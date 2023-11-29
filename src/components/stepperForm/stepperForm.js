@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Button, message, Steps } from "antd";
 import Form from "../forms/From";
+import Link from "next/link";
 
 const StepperForm = ({ steps }) => {
   const [current, setCurrent] = useState(0);
@@ -33,34 +34,42 @@ const StepperForm = ({ steps }) => {
           }}
         >
           {current > 0 && (
-            <Button
-              className="bg-primary font-bold px-6 text-white"
-              size="large"
-              style={{
-                margin: "0 8px",
-              }}
-              onClick={() => prev()}
-            >
-              Previous
-            </Button>
+            <Link href={"/step"}>
+              <Button
+                className="bg-primary font-bold px-6 text-white"
+                size="large"
+                style={{
+                  margin: "0 8px",
+                }}
+                onClick={() => prev()}
+              >
+                Previous
+              </Button>
+            </Link>
           )}
           {current < steps.length - 1 && (
-            <Button
-              className="bg-primary font-bold px-10"
-              size="large"
-              type="primary"
-              onClick={() => next()}
-            >
-              Next
-            </Button>
+            <Link href={"/step"}>
+              <Button
+                className="bg-primary font-bold px-10"
+                size="large"
+                type="primary"
+                onClick={() => next()}
+              >
+                Next
+              </Button>
+            </Link>
           )}
           {current === steps.length - 1 && (
-            <Button
-              type="primary"
-              onClick={() => message.success("Processing complete!")}
-            >
-              Done
-            </Button>
+            <Link href={"/"}>
+              <Button
+                className="bg-primary font-bold px-10"
+                size="large"
+                type="primary"
+                onClick={() => message.success("Processing complete!")}
+              >
+                Submit
+              </Button>
+            </Link>
           )}
         </div>
       </Form>

@@ -4,6 +4,7 @@ import Executors from "@/components/stepperForm/Executors";
 import Instructions from "@/components/stepperForm/Instructions";
 import PersonalDetails from "@/components/stepperForm/PersonalDetails";
 import Review from "@/components/stepperForm/Review";
+import ReviewAndSubmit from "@/components/stepperForm/ReviewAndSubmit";
 import StepperForm from "@/components/stepperForm/stepperForm";
 import React from "react";
 
@@ -31,7 +32,7 @@ const DetailsSubmitPage = () => {
     },
     {
       title: "Review",
-      content: <Review />,
+      content: <ReviewAndSubmit />,
     },
   ];
 
