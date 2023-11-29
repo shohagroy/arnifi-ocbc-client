@@ -1,21 +1,23 @@
 "use client";
 
-import { Button, Card, Flex } from "antd";
-import React from "react";
+import { Button, Card, Flex, Modal } from "antd";
+import React, { useState } from "react";
 import { CheckOutlined } from "@ant-design/icons";
 import useBreakpoint from "antd/lib/grid/hooks/useBreakpoint";
+import NotesAgreeModal from "../modal/NotesAgreeModal";
 
 const HeroSection = () => {
-  const { md } = useBreakpoint();
+  const [open, setOpen] = useState(false);
+  const { md = false } = useBreakpoint();
 
   return (
     <section
       className="relative"
       style={{
         backgroundImage: "url(/background.png)",
-        backgroundPosition: !md ? "top" : "center",
+        backgroundPosition: "top",
         backgroundRepeat: "no-repeat",
-        backgroundSize: !md ? "contain" : "cover",
+        backgroundSize: !md ? "contain" : "cover" || "cover",
         // height: "100vh",
       }}
     >
@@ -100,6 +102,7 @@ const HeroSection = () => {
 
         <div className="text-center my-6">
           <Button
+            onClick={() => setOpen(true)}
             className="bg-primary"
             type="primary font-bold px-6"
             size="large"
@@ -108,6 +111,8 @@ const HeroSection = () => {
           </Button>
         </div>
       </div>
+
+      <NotesAgreeModal setOpen={setOpen} open={open} />
     </section>
   );
 };
