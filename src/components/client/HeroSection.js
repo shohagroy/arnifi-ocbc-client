@@ -3,7 +3,11 @@
 import { Button, Card, Flex } from "antd";
 import React from "react";
 import { CheckOutlined } from "@ant-design/icons";
+import useBreakpoint from "antd/lib/grid/hooks/useBreakpoint";
+
 const HeroSection = () => {
+  const { md } = useBreakpoint();
+
   return (
     <section
       className="relative"
@@ -12,9 +16,10 @@ const HeroSection = () => {
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
+        height: "100%",
       }}
     >
-      <div className="max-w-5xl min-h-screen mx-auto font-primary">
+      <div className="max-w-5xl mx-auto font-primary">
         <div className="pt-16">
           <div className="py-6 p-4 w-[400px] md:w-[700px]">
             <h2 className="text-5xl ">Arnifi Online Will Generator</h2>
@@ -22,7 +27,7 @@ const HeroSection = () => {
               Take care of your loved ones by planning your legacy today. After
               you have decided on your executor(s) and beneficiaries, as well as
               how much each should receive, use our Online Will Generator to set
-              a plan in place.{" "}
+              a plan in place.
             </p>
           </div>
         </div>
@@ -31,14 +36,14 @@ const HeroSection = () => {
           <p className="text-xl text-[#1F938F] font-semibold p-4">
             Things to note before you begin.
           </p>
-          <div>
+          <div className="p-4 lg:p-0">
             <Card className="">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
                 {[...Array(3)].map((_, i) => (
                   <div
                     style={{
-                      borderLeft: i === 1 ? "1px solid #DFDDDD" : "none",
-                      borderRight: i === 1 ? "1px solid #DFDDDD" : "none",
+                      borderLeft: i === 1 && md ? "1px solid #DFDDDD" : "none",
+                      borderRight: i === 1 && md ? "1px solid #DFDDDD" : "none",
                     }}
                     className=" font-primary p-4 w-full mx-1"
                     key={i}
@@ -93,7 +98,7 @@ const HeroSection = () => {
           </div>
         </div>
 
-        <div className="text-center my-10">
+        <div className="text-center my-6">
           <Button
             className="bg-primary"
             type="primary font-bold px-6"
