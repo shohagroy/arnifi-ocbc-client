@@ -13,10 +13,10 @@ const HeroSection = () => {
       className="relative"
       style={{
         backgroundImage: "url(/background.png)",
-        backgroundPosition: "center",
+        backgroundPosition: !md ? "top" : "center",
         backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        height: "100%",
+        backgroundSize: !md ? "contain" : "cover",
+        // height: "100vh",
       }}
     >
       <div className="max-w-5xl mx-auto font-primary">

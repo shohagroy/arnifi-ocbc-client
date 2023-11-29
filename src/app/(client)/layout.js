@@ -6,7 +6,7 @@ const ClientLayout = ({ children }) => {
   return (
     <main className="font-primary">
       <Header />
-      <div className="bg-[#EEEEEE] min-h-[70vh]">{children}</div>
+      <div className="bg-[#EEEEEE]">{children}</div>
       <Footer />
     </main>
   );
