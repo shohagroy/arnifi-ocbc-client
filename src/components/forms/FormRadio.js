@@ -1,0 +1,83 @@
+"use client";
+
+import { getErrorMessageByPropertyName } from "@/utils/schema-validator";
+import { Flex, Radio } from "antd";
+import { useFormContext, Controller } from "react-hook-form";
+import Image from "next/image";
+
+const FormRadio = ({
+  name,
+  value,
+  options,
+  id,
+  validation,
+  disabled,
+  label,
+  required,
+  onChange,
+}) => {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
+
+  const errorMessage = getErrorMessageByPropertyName(errors, name);
+
+  return (
+    <>
+      {label ? (
+        <p className="font-primary text-xl py-4">
+          {required ? (
+            <span
+              style={{
+                color: "red",
+              }}
+            >
+              *
+            </span>
+          ) : null}
+          {label}
+        </p>
+      ) : null}
+      <Controller
+        control={control}
+        name={name}
+        render={({ field }) => (
+          <Radio.Group
+            name={name}
+            className="flex"
+            onChange={onChange}
+            value={value ? value : field.value}
+            buttonStyle="solid"
+            optionType="button"
+            {...field}
+          >
+            {options?.map((item) => (
+              <Radio
+                key={item?.label}
+                className="px-[20px] h-[50px] py-[12px]"
+                value={item.value}
+              >
+                <Flex>
+                  {item?.icon && (
+                    <Image
+                      src={item?.icon}
+                      alt={item.value}
+                      height={30}
+                      width={30}
+                    />
+                  )}
+                  <p className="px-2"> {item.label}</p>
+                </Flex>
+              </Radio>
+            ))}
+          </Radio.Group>
+        )}
+      />
+
+      <small style={{ color: "red" }}>{errorMessage}</small>
+    </>
+  );
+};
+
+export default FormRadio;
