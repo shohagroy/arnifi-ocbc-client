@@ -7,3 +7,31 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: "Switzer-Variable";
+  src: url("../assets/fonts/Switzer-Variable.woff2") format("woff2"),
+    url("../assets/fonts/Switzer-Variable.woff") format("woff"),
+    url("../assets/fonts/Switzer-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/static/Inter-Thin.ttf"),
+    url("../assets/fonts/static/Inter-ExtraLight.ttf")
+      url("../assets/fonts/static/Inter-Light.ttf")
+      url("../assets/fonts/static/Inter-Regular.ttf")
+      url("../assets/fonts/static/Inter-Medium.ttf")
+      url("../assets/fonts/static/Inter-SemiBold.ttf")
+      url("../assets/fonts/static/Inter-Bold.ttf")
+      url("../assets/fonts/static/Inter-ExtraBold.ttf")
+      url("../assets/fonts/static/Inter-Black.ttf");
+  font-weight: 100 900;
+  font-display: swap;
+
+  font-style: normal;
+}
