@@ -4,11 +4,11 @@ import React from "react";
 
 const ClientLayout = ({ children }) => {
   return (
-    <div>
+    <main className="font-primary">
       <Header />
-      <div className="bg-gray-100 min-h-screen font-primary">{children}</div>
+      <div className="bg-gray-100 min-h-[70vh]">{children}</div>
       <Footer />
-    </div>
+    </main>
   );
 };
 

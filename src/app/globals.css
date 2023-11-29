@@ -8,6 +8,10 @@
   box-sizing: border-box;
 }
 
+ul li {
+  list-style: none;
+}
+
 @font-face {
   font-family: "Switzer-Variable";
   src: url("../assets/fonts/Switzer-Variable.woff2") format("woff2"),

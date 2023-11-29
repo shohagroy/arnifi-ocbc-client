@@ -7,7 +7,7 @@ import Link from "next/link";
 const Header = () => {
   return (
     <header className=" bg-white ">
-      <div className="max-w-5xl  p-3 mx-auto flex justify-between items-center">
+      <div className="max-w-5xl p-3 mx-auto flex justify-between items-center">
         <Link href={"/"}>
           <Image src={Primary_Logo} alt="Arnifi" width={150} />
         </Link>
