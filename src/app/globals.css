@@ -26,6 +26,10 @@ ul li {
   }
 }
 
+.ant-radio-wrapper.ant-radio-wrapper-checked {
+  background-color: #3955d9;
+}
+
 @font-face {
   font-family: "Switzer-Variable";
   src: url("../assets/fonts/Switzer-Variable.woff2") format("woff2"),

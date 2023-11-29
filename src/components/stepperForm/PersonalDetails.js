@@ -138,6 +138,7 @@ const PersonalDetails = () => {
               </div>
               <div>
                 <FormSelectField
+                  required
                   name={"citizenship"}
                   options={idTypeOptions}
                   type={"text"}
@@ -145,6 +146,7 @@ const PersonalDetails = () => {
               </div>
               <div>
                 <FormInput
+                  required
                   type={"text"}
                   placeholder={"postal code"}
                   name={"postalCode"}

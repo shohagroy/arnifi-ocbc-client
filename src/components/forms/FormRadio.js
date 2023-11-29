@@ -45,7 +45,6 @@ const FormRadio = ({
         render={({ field }) => (
           <Radio.Group
             name={name}
-            className="flex"
             onChange={onChange}
             value={value ? value : field.value}
             buttonStyle="solid"
@@ -55,7 +54,7 @@ const FormRadio = ({
             {options?.map((item) => (
               <Radio
                 key={item?.label}
-                className="px-[20px] h-[50px] py-[12px]"
+                className="px-[20px] h-[50px] py-[12px] font-bold"
                 value={item.value}
               >
                 <Flex>
