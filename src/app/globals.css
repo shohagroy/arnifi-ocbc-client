@@ -12,6 +12,20 @@ ul li {
   list-style: none;
 }
 
+.background-image {
+  background-image: url("/background.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (max-width: 768px) {
+  .background-image {
+    background-size: contain;
+    background-position: center;
+  }
+}
+
 @font-face {
   font-family: "Switzer-Variable";
   src: url("../assets/fonts/Switzer-Variable.woff2") format("woff2"),

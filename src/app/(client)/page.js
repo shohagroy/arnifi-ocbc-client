@@ -1,13 +1,10 @@
-import { Button } from "antd";
+import HeroSection from "@/components/client/HeroSection";
 
 export default function Home() {
   return (
     <>
       <main>
-        <section>
-          <h2>home page</h2>
-          <Button>hello</Button>
-        </section>
+        <HeroSection />
       </main>
     </>
   );
