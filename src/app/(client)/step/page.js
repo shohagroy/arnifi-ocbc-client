@@ -264,7 +264,11 @@ const DetailsSubmitPage = () => {
   return (
     <section>
       <div className="max-w-5xl mx-auto">
-        <StepperForm steps={steps} formData={formData} />
+        <StepperForm
+          persistKey={"form-data"}
+          steps={steps}
+          formData={formData}
+        />
       </div>
     </section>
   );

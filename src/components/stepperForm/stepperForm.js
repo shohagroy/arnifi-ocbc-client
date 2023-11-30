@@ -6,16 +6,16 @@ import Form from "../forms/From";
 import Link from "next/link";
 import { generateFormValidator } from "@/schemas/formSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { getFromLocalStorage } from "@/utils/local-storage";
 
-const StepperForm = ({ steps, formData }) => {
+const StepperForm = ({ steps, formData, persistKey }) => {
   const [current, setCurrent] = useState(0);
+  const [savedValues, setSavedValues] = useState(
+    JSON.parse(getFromLocalStorage(persistKey)) || ""
+  );
 
   const resolver = generateFormValidator(formData);
 
-  const next = () => {
-    console.log("submit");
-    // setCurrent(current + 1);
-  };
   const prev = () => {
     setCurrent(current - 1);
   };
@@ -25,13 +25,19 @@ const StepperForm = ({ steps, formData }) => {
   }));
 
   const onSubmit = (data) => {
-    next();
+    // next();
+    setCurrent(current + 1);
     console.log(data, "submit");
   };
 
   return (
     <div className="p-6">
-      <Form submitHandler={onSubmit} resolver={yupResolver(resolver)}>
+      <Form
+        defaultValues={savedValues}
+        persistKey={persistKey}
+        submitHandler={onSubmit}
+        resolver={yupResolver(resolver)}
+      >
         <Steps current={current} items={items} />
         <div>{steps[current].content}</div>
         <div
@@ -71,7 +77,6 @@ const StepperForm = ({ steps, formData }) => {
               className="bg-primary font-bold px-10"
               size="large"
               type="primary"
-              // onClick={() => next()}
             >
               Next
             </Button>
