@@ -4,7 +4,7 @@ const MoreSection = () => {
   return (
     <section>
       <div className="max-w-5xl mx-auto p-4">
-        <h2 className="font-primary my-4 text-lg font-semibold text-center">
+        {/* <h2 className="font-primary my-4 text-lg font-semibold text-center">
           More on Wealth and Legacy Planning in your Silver Years
         </h2>
 
@@ -32,26 +32,27 @@ const MoreSection = () => {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
 
-        <div className="py-10 text-sm text-gray-500 text-center text-clip px-2">
+        <div className="py-10 text-black/60 text-center text-clip px-2">
           <p>
-            The Online Will Generator utilises a basic Will template and has
-            been prepared upon the advice and with the assistance of Hin Tat
-            Augustine & Partners and does not necessarily deal with every
-            important topic or nor cover every aspect of the topics with which
-            it deals. The Online Will Generator is intended for general use only
-            and does not contain or convey any legal or other advice. You should
-            seek legal advice from appropriately qualified lawyers for more
-            specific Will requirements (e.g. Islamic law, persons under 21, not
-            residing in Singapore etc.). You may refer to the
-            <a href="/" className="mx-1 text-primary">
+            The Arnifi Online Will Generator utilises a basic Will template and
+            has been prepared upon the advice and with the assistance of XX Law
+            firm in UAE and does not necessarily deal with every important topic
+            or nor cover every aspect of the topics with which it deals. The
+            Online Will Generator is intended for general use only and does not
+            contain or convey any legal or other advice. You should seek legal
+            advice from appropriately qualified lawyers for more specific Will
+            requirements (e.g. Islamic law, persons under 21, not residing in
+            UAE etc.). You may refer to the{" "}
+            <a className="text-primary" href="/">
               Ministry of Law
-            </a>
-            for more information. OCBC Bank does not act as adviser to you. OCBC
-            Bank gives no warranty as to the accuracy or completeness of the
-            Online Will Generator, and is not responsible for or liable to any
-            person for any loss or damage arising from any reliance thereon.{" "}
+            </a>{" "}
+            and respective courts of Dubai, Abu Dhabi and other Emirates for
+            more information. Arnifi does not act as adviser to you. Arnifi
+            gives no warranty as to the accuracy or completeness of the Online
+            Will Generator, and is not responsible for or liable to any person
+            for any loss or damage arising from any reliance thereon.
           </p>
         </div>
       </div>

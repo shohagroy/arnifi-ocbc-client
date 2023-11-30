@@ -5,7 +5,6 @@ import React, { useState } from "react";
 const NotesAgreeModal = ({ setOpen, open }) => {
   const [agree, setAgree] = useState(false);
 
-  console.log(agree);
   const applicableOptions = [
     {
       label: "Citizens and residents governed by Singapore Law",

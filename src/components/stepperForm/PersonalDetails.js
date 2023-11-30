@@ -77,6 +77,7 @@ const PersonalDetails = () => {
               type={"text"}
             />
           </div>
+
           <div>
             <FormRadio
               label={"Gender"}

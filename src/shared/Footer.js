@@ -1,89 +1,166 @@
 import React from "react";
 import {
-  FacebookOutlined,
+  FacebookFilled,
   TwitterOutlined,
-  YoutubeOutlined,
-} from "@ant-design/icons";
+  LinkedinFilled,
+} from "@ant-design/icons"; //<LinkedinFilled />
+
+import Logo from "../assets/Primary_Logo.png";
+import Link from "next/link";
+import Image from "next/image";
 
 const Footer = () => {
-  const footerMenu = [
-    {
-      key: 1,
-      lebel: "Conditions of Access",
-      link: "/",
-    },
-    {
-      key: 2,
-      lebel: "Policies",
-      link: "/",
-    },
-    {
-      key: 3,
-      lebel: "Notices",
-      link: "/",
-    },
-
-    {
-      key: 4,
-      lebel: "Security",
-      link: "/",
-    },
-  ];
-
   const contactIcon = [
     {
       key: 1,
-      icon: <FacebookOutlined />,
-      link: "/",
+      icon: <FacebookFilled />,
+      link: "https://www.facebook.com/arnifiofficial",
     },
     {
       key: 2,
       icon: <TwitterOutlined />,
-      link: "/",
+      link: "https://twitter.com/i/flow/login?redirect_after_login=%2Farnifiofficial",
     },
     {
       key: 3,
-      icon: <YoutubeOutlined />,
-      link: "/",
+      icon: <LinkedinFilled />,
+      link: "https://www.linkedin.com/company/arnifiofficial",
     },
   ];
-  return (
-    <footer
-      style={{
-        borderTop: "3px solid #3955D9",
-      }}
-    >
-      <div className="max-w-5xl mx-auto p-3 flex-col lg:flex-row lg:flex justify-between ">
-        <div className="flex flex-col lg:flex-row justify-center items-center">
-          <ul className="flex flex-wrap justify-center items-center">
-            {footerMenu.map((item) => {
-              return (
-                <li className="" key={item.key}>
-                  <a
-                    className="p-2 text-sm hover:border-none text-primary"
-                    href={item.link}
-                  >
-                    {item.lebel}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
 
-          <div className="p-2">
-            {contactIcon?.map((icon) => (
-              <a className="p-2 text-primary" href={icon.link} key={icon.key}>
-                {icon.icon}
-              </a>
-            ))}
+  const businessCountry = [
+    {
+      name: "Soudi Arabia",
+      link: "https://www.arnifi.com/saudiArabia",
+      icon: "",
+    },
+    {
+      name: "UAE",
+      link: "https://www.arnifi.com/saudiArabia",
+      icon: "",
+    },
+    {
+      name: "IFZA",
+      link: "https://www.arnifi.com/saudiArabia",
+      icon: "",
+    },
+    {
+      name: "Maydan",
+      link: "https://www.arnifi.com/saudiArabia",
+      icon: "",
+    },
+    {
+      name: "Shama",
+      link: "https://www.arnifi.com/saudiArabia",
+      icon: "",
+    },
+    {
+      name: "Rakex",
+      link: "https://www.arnifi.com/saudiArabia",
+      icon: "",
+    },
+  ];
+
+  return (
+    <footer className="py-6 bg-white ">
+      <div className="container px-6 mx-auto space-y-6 divide-y divide-gray-400 md:space-y-12 divide-opacity-50">
+        <div className="grid grid-cols-12">
+          <div className="col-span-12">
+            <Link href={"/"}>
+              <Image src={Logo} alt="Arnifi" width={150} />
+            </Link>
+          </div>
+
+          <div className="pb-6 col-span-full md:pb-0 md:col-span-6">
+            <div className="w-full h-full">
+              <p className="w-[350px] text-sm text-black/60">
+                Arnifi provides customized and tailored services around the
+                world who aims to expand their businesses across the Middle
+                East.
+              </p>
+
+              <div className="mt-12">
+                {contactIcon?.map((icon) => (
+                  <a
+                    className="p-2 text-black text-xl"
+                    href={icon.link}
+                    key={icon.key}
+                    target="_"
+                  >
+                    {icon.icon}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="col-span-full md:col-span-6">
+            <div className="flex justify-between items-start">
+              <div className="w-full">
+                <p className="pb-1  text-sm text-black/60">
+                  START YOUR BUSINESS
+                </p>
+                <ul>
+                  {businessCountry?.map((item) => (
+                    <li key={item?.name}>
+                      <a
+                        rel="noopener noreferrer"
+                        href={item?.link}
+                        target="_"
+                        className="hover:text-primary text-black duration-200"
+                      >
+                        {item?.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="w-full">
+                <p className="pb-1  text-sm text-black/60">CONTACT</p>
+                <p>hello@arnifi.com</p>
+                <p>+971 58 505 4423</p>
+              </div>
+
+              <div className="w-full">
+                <p className="pb-1  text-sm text-black/60">LOCATION</p>
+                <p>Floor 9, Building 4, One central, Dubai</p>
+                <a
+                  rel="noopener noreferrer"
+                  href={"https://maps.app.goo.gl/vxSp7XmqiXtXXQ5NA"}
+                  target="_"
+                  className="hover:text-primary text-black duration-200"
+                >
+                  View on map
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div>
-          <p className="text-[12px] text-center p-2">
-            © Copyright 2004 – 2017 – OCBC Bank. All Rights Reserved. Co. Reg.
-            No.: 193200032W
-          </p>
+        <div className="flex justify-between items-center text-sm">
+          <div>
+            <span>©2023 </span> <a href="arnifi.com">Arnifi.com</a>
+          </div>
+          <div>
+            <a
+              className="text-primary"
+              rel="noopener noreferrer"
+              href="https://www.arnifi.com/privacypolicy"
+              target="_"
+            >
+              <span>Privacy policy</span>
+            </a>
+            <span className="mx-2"> | </span>
+            <a
+              className="text-primary"
+              rel="noopener noreferrer"
+              href="https://www.arnifi.com/tnc"
+              target="_"
+            >
+              <span>Terms of service</span>
+            </a>
+          </div>
         </div>
       </div>
     </footer>
