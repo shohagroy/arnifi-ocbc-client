@@ -6,7 +6,6 @@ import Form from "../forms/From";
 import Link from "next/link";
 import { generateFormValidator } from "@/schemas/formSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { testSchema } from "@/schemas/testError";
 
 const StepperForm = ({ steps, formData }) => {
   const [current, setCurrent] = useState(0);
@@ -28,11 +27,9 @@ const StepperForm = ({ steps, formData }) => {
     console.log(data, "submit");
   };
 
-  console.log(resolver, "test:", testSchema);
-
   return (
     <div className="p-6">
-      <Form submitHandler={onSubmit} resolver={yupResolver(testSchema)}>
+      <Form submitHandler={onSubmit} resolver={yupResolver(resolver)}>
         <Steps current={current} items={items} />
         <div>{steps[current].content}</div>
         <div

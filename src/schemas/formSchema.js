@@ -1,46 +1,29 @@
 import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 export const generateFormValidator = (formData) => {
-  const validationSchema = {};
+  const formErrorSchema = {};
 
-  const createValidationSchema = (field, path = "") => {
-    const fieldPath = path ? `${path}.${field.name}` : field.name;
-
-    switch (field.type) {
-      case "object":
-        validationSchema[fieldPath] = yup.object().shape({});
-        Object.keys(field.fields).forEach((nestedField) => {
-          createValidationSchema(field.fields[nestedField], fieldPath);
-        });
-        break;
-      case "string":
-        validationSchema[fieldPath] = stringValidation(field);
-        break;
-
-      // Add cases for other types if needed
-
-      default:
-        break;
-    }
-  };
-
-  const stringValidation = (field) => {
-    let schema = yup.string();
-
-    if (field.required) {
-      schema = schema.required(field.errorText || "This field is required");
+  Object.keys(formData).map((key) => {
+    if (formData[key].required) {
+      formErrorSchema[formData[key].name] = yup
+        .string()
+        .required(formData[key]?.errorText);
     }
 
-    // Add more validations based on your field properties if needed
+    const addressFild = formData["address"];
 
-    return schema;
-  };
+    if (addressFild) {
+      Object.keys(addressFild).map((key) => {
+        const requiredAddress = addressFild[key].required;
 
-  Object.values(formData).forEach((field) => {
-    createValidationSchema(field);
+        if (addressFild[key].required) {
+          formErrorSchema[addressFild[key].name] = yup
+            .string()
+            .required(addressFild[key]?.errorText);
+        }
+      });
+    }
   });
 
-  // Return the Yup schema for the specific field
-  return validationSchema.fullName || yup.object();
+  return yup.object().shape(formErrorSchema);
 };

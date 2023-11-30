@@ -3,7 +3,6 @@ import Beneficiaries from "@/components/stepperForm/Beneficiaries";
 import Executors from "@/components/stepperForm/Executors";
 import Instructions from "@/components/stepperForm/Instructions";
 import PersonalDetails from "@/components/stepperForm/PersonalDetails";
-import Review from "@/components/stepperForm/Review";
 import ReviewAndSubmit from "@/components/stepperForm/ReviewAndSubmit";
 import StepperForm from "@/components/stepperForm/stepperForm";
 import React from "react";
@@ -158,7 +157,7 @@ const DetailsSubmitPage = () => {
       type: "text",
       required: true,
       placeholder: "Enter your full name",
-      errorText: "This field is required",
+      errorText: "Full Name field is required",
     },
     gender: {
       name: "gender",
@@ -174,7 +173,7 @@ const DetailsSubmitPage = () => {
       type: "select",
       required: true,
       options: idTypeOptions,
-      errorText: "This field is required",
+      errorText: "Type Of ID field is required",
     },
     idNumber: {
       name: "idNumber",
@@ -182,7 +181,7 @@ const DetailsSubmitPage = () => {
       type: "text",
       required: true,
       placeholder: "e.g.S1234567A",
-      errorText: "This field is required",
+      errorText: "Emirates ID / Passport No field is required",
     },
     citizenship: {
       name: "citizenship",
@@ -200,7 +199,7 @@ const DetailsSubmitPage = () => {
         type: "text",
         required: true,
         placeholder: "address line 1",
-        errorText: "This field is required",
+        errorText: "Address field is required",
       },
       line2: {
         name: "address.line2",
@@ -212,14 +211,14 @@ const DetailsSubmitPage = () => {
         type: "select",
         required: true,
         options: countryOptions,
-        errorText: "This field is required",
+        errorText: "Country field is required",
       },
       postalCode: {
         name: "address.postalCode",
         type: "number",
         required: true,
         placeholder: "postal code",
-        errorText: "This field is required",
+        errorText: "Postal field is required",
       },
     },
   };
