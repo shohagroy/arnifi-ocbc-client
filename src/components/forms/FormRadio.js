@@ -61,12 +61,12 @@ const FormRadio = ({
                   {item?.icon && (
                     <Image
                       src={item?.icon}
-                      alt={item.value}
+                      alt={item?.value}
                       height={30}
                       width={30}
                     />
                   )}
-                  <p className="px-2"> {item.label}</p>
+                  <p className="px-2"> {item?.label}</p>
                 </Flex>
               </Radio>
             ))}

@@ -23,6 +23,7 @@ const FormInput = ({
 
   const errorMessage = getErrorMessageByPropertyName(errors, name);
 
+  console.log(errorMessage);
   return (
     <>
       {label ? (

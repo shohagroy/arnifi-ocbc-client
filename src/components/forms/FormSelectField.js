@@ -12,6 +12,7 @@ const FormSelectField = ({
   options,
   label,
   defaultValue,
+  showSearch,
   required,
   loading,
   handleChange,
@@ -47,6 +48,7 @@ const FormSelectField = ({
           <Select
             className="focus:border-primary h-[50px] "
             disabled={disabled}
+            showSearch={showSearch}
             loading={loading}
             onChange={handleChange ? handleChange : onChange}
             size={size}

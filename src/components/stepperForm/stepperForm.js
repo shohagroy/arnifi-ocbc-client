@@ -4,9 +4,15 @@ import React, { useState } from "react";
 import { Button, message, Steps } from "antd";
 import Form from "../forms/From";
 import Link from "next/link";
+import { generateFormValidator } from "@/schemas/formSchema";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { testSchema } from "@/schemas/testError";
 
-const StepperForm = ({ steps }) => {
+const StepperForm = ({ steps, formData }) => {
   const [current, setCurrent] = useState(0);
+
+  const resolver = generateFormValidator(formData);
+
   const next = () => {
     setCurrent(current + 1);
   };
@@ -22,9 +28,11 @@ const StepperForm = ({ steps }) => {
     console.log(data, "submit");
   };
 
+  console.log(resolver, "test:", testSchema);
+
   return (
     <div className="p-6">
-      <Form submitHandler={onSubmit}>
+      <Form submitHandler={onSubmit} resolver={yupResolver(testSchema)}>
         <Steps current={current} items={items} />
         <div>{steps[current].content}</div>
         <div
@@ -50,6 +58,7 @@ const StepperForm = ({ steps }) => {
           {current < steps.length - 1 && (
             <Link href={"/step"}>
               <Button
+                htmlType="submit"
                 className="bg-primary font-bold px-10"
                 size="large"
                 type="primary"
@@ -72,6 +81,8 @@ const StepperForm = ({ steps }) => {
             </Link>
           )}
         </div>
+
+        <button type="submit">submit</button>
       </Form>
     </div>
   );

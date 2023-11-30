@@ -5,61 +5,19 @@ import React from "react";
 import FormInput from "../forms/FormInput";
 import FormSelectField from "../forms/FormSelectField";
 import FormRadio from "../forms/FormRadio";
-import MIcon from "../../assets/male-icon.png";
-import FIcon from "../../assets/female-icon.png";
 
-const PersonalDetails = () => {
-  const idTypeOptions = [
-    {
-      value: "Options - 1",
-      label: "Options - 1",
-    },
-    {
-      value: "Options - 2",
-      label: "Options - 2",
-    },
-    {
-      value: "Options - 3",
-      label: "Options - 3",
-    },
-    {
-      value: "Options - 5",
-      label: "Options - 5",
-    },
-    {
-      value: "Options - 6",
-      label: "Options - 6",
-    },
-    {
-      value: "Options - 7",
-      label: "Options - 7",
-    },
-    {
-      value: "Options - 8",
-      label: "Options - 8",
-    },
-    {
-      value: "Options - 9",
-      label: "Options - 9",
-    },
-    {
-      value: "Options - 10",
-      label: "Options - 10",
-    },
-  ];
-
-  const genderOptions = [
-    {
-      label: "Male",
-      value: "male",
-      icon: MIcon,
-    },
-    {
-      label: "Female",
-      value: "female",
-      icon: FIcon,
-    },
-  ];
+const PersonalDetails = ({ filds }) => {
+  const fromDataArray = Object.keys(filds).map((key) => {
+    return {
+      name: filds[key]?.name || key,
+      label: filds[key]?.label,
+      type: filds[key]?.type,
+      required: filds[key]?.required,
+      placeholder: filds[key]?.placeholder,
+      errorText: filds[key]?.errorText,
+      options: filds[key]?.options,
+    };
+  });
 
   return (
     <div>
@@ -68,93 +26,85 @@ const PersonalDetails = () => {
       </h2>
       <Card>
         <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <FormInput
-              label={"Full Name"}
-              name={"name"}
-              placeholder={"Type Full Name"}
-              required
-              type={"text"}
-            />
-          </div>
-
-          <div>
-            <FormRadio
-              label={"Gender"}
-              name={"gender"}
-              required
-              options={genderOptions}
-            />
-          </div>
-
-          <div>
-            <FormSelectField
-              label={"Type of ID"}
-              name={"idType"}
-              required
-              options={idTypeOptions}
-              type={"text"}
-            />
-          </div>
-
-          <div>
-            <FormInput
-              label={"NRIC/Passport No./ID No."}
-              name={"idNumber"}
-              placeholder={"e.g.S1234567A"}
-              required
-              type={"text"}
-            />
-          </div>
-
-          <div>
-            <FormSelectField
-              label={"Citizenship"}
-              name={"citizenship"}
-              required
-              options={idTypeOptions}
-              type={"text"}
-            />
-          </div>
-          <hr className="border-[#EEEEEE] col-span-2 my-4" />
-          <div>
-            <FormInput
-              label={"Address"}
-              required
-              type={"text"}
-              placeholder={"address line 1"}
-              name={"address"}
-            />
-          </div>
-          <div></div>
-
-          <div className="">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2">
+          {fromDataArray?.map((data) => {
+            const { type, placeholder, name, label, required, options } =
+              data || {};
+            return type === "text" ? (
+              <div key={data?.name}>
                 <FormInput
-                  type={"text"}
-                  placeholder={"address line 2"}
-                  name={"address"}
+                  label={label}
+                  name={name}
+                  placeholder={placeholder}
+                  type={type}
+                  required={required}
                 />
               </div>
-              <div>
-                <FormSelectField
-                  required
-                  name={"citizenship"}
-                  options={idTypeOptions}
-                  type={"text"}
+            ) : type === "radio" ? (
+              <div key={data?.name}>
+                <FormRadio
+                  label={label}
+                  name={name}
+                  required={required}
+                  options={options}
                 />
               </div>
+            ) : (
+              type === "select" && (
+                <div key={data?.name}>
+                  <FormSelectField
+                    label={label}
+                    name={name}
+                    showSearch={true}
+                    required={required}
+                    options={options}
+                  />
+                </div>
+              )
+            );
+          })}
+
+          {filds["address"] && (
+            <>
+              <hr className="border-[#EEEEEE] col-span-2 my-4" />
               <div>
                 <FormInput
+                  label={"Address"}
                   required
                   type={"text"}
-                  placeholder={"postal code"}
-                  name={"postalCode"}
+                  placeholder={"address line 1"}
+                  name={"address.line1"}
                 />
               </div>
-            </div>
-          </div>
+              <div></div>
+              <div className="">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-2">
+                    <FormInput
+                      type={"text"}
+                      placeholder={"address line 2"}
+                      name={"address.line2"}
+                    />
+                  </div>
+                  <div>
+                    <FormSelectField
+                      required
+                      name={"address.country"}
+                      options={filds["address"]?.country?.options}
+                      showSearch={true}
+                    />
+                  </div>
+                  <div>
+                    <FormInput
+                      required
+                      type={"text"}
+                      placeholder={"postal code"}
+                      name={"address.postalCode"}
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </Card>
 

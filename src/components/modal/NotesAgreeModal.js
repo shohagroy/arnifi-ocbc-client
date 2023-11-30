@@ -7,7 +7,7 @@ const NotesAgreeModal = ({ setOpen, open }) => {
 
   const applicableOptions = [
     {
-      label: "Citizens and residents governed by Singapore Law",
+      label: "Residents (non-citizens) residing in the United Arab Emirates",
     },
     {
       label: "Persons over the age of 21; and",
@@ -62,22 +62,22 @@ const NotesAgreeModal = ({ setOpen, open }) => {
         </ul>
 
         <div
-          className="pt-10 text-sm"
+          className="pt-6 text-sm"
           style={{ borderTop: "1px solid #DFDDDD" }}
         >
           <p>
             By checking “I agree” and clicking “Next”, I hereby confirm that
-            Oversea-Chinese Banking Corporation Limited (“OCBC”) and its related
+            Arnifi Corporate Services Providers LLC (“Arnifi”) and its related
             corporations, as well as their respective representatives and/or
             agents, can collect, use or disclose my personal data in the manner
-            set forth in OCBC’s{" "}
+            set forth in{" "}
             <a href="/" className="text-primary">
-              Data Protection Policy
+              Arnifi’s privacy policy
             </a>{" "}
-            and the{" "}
+            and{" "}
             <a href="/" className="text-primary">
-              FAQs.
-            </a>{" "}
+              FAQ’s.
+            </a>
           </p>
         </div>
       </div>
