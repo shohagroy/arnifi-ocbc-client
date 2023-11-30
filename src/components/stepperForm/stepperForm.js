@@ -13,7 +13,8 @@ const StepperForm = ({ steps, formData }) => {
   const resolver = generateFormValidator(formData);
 
   const next = () => {
-    setCurrent(current + 1);
+    console.log("submit");
+    // setCurrent(current + 1);
   };
   const prev = () => {
     setCurrent(current - 1);
@@ -24,6 +25,7 @@ const StepperForm = ({ steps, formData }) => {
   }));
 
   const onSubmit = (data) => {
+    next();
     console.log(data, "submit");
   };
 
@@ -53,17 +55,26 @@ const StepperForm = ({ steps, formData }) => {
             </Link>
           )}
           {current < steps.length - 1 && (
-            <Link href={"/step"}>
-              <Button
-                htmlType="submit"
-                className="bg-primary font-bold px-10"
-                size="large"
-                type="primary"
-                onClick={() => next()}
-              >
-                Next
-              </Button>
-            </Link>
+            // <Link href={"/step"}>
+            //   <Button
+            //     htmlType="submit"
+            //     className="bg-primary font-bold px-10"
+            //     size="large"
+            //     type="primary"
+            //     onClick={() => next()}
+            //   >
+            //     Next
+            //   </Button>
+            // </Link>
+            <Button
+              htmlType="submit"
+              className="bg-primary font-bold px-10"
+              size="large"
+              type="primary"
+              // onClick={() => next()}
+            >
+              Next
+            </Button>
           )}
           {current === steps.length - 1 && (
             <Link href={"/"}>
@@ -78,8 +89,6 @@ const StepperForm = ({ steps, formData }) => {
             </Link>
           )}
         </div>
-
-        <button type="submit">submit</button>
       </Form>
     </div>
   );

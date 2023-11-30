@@ -3,6 +3,7 @@
 import { Select } from "antd";
 import { useFormContext, Controller } from "react-hook-form";
 import { getErrorMessageByPropertyName } from "@/utils/schema-validator";
+import { WarningOutlined } from "@ant-design/icons";
 
 const FormSelectField = ({
   name,
@@ -46,7 +47,13 @@ const FormSelectField = ({
         name={name}
         render={({ field: { value, onChange } }) => (
           <Select
-            className="focus:border-primary h-[50px] "
+            style={
+              errorMessage && {
+                border: "1.5px solid #F15656",
+                borderRadius: "10px",
+              }
+            }
+            className={`focus:border-primary h-[50px] w-full`}
             disabled={disabled}
             showSearch={showSearch}
             loading={loading}
@@ -54,12 +61,17 @@ const FormSelectField = ({
             size={size}
             options={options}
             value={value}
-            style={{ width: "100%" }}
             placeholder={placeholder}
           />
         )}
       />
-      <small style={{ color: "red" }}>{errorMessage}</small>
+
+      {errorMessage && (
+        <div style={{ color: "#F15656" }}>
+          <WarningOutlined />
+          <small className="mx-1">{errorMessage}</small>
+        </div>
+      )}
     </>
   );
 };

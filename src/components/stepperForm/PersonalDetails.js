@@ -87,7 +87,7 @@ const PersonalDetails = ({ filds }) => {
                   </div>
                   <div>
                     <FormSelectField
-                      required
+                      required={true}
                       name={"address.country"}
                       options={filds["address"]?.country?.options}
                       showSearch={true}
@@ -96,7 +96,7 @@ const PersonalDetails = ({ filds }) => {
                   <div>
                     <FormInput
                       required
-                      type={"text"}
+                      type={"number"}
                       placeholder={"postal code"}
                       name={"address.postalCode"}
                     />

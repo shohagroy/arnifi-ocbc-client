@@ -13,7 +13,7 @@ const Form = ({ children, submitHandler, defaultValues, resolver }) => {
   const { handleSubmit, reset } = methods;
 
   const onSubmit = (data) => {
-    submitHandler(data);
+    // submitHandler(data);
     reset();
   };
 

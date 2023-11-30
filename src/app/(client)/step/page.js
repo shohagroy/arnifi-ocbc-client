@@ -194,27 +194,38 @@ const DetailsSubmitPage = () => {
 
     address: {
       line1: {
-        name: "address.line1",
+        name: "line1",
         label: "Address",
         type: "text",
         required: true,
         placeholder: "address line 1",
         errorText: "Address field is required",
       },
-      line2: {
-        name: "address.line2",
+
+      addressLine: {
+        name: "line2",
         type: "text",
         placeholder: "address line 2",
       },
+
       country: {
-        name: "address.country",
+        name: "country",
         type: "select",
         required: true,
         options: countryOptions,
         errorText: "Country field is required",
       },
+
+      line1: {
+        name: "line1",
+        type: "text",
+        required: true,
+        placeholder: "postal code",
+        errorText: "address line 1 field is required",
+      },
+
       postalCode: {
-        name: "address.postalCode",
+        name: "postalCode",
         type: "number",
         required: true,
         placeholder: "postal code",

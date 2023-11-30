@@ -11,17 +11,18 @@ export const generateFormValidator = (formData) => {
     }
 
     const addressFild = formData["address"];
+    const addressSchema = {};
 
     if (addressFild) {
       Object.keys(addressFild).map((key) => {
-        const requiredAddress = addressFild[key].required;
-
         if (addressFild[key].required) {
-          formErrorSchema[addressFild[key].name] = yup
+          addressSchema[addressFild[key].name] = yup
             .string()
             .required(addressFild[key]?.errorText);
         }
       });
+
+      formErrorSchema["address"] = yup.object().shape(addressSchema);
     }
   });
 

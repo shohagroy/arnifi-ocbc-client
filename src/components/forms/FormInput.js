@@ -3,6 +3,7 @@
 import { getErrorMessageByPropertyName } from "@/utils/schema-validator";
 import { Input } from "antd";
 import { useFormContext, Controller } from "react-hook-form";
+import { WarningOutlined } from "@ant-design/icons";
 
 const FormInput = ({
   name,
@@ -53,6 +54,7 @@ const FormInput = ({
             />
           ) : (
             <Input
+              style={errorMessage && { border: "1.5px solid #F15656" }}
               className="focus:border-primary h-[50px] px-[20px] py-[12px]"
               disabled={disabled}
               type={type}
@@ -64,7 +66,13 @@ const FormInput = ({
           )
         }
       />
-      <small style={{ color: "red" }}>{errorMessage}</small>
+
+      {errorMessage && (
+        <div style={{ color: "#F15656" }}>
+          <WarningOutlined />
+          <small className="mx-1">{errorMessage}</small>
+        </div>
+      )}
     </>
   );
 };
