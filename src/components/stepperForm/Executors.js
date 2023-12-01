@@ -9,7 +9,9 @@ import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 
 const Executors = ({ filds, persistKey }) => {
   const [savedValus, setSavedValues] = useState(
-    JSON.parse(getFromLocalStorage(persistKey))
+    !!getFromLocalStorage(persistKey)
+      ? JSON.parse(getFromLocalStorage(persistKey))
+      : ""
   );
   const [sameAddress, setSameAddress] = useState(false);
   const sameAddressHandelar = (isChack) => {

@@ -150,12 +150,6 @@ const DetailsSubmitPage = () => {
     },
   ];
 
-  // Spouse
-  // Child
-  // Parent
-  // Relative
-  // Other
-
   const relationOptions = [
     {
       value: "Spouse",
@@ -381,7 +375,7 @@ const DetailsSubmitPage = () => {
         errorText: "Address field is required",
       },
 
-      addressLine: {
+      line2: {
         name: "line2",
         type: "text",
         placeholder: "address line 2",
@@ -393,14 +387,6 @@ const DetailsSubmitPage = () => {
         required: true,
         options: countryOptions,
         errorText: "Country field is required",
-      },
-
-      line1: {
-        name: "line1",
-        type: "text",
-        required: true,
-        placeholder: "postal code",
-        errorText: "address line 1 field is required",
       },
 
       postalCode: {

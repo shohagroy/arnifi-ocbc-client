@@ -10,10 +10,14 @@ import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 
 const StepperForm = ({ steps, persistKey }) => {
   const [current, setCurrent] = useState(
-    Number(JSON.parse(getFromLocalStorage("step"))?.step) || 0
+    !!getFromLocalStorage("step")
+      ? Number(JSON.parse(getFromLocalStorage("step"))?.step)
+      : 0
   );
   const [savedValues, setSavedValues] = useState(
-    JSON.parse(getFromLocalStorage(persistKey)) || ""
+    !!getFromLocalStorage(persistKey)
+      ? JSON.parse(getFromLocalStorage(persistKey))
+      : ""
   );
 
   useEffect(() => {
