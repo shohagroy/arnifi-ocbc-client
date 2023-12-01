@@ -150,7 +150,36 @@ const DetailsSubmitPage = () => {
     },
   ];
 
-  const formData = {
+  // Spouse
+  // Child
+  // Parent
+  // Relative
+  // Other
+
+  const relationOptions = [
+    {
+      value: "Spouse",
+      label: "Spouse",
+    },
+    {
+      value: "Child",
+      label: "Child",
+    },
+    {
+      value: "Parent",
+      label: "Parent",
+    },
+    {
+      value: "Relative",
+      label: "Relative",
+    },
+    {
+      value: "Other",
+      label: "Other",
+    },
+  ];
+
+  const personalDataForm = {
     fullName: {
       name: "fullName",
       label: "Full Name",
@@ -234,41 +263,197 @@ const DetailsSubmitPage = () => {
     },
   };
 
+  const executorsDataForm = {
+    mainExecutorFullName: {
+      name: "mainExecutorFullName",
+      label: "Full Name of Main Executor",
+      type: "text",
+      required: true,
+      placeholder: "Enter your Main Executor Name",
+      errorText: "Main Executor Name field is required",
+    },
+
+    mainExecutorIdType: {
+      name: "mainExecutorIdType",
+      label: "Type Of ID",
+      type: "select",
+      required: true,
+      options: idTypeOptions,
+      errorText: "Type Of ID field is required",
+    },
+
+    mainExecutorIdNumber: {
+      name: "mainExecutorIdNumber",
+      label: "Emirates ID / Passport No",
+      type: "text",
+      required: true,
+      placeholder: "e.g.S1234567A",
+      errorText: "Emirates ID / Passport No field is required",
+    },
+
+    mainExecutorAddress: {
+      line1: {
+        name: "line1",
+        label: "Address",
+        type: "text",
+        required: true,
+        placeholder: "address line 1",
+        errorText: "Address field is required",
+      },
+
+      addressLine: {
+        name: "line2",
+        type: "text",
+        placeholder: "address line 2",
+      },
+
+      country: {
+        name: "country",
+        type: "select",
+        required: true,
+        options: countryOptions,
+        errorText: "Country field is required",
+      },
+
+      line1: {
+        name: "line1",
+        type: "text",
+        required: true,
+        placeholder: "postal code",
+        errorText: "address line 1 field is required",
+      },
+
+      postalCode: {
+        name: "postalCode",
+        type: "number",
+        required: true,
+        placeholder: "postal code",
+        errorText: "Postal field is required",
+      },
+    },
+  };
+
+  const relationshipDataForm = {
+    firstBeneficiaryName: {
+      name: "firstBeneficiaryName",
+      label: "Full name of first beneficiary",
+      type: "text",
+      required: true,
+      placeholder: "Enter your Main Executor Name",
+      errorText: "Full Name of First beneficiary field is required.",
+    },
+
+    relationship: {
+      name: "relationship",
+      label: "Relationship",
+      type: "select",
+      required: true,
+      options: relationOptions,
+      errorText: "Relationship field is required.",
+    },
+
+    firstBeneficiaryIdType: {
+      name: "firstBeneficiaryIdType",
+      label: "Type of ID",
+      type: "select",
+      options: idTypeOptions,
+      required: true,
+      placeholder: "select",
+      errorText: "The Type of ID field is required.",
+    },
+
+    firstBeneficiaryIdNumber: {
+      name: "firstBeneficiaryIdNumber",
+      label: "Emirates ID / Passport No",
+      type: "text",
+      required: true,
+      placeholder: "e.g.S1234567A",
+      errorText: "Emirates ID / Passport No field is required",
+    },
+
+    firstBeneficiaryAddress: {
+      line1: {
+        name: "line1",
+        label: "Address",
+        type: "text",
+        required: true,
+        placeholder: "address line 1",
+        errorText: "Address field is required",
+      },
+
+      addressLine: {
+        name: "line2",
+        type: "text",
+        placeholder: "address line 2",
+      },
+
+      country: {
+        name: "country",
+        type: "select",
+        required: true,
+        options: countryOptions,
+        errorText: "Country field is required",
+      },
+
+      line1: {
+        name: "line1",
+        type: "text",
+        required: true,
+        placeholder: "postal code",
+        errorText: "address line 1 field is required",
+      },
+
+      postalCode: {
+        name: "postalCode",
+        type: "number",
+        required: true,
+        placeholder: "postal code",
+        errorText: "Postal field is required",
+      },
+    },
+  };
+
   const steps = [
     {
       title: "Personal Details",
-      content: <PersonalDetails filds={formData} />,
+      content: (
+        <PersonalDetails filds={personalDataForm} persistKey={"form-data"} />
+      ),
+      data: personalDataForm,
     },
     {
       title: "Executors",
-      content: <Executors />,
+      content: <Executors filds={executorsDataForm} persistKey={"form-data"} />,
+      data: executorsDataForm,
     },
     {
       title: "Beneficiaries",
-      content: <Beneficiaries />,
+      content: (
+        <Beneficiaries filds={relationshipDataForm} persistKey={"form-data"} />
+      ),
+      data: relationshipDataForm,
     },
     {
       title: "Asset Allocation",
       content: <AssetAllocation />,
+      data: relationshipDataForm,
     },
     {
       title: "Instructions",
       content: <Instructions />,
+      data: relationshipDataForm,
     },
     {
       title: "Review",
       content: <ReviewAndSubmit />,
+      data: relationshipDataForm,
     },
   ];
 
   return (
     <section>
       <div className="max-w-5xl mx-auto">
-        <StepperForm
-          persistKey={"form-data"}
-          steps={steps}
-          formData={formData}
-        />
+        <StepperForm steps={steps} persistKey={"form-data"} />
       </div>
     </section>
   );

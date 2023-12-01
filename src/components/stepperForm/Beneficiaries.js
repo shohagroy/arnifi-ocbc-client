@@ -5,47 +5,36 @@ import React, { useState } from "react";
 import FormInput from "../forms/FormInput";
 import FormSelectField from "../forms/FormSelectField";
 import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 
-const Beneficiaries = () => {
-  const [address, setAddress] = useState(false);
-  const idTypeOptions = [
-    {
-      value: "Options - 1",
-      label: "Options - 1",
-    },
-    {
-      value: "Options - 2",
-      label: "Options - 2",
-    },
-    {
-      value: "Options - 3",
-      label: "Options - 3",
-    },
-    {
-      value: "Options - 5",
-      label: "Options - 5",
-    },
-    {
-      value: "Options - 6",
-      label: "Options - 6",
-    },
-    {
-      value: "Options - 7",
-      label: "Options - 7",
-    },
-    {
-      value: "Options - 8",
-      label: "Options - 8",
-    },
-    {
-      value: "Options - 9",
-      label: "Options - 9",
-    },
-    {
-      value: "Options - 10",
-      label: "Options - 10",
-    },
-  ];
+const Beneficiaries = ({ filds, persistKey }) => {
+  const [savedValus, setSavedValues] = useState(
+    JSON.parse(getFromLocalStorage(persistKey))
+  );
+  const [sameAddress, setSameAddress] = useState(false);
+  const sameAddressHandelar = (isChack) => {
+    setSameAddress(isChack);
+    if (isChack) {
+      savedValus["firstBeneficiaryAddress"] = savedValus?.address;
+      setToLocalStorage(persistKey, JSON.stringify(savedValus));
+    } else {
+      savedValus["firstBeneficiaryAddress"] = {};
+      setToLocalStorage(persistKey, JSON.stringify(savedValus));
+      setSavedValues({ ...savedValus, address: {} });
+    }
+  };
+
+  const fromDataArray = Object.keys(filds).map((key) => {
+    return {
+      name: filds[key]?.name || key,
+      label: filds[key]?.label,
+      type: filds[key]?.type,
+      required: filds[key]?.required,
+      placeholder: filds[key]?.placeholder,
+      errorText: filds[key]?.errorText,
+      options: filds[key]?.options,
+    };
+  });
 
   return (
     <div>
@@ -68,9 +57,94 @@ const Beneficiaries = () => {
           </a>
         </div>
       </div>
+
       <Card>
         <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+          {fromDataArray?.map((data) => {
+            const { type, placeholder, name, label, required, options } =
+              data || {};
+
+            return type === "text" ? (
+              <div key={name}>
+                <FormInput
+                  label={label}
+                  name={name}
+                  placeholder={placeholder}
+                  type={type}
+                  required={required}
+                />
+              </div>
+            ) : (
+              type === "select" && (
+                <div key={data?.name}>
+                  <FormSelectField
+                    label={label}
+                    name={name}
+                    showSearch={true}
+                    required={required}
+                    options={options}
+                  />
+                </div>
+              )
+            );
+          })}
+
+          {filds["firstBeneficiaryAddress"] && (
+            <>
+              <hr className="border-[#EEEEEE] col-span-2 my-4" />
+              <div>
+                <FormInput
+                  label={"Address"}
+                  required
+                  type={"text"}
+                  value={sameAddress ? savedValus?.address?.line1 : ""}
+                  placeholder={"Address line 1"}
+                  name={"firstBeneficiaryAddress.line1"}
+                />
+              </div>
+              <div></div>
+              <div className="">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-2">
+                    <FormInput
+                      type={"text"}
+                      placeholder={"Address line 2"}
+                      value={sameAddress ? savedValus?.address?.line2 : ""}
+                      name={"firstBeneficiaryAddress.line2"}
+                    />
+                  </div>
+                  <div>
+                    <FormSelectField
+                      required={true}
+                      name={"firstBeneficiaryAddress.country"}
+                      value={sameAddress ? savedValus?.address?.country : ""}
+                      options={
+                        filds["firstBeneficiaryAddress"]?.country?.options
+                      }
+                      showSearch={true}
+                    />
+                  </div>
+                  <div>
+                    <FormInput
+                      required
+                      type={"number"}
+                      value={sameAddress ? savedValus?.address?.postalCode : ""}
+                      placeholder={"postal code"}
+                      name={"firstBeneficiaryAddress.postalCode"}
+                    />
+                  </div>
+                </div>
+                <Checkbox
+                  className="py-2"
+                  onChange={(e) => sameAddressHandelar(e.target.checked)}
+                >
+                  Same as my address
+                </Checkbox>
+              </div>
+            </>
+          )}
+
+          {/* <div>
             <FormInput
               label={"Full name of first beneficiary"}
               name={"executorName"}
@@ -151,7 +225,7 @@ const Beneficiaries = () => {
             >
               Same as my address
             </Checkbox>
-          </div>
+          </div> */}
         </div>
       </Card>
 

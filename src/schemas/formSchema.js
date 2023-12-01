@@ -3,27 +3,46 @@ import * as yup from "yup";
 export const generateFormValidator = (formData) => {
   const formErrorSchema = {};
 
-  Object.keys(formData).map((key) => {
-    if (formData[key].required) {
-      formErrorSchema[formData[key].name] = yup
+  Object.keys(formData).map((mainKey) => {
+    if (formData[mainKey].required) {
+      formErrorSchema[formData[mainKey].name] = yup
         .string()
-        .required(formData[key]?.errorText);
+        .required(formData[mainKey]?.errorText);
     }
 
-    const addressFild = formData["address"];
     const addressSchema = {};
 
-    if (addressFild) {
-      Object.keys(addressFild).map((key) => {
-        if (addressFild[key].required) {
-          addressSchema[addressFild[key].name] = yup
-            .string()
-            .required(addressFild[key]?.errorText);
-        }
-      });
+    const filds = formData[mainKey];
 
-      formErrorSchema["address"] = yup.object().shape(addressSchema);
-    }
+    Object?.keys(filds)?.map((key) => {
+      if (filds[key]?.name) {
+        Object.keys(filds).map((key) => {
+          if (filds[key].required) {
+            addressSchema[filds[key].name] = yup
+              .string()
+              .required(filds[key]?.errorText);
+          }
+        });
+        formErrorSchema[mainKey] = yup.object().shape(addressSchema);
+      }
+    });
+
+    // if (
+    //   typeof Object.keys(formData[key]).map((key) => formData[key][key]) ===
+    //   "object"
+    // ) {
+    //   console.log("its object");
+    // }
+    // if (addressFild) {
+    //   Object.keys(addressFild).map((key) => {
+    //     if (addressFild[key].required) {
+    //       addressSchema[addressFild[key].name] = yup
+    //         .string()
+    //         .required(addressFild[key]?.errorText);
+    //     }
+    //   });
+    //   formErrorSchema["address"] = yup.object().shape(addressSchema);
+    // }
   });
 
   return yup.object().shape(formErrorSchema);

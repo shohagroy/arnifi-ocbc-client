@@ -1,20 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, message, Steps } from "antd";
 import Form from "../forms/From";
 import Link from "next/link";
 import { generateFormValidator } from "@/schemas/formSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { getFromLocalStorage } from "@/utils/local-storage";
+import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 
-const StepperForm = ({ steps, formData, persistKey }) => {
-  const [current, setCurrent] = useState(0);
+const StepperForm = ({ steps, persistKey }) => {
+  const [current, setCurrent] = useState(
+    Number(JSON.parse(getFromLocalStorage("step"))?.step) || 0
+  );
   const [savedValues, setSavedValues] = useState(
     JSON.parse(getFromLocalStorage(persistKey)) || ""
   );
 
-  const resolver = generateFormValidator(formData);
+  useEffect(() => {
+    setToLocalStorage("step", JSON.stringify({ step: current }));
+  }, [current]);
+
+  const resolver = generateFormValidator(steps[current]?.data);
 
   const prev = () => {
     setCurrent(current - 1);

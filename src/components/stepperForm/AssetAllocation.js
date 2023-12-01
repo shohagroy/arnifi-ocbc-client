@@ -86,7 +86,7 @@ const AssetAllocation = () => {
                 required
                 type={"text"}
                 placeholder={"address line 1"}
-                name={"address"}
+                name={"address.line1"}
               />
             </div>
 
@@ -106,7 +106,7 @@ const AssetAllocation = () => {
                   <FormInput
                     type={"text"}
                     placeholder={"address line 2"}
-                    name={"address"}
+                    name={"address.line2"}
                   />
                 </div>
                 <div>
