@@ -1,4 +1,4 @@
-import { baseApi } from "./features/baseApi/baseApi";
+import { baseApi } from "./features/baseApi/apiSlice";
 import { reducer } from "./rootReducer";
 import { configureStore } from "@reduxjs/toolkit";
 
