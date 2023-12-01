@@ -72,13 +72,13 @@ const HeroSection = () => {
                         <Flex justify="start" align="center">
                           <CheckOutlined />
                           <p className="p-2">
-                            Name and NRIC/Passport no. of Executors
+                            Name and Emirates ID/Passport No of Executors.
                           </p>
                         </Flex>
                         <Flex justify="start" align="center">
                           <CheckOutlined />
                           <p className="p-2">
-                            Name and NRIC/Passport no. of Beneficiaries
+                            Name and Emirates ID/Passport No. of Beneficiaries
                           </p>
                         </Flex>
                       </div>
