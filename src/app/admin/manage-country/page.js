@@ -21,9 +21,9 @@ const ManageCountryPage = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [isEditable, setIsEditable] = useState(false);
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
-  const [sortBy, setSortBy] = useState("");
-  const [sortOrder, setSortOrder] = useState("");
+  const [size, setSize] = useState(8);
+  const [sortBy, setSortBy] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
 
   // modal code
@@ -226,7 +226,7 @@ const ManageCountryPage = () => {
         <AdminBreadCrumb items={breadCrumbItems} />
 
         <div className="max-w-7xl mx-auto my-4 px-2">
-          <Card className="mt-10 min-h-[70vh]">
+          <Card className="mt-10 min-h-[80vh]">
             <div>
               <Row gutter={16}>
                 <Col span={10}>
@@ -235,27 +235,45 @@ const ManageCountryPage = () => {
                     change={(e) => setSearchTerm(e.target.value)}
                   />
                 </Col>
-                <Col span={10}>
-                  <div className="flex items-center font-primary text-xl">
-                    <p>Sort by Date:</p>
-
+                <Col span={10} className="flex items-center">
+                  <div className="flex items-center font-primary text-lg">
+                    <p>Sort by:</p>
                     <Select
-                      // style={
-                      //   errorMessage && {
-                      //     border: "1.5px solid #F15656",
-                      //     borderRadius: "10px",
-                      //   }
-                      // }
-                      className={`focus:border-primary h-[50px] w-[200px] ml-3`}
-                      // onChange={handleChange ? handleChange : onChange}
+                      onChange={(e) => setSortBy(e)}
+                      value={sortBy}
+                      className={`focus:border-primary h-[50px] w-[100px] ml-3`}
                       size={"large"}
-                      options={dateOptions}
+                      options={[
+                        {
+                          label: "Name",
+                          value: "name",
+                        },
+                        {
+                          label: "Date",
+                          value: "createdAt",
+                        },
+                      ]}
                     />
                   </div>
-                  {/* <SearchInput
-                    placeholder={"search..."}
-                    change={(e) => setSearchTerm(e.target.value)}
-                  /> */}
+
+                  <div className="flex items-center font-primary text-lg">
+                    <Select
+                      className={`focus:border-primary h-[50px] w-[200px] ml-3`}
+                      onChange={(e) => setSortOrder(e)}
+                      value={sortOrder}
+                      size={"large"}
+                      options={[
+                        {
+                          label: "Low to High",
+                          value: "asc",
+                        },
+                        {
+                          label: "High to Low",
+                          value: "desc",
+                        },
+                      ]}
+                    />
+                  </div>
                 </Col>
                 <Col span={4}>
                   <AddButton
@@ -266,7 +284,7 @@ const ManageCountryPage = () => {
               </Row>
             </div>
 
-            <div className=" my-4">
+            <div className="my-4">
               <DisplayTable
                 loading={tableLoading}
                 columns={columns}

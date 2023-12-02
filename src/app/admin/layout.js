@@ -61,9 +61,9 @@ const AdminDashboardLayout = ({ children }) => {
           >
             {children}
           </div>
-          <Footer className="mt-14">
+          {/* <Footer className="mt-14">
             <AdminFooter />
-          </Footer>
+          </Footer> */}
         </Content>
       </Layout>
     </div>
