@@ -37,8 +37,8 @@ export const countryApi = baseApi.injectEndpoints({
     }),
 
     updateCountry: build.mutation({
-      query: ({ id, ...data }) => ({
-        url: `/countries/${id}`,
+      query: ({ key, sl, ...data }) => ({
+        url: `/countries/${key}`,
         method: "PATCH",
         data,
       }),

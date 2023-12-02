@@ -34,7 +34,7 @@ const CreateUpdateInfoModal = ({
           key={"yes"}
           onClick={handleOk}
         >
-          {loading ? "Creating..." : " Yes, Confirm"}
+          {loading ? "Loading..." : " Yes, Confirm"}
         </Button>,
       ]}
       onCancel={() => setOpen(false)}

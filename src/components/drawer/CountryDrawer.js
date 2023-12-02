@@ -12,53 +12,93 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { countrySchema } from "@/schemas/country";
 import CreateUpdateInfoModal from "../modal/CreateUpdateInfoModal";
 
-const CountryDrawer = ({ open, setOpen, valueObj, valueFn }) => {
-  const [countryInfo, setCountryInfo] = useState({});
+const CountryDrawer = ({
+  open,
+  setOpen,
+  setData,
+  data,
+  openModal,
+  setOpenModal,
+  modalText,
+  setModalText,
+}) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [createCountry, { isLoading: createLoading }] =
     useCreateCountryMutation();
   const [updateCountry, { isLoading: updateLoading }] =
     useUpdateCountryMutation();
 
-  const [openModal, setOpenModal] = useState(false);
-  const [modalText, setModalText] = useState({});
-
   const onSubmit = async (data) => {
     setOpenModal(true);
 
-    const info = {
-      tittle: "Are you sure create this country",
-      details: (
-        <p className="font-primary">
-          Country Name: <strong>{data?.name}</strong>
-        </p>
-      ),
-    };
-
-    setModalText(info);
-    setCountryInfo(data);
+    if (data?.key) {
+      const info = {
+        tittle: "Are you sure update this country info?",
+        details: (
+          <p className="font-primary">
+            Country Name: <strong>{data?.name}</strong>
+          </p>
+        ),
+      };
+      setModalText(info);
+      setData(data);
+    } else {
+      const info = {
+        tittle: "Are you sure create this country?",
+        details: (
+          <p className="font-primary">
+            Country Name: <strong>{data?.name}</strong>
+          </p>
+        ),
+      };
+      setModalText(info);
+      setData(data);
+    }
   };
 
   const modalOkHandelar = async () => {
-    const result = await createCountry(countryInfo).unwrap();
-
-    if (result?.data.success) {
-      messageApi.open({
-        type: "success",
-        content: result?.data?.message || "Country Create Successfully!",
-      });
-      setOpenModal(false);
-      setOpen(false);
-      setCountryInfo({
-        name: "",
-        postalCode: "",
-        countryCode: "",
-      });
+    if (data?.key) {
+      // update country
+      const result = await updateCountry(data).unwrap();
+      if (result?.data.success) {
+        messageApi.open({
+          type: "success",
+          content: result?.data?.message || "Country Updated Successfully!",
+        });
+        setOpenModal(false);
+        setOpen(false);
+        setData({
+          name: "",
+          postalCode: "",
+          countryCode: "",
+        });
+      } else {
+        messageApi.open({
+          type: "error",
+          content: result?.data?.message || "Something went wrong!",
+        });
+      }
     } else {
-      messageApi.open({
-        type: "error",
-        content: result?.data?.message || "Something went wrong!",
-      });
+      // create new
+      const result = await createCountry(data).unwrap();
+      if (result?.data.success) {
+        messageApi.open({
+          type: "success",
+          content: result?.data?.message || "Country Create Successfully!",
+        });
+        setOpenModal(false);
+        setOpen(false);
+        setData({
+          name: "",
+          postalCode: "",
+          countryCode: "",
+        });
+      } else {
+        messageApi.open({
+          type: "error",
+          content: result?.data?.message || "Something went wrong!",
+        });
+      }
     }
   };
   return (
@@ -67,7 +107,7 @@ const CountryDrawer = ({ open, setOpen, valueObj, valueFn }) => {
         className="font-primary"
         title={
           <Flex className="font-primary" justify="space-between" align="center">
-            <h2>Create New Country</h2>
+            <h2> {data?.key ? "Update Country Info" : "Create New Country"}</h2>
 
             <Button
               icon={<CloseOutlined />}
@@ -93,7 +133,7 @@ const CountryDrawer = ({ open, setOpen, valueObj, valueFn }) => {
           <Form
             submitHandler={onSubmit}
             resolver={yupResolver(countrySchema)}
-            defaultValues={countryInfo}
+            defaultValues={data}
           >
             <FormInput
               name={"name"}
@@ -136,20 +176,14 @@ const CountryDrawer = ({ open, setOpen, valueObj, valueFn }) => {
               type="primary"
               size="large"
             >
-              {!valueObj?.key
-                ? createLoading
-                  ? "Creating..."
-                  : "Create +"
-                : updateLoading
-                ? "Updating..."
-                : "Update"}
+              {!data?.key ? "Create +" : "Update"}
             </Button>
           </Form>
         </div>
       </Drawer>
 
       <CreateUpdateInfoModal
-        loading={createLoading}
+        loading={createLoading || updateLoading}
         setOpen={setOpenModal}
         open={openModal}
         submitFn={modalOkHandelar}

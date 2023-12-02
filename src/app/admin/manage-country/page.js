@@ -2,12 +2,11 @@
 
 import AdminBreadCrumb from "@/components/admin/AdminBreadCrumb";
 import DisplayTable from "@/components/table/DisplayTable";
-import { Button, Card, Col, Input, Row, Select, message } from "antd";
+import { Button, Card, Col, Row, Select, message } from "antd";
 import Link from "next/link";
 import React, { useState } from "react";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import { useDebounced } from "@/redux/hooks/useDebounced";
-import ConfirmModal from "@/components/ui/ConfirmModal";
 import CountryDrawer from "@/components/drawer/CountryDrawer";
 import {
   useDeleteCountryMutation,
@@ -16,10 +15,13 @@ import {
 import AddButton from "../../../components/ui/button/AddButton";
 import SearchInput from "@/components/ui/dataInput/SearchInput";
 import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal";
+import dayjs from "dayjs";
 
 const ManageCountryPage = () => {
+  const [countryInfo, setCountryInfo] = useState({});
   const [messageApi, contextHolder] = message.useMessage();
-  const [isEditable, setIsEditable] = useState(false);
+
+  // filtar
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(8);
   const [sortBy, setSortBy] = useState("name");
@@ -28,9 +30,7 @@ const ManageCountryPage = () => {
 
   // modal code
   const [openDrawer, setOpenDrawer] = useState(false);
-
-  const [open, setOpen] = useState(false);
-  const [countryInfo, setCountryInfo] = useState({});
+  const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState({});
 
   const query = {};
@@ -53,8 +53,6 @@ const ManageCountryPage = () => {
   });
   const { meta } = data || {};
 
-  console.log(data);
-
   const countriesData = data?.data?.data.map((item, i) => {
     return {
       key: item?.id,
@@ -62,49 +60,52 @@ const ManageCountryPage = () => {
       name: item?.name,
       postalCode: item?.postalCode,
       countryCode: item?.countryCode,
-      createdAt: item?.createdAt,
+      createdAt: dayjs(item?.createdAt).format("MMM D, YYYY hh:mm A"),
     };
   });
 
   const [deleteCountry, { isLoading: deleteLoading }] =
     useDeleteCountryMutation();
 
-  const itemDeleteHandelar = async () => {
+  const openModalHandelar = (data) => {
+    const info = {
+      tittle: "Are you sure delete this country info?",
+      details: (
+        <p className="font-primary">
+          Country Name: <strong>{data?.name}</strong>
+        </p>
+      ),
+    };
+
+    setCountryInfo(data);
+    setModalText(info);
+    setOpenModal(true);
+  };
+
+  const deleteHandelar = async () => {
     const result = await deleteCountry(countryInfo?.key).unwrap();
-    if (result?.errorMessages) {
-      messageApi.open({
-        type: "error",
-        content: result.errorMessages || "Something went wrong!",
-      });
-    }
-    if (result?.data?.id) {
+    if (result?.data.success) {
       messageApi.open({
         type: "success",
-        content: "Country Delete Successfully!",
+        content: result?.data?.message || "Country Delete Successfully!",
       });
-      setOpen(false);
+      setOpenModal(false);
+      setCountryInfo({
+        name: "",
+        postalCode: "",
+        countryCode: "",
+      });
+    } else {
+      messageApi.open({
+        type: "error",
+        content: result?.data?.message || "Something went wrong!",
+      });
     }
   };
 
-  const openModalHandelar = (data) => {
+  const updateHandelar = (data) => {
     setCountryInfo(data);
-    setModalText({
-      tittle: "Are your sure Delete this Country?",
-      details: (
-        <div>
-          <p>
-            Name: <span className="text-xl font-bold">{data?.name}</span>
-          </p>
-        </div>
-      ),
-    });
-    setOpen(true);
-  };
-
-  const handelCountryUpdate = (data) => {
-    console.log("updated button click");
-    // setCountryInfo(data);
-    // setIsEditable(true);
+    setOpenDrawer(true);
   };
 
   const columns = [
@@ -140,16 +141,7 @@ const ManageCountryPage = () => {
       width: 200,
       // align: "center",
     },
-    // {
-    //   title: <p>Postal Code</p>,
-    //   dataIndex: "createdAt",
-    //   width: 250, // Set the width here
-    //   align: "center",
-    //   render: function (data) {
-    //     return data && dayjs(data).format("MMM D, YYYY hh:mm A");
-    //   },
-    //   sorter: true,
-    // },
+
     {
       title: <p>Action</p>,
       width: 200, // Set the width here
@@ -158,22 +150,18 @@ const ManageCountryPage = () => {
         return (
           <>
             <Button
-              style={{
-                margin: "0px 5px",
-              }}
-              onClick={() => handelCountryUpdate(data)}
+              className="mx-2 bg-primary"
+              onClick={() => updateHandelar(data)}
               type="primary"
             >
-              <EditOutlined />
+              <EditFilled />
             </Button>
             <Button
-              onClick={() => {
-                console.log("delete");
-              }}
+              onClick={() => openModalHandelar(data)}
               type="primary"
               danger
             >
-              <DeleteOutlined />
+              <DeleteFilled />
             </Button>
           </>
         );
@@ -191,12 +179,6 @@ const ManageCountryPage = () => {
     setSortOrder(order === "ascend" ? "asc" : "desc");
   };
 
-  // const resetFilters = () => {
-  //   setSortBy("");
-  //   setSortOrder("");
-  //   setSearchTerm("");
-  // };
-
   const breadCrumbItems = [
     {
       label: <Link href={"/admin"}>Admin</Link>,
@@ -205,17 +187,6 @@ const ManageCountryPage = () => {
     {
       label: "Manage Admins",
       link: "/admin/manage-admins",
-    },
-  ];
-
-  const dateOptions = [
-    {
-      label: "Up to Low",
-      value: "asd",
-    },
-    {
-      label: "Low to High",
-      value: "desc",
     },
   ];
 
@@ -304,15 +275,19 @@ const ManageCountryPage = () => {
       <CountryDrawer
         open={openDrawer}
         setOpen={setOpenDrawer}
-        // valueObj={countryInfo}
-        // valueFn={setCountryInfo}
+        data={countryInfo}
+        setData={setCountryInfo}
+        modalText={modalText}
+        setModalText={setModalText}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
       />
 
-      <ConfirmModal
-        submitFn={itemDeleteHandelar}
-        setOpen={setOpen}
-        open={open}
+      <CreateUpdateInfoModal
         loading={deleteLoading}
+        setOpen={setOpenModal}
+        open={openModal}
+        submitFn={deleteHandelar}
         modalText={modalText}
       />
     </main>

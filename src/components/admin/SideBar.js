@@ -37,8 +37,8 @@ const SideBar = () => {
       icon: <SettingFilled />,
       children: [
         {
-          label: <Link href={`/admin/manage-country`}>Manage Country</Link>,
-          key: `/adminmanage-country`,
+          label: <Link href={`/admin/manage-countries`}>Manage Countries</Link>,
+          key: `/adminmanage-countries`,
         },
 
         {
