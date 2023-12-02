@@ -3,11 +3,9 @@
 import AdminBreadCrumb from "@/components/admin/AdminBreadCrumb";
 import DisplayTable from "@/components/table/DisplayTable";
 import { Button, Card, Col, Input, Row, Select, message } from "antd";
-import Head from "next/head";
 import Link from "next/link";
 import React, { useState } from "react";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
 import { useDebounced } from "@/redux/hooks/useDebounced";
 import ConfirmModal from "@/components/ui/ConfirmModal";
 import CountryDrawer from "@/components/drawer/CountryDrawer";
@@ -15,9 +13,9 @@ import {
   useDeleteCountryMutation,
   useGetAllCountriesQuery,
 } from "@/redux/features/country/countryApi";
-import FormSelectField from "@/components/forms/FormSelectField";
 import AddButton from "../../../components/ui/button/AddButton";
 import SearchInput from "@/components/ui/dataInput/SearchInput";
+import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal";
 
 const ManageCountryPage = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -27,6 +25,9 @@ const ManageCountryPage = () => {
   const [sortBy, setSortBy] = useState("");
   const [sortOrder, setSortOrder] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  // modal code
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [countryInfo, setCountryInfo] = useState({});
@@ -47,16 +48,23 @@ const ManageCountryPage = () => {
     query["search"] = debouncedTerm;
   }
 
-  const { data, isLoading } = useGetAllCountriesQuery({ ...query });
-  const countriesData = data?.data?.map((item, i) => {
+  const { data, isLoading: tableLoading } = useGetAllCountriesQuery({
+    ...query,
+  });
+  const { meta } = data || {};
+
+  console.log(data);
+
+  const countriesData = data?.data?.data.map((item, i) => {
     return {
       key: item?.id,
       sl: page * size - size + i + 1,
       name: item?.name,
+      postalCode: item?.postalCode,
+      countryCode: item?.countryCode,
       createdAt: item?.createdAt,
     };
   });
-  const meta = data?.meta || {};
 
   const [deleteCountry, { isLoading: deleteLoading }] =
     useDeleteCountryMutation();
@@ -94,14 +102,15 @@ const ManageCountryPage = () => {
   };
 
   const handelCountryUpdate = (data) => {
-    setCountryInfo(data);
-    setIsEditable(true);
+    console.log("updated button click");
+    // setCountryInfo(data);
+    // setIsEditable(true);
   };
 
   const columns = [
     {
       title: <p>SL No</p>,
-      width: 100,
+      width: 80,
       align: "center",
       dataIndex: "sl",
     },
@@ -109,21 +118,27 @@ const ManageCountryPage = () => {
       title: <p>Country Name</p>,
       dataIndex: "name",
       width: 300,
-      align: "center",
+      // align: "center",
     },
 
     {
       title: <p>Postal Code</p>,
       dataIndex: "postalCode",
-      width: 300,
-      align: "center",
+      width: 150,
+      // align: "center",
     },
 
     {
       title: <p>Country Code</p>,
-      dataIndex: "name",
-      width: 300,
-      align: "center",
+      dataIndex: "countryCode",
+      width: 150,
+      // align: "center",
+    },
+    {
+      title: <p>Created Date</p>,
+      dataIndex: "createdAt",
+      width: 200,
+      // align: "center",
     },
     // {
     //   title: <p>Postal Code</p>,
@@ -137,7 +152,7 @@ const ManageCountryPage = () => {
     // },
     {
       title: <p>Action</p>,
-      width: 100, // Set the width here
+      width: 200, // Set the width here
       align: "center",
       render: function (data) {
         return (
@@ -152,7 +167,9 @@ const ManageCountryPage = () => {
               <EditOutlined />
             </Button>
             <Button
-              onClick={() => openModalHandelar(data)}
+              onClick={() => {
+                console.log("delete");
+              }}
               type="primary"
               danger
             >
@@ -186,8 +203,8 @@ const ManageCountryPage = () => {
       link: "/admin",
     },
     {
-      label: "Manage Country",
-      link: "/admin/manage-country",
+      label: "Manage Admins",
+      link: "/admin/manage-admins",
     },
   ];
 
@@ -243,7 +260,7 @@ const ManageCountryPage = () => {
                 <Col span={4}>
                   <AddButton
                     text={"Add Country"}
-                    click={() => setIsEditable(true)}
+                    click={() => setOpenDrawer(true)}
                   />
                 </Col>
               </Row>
@@ -251,7 +268,7 @@ const ManageCountryPage = () => {
 
             <div className=" my-4">
               <DisplayTable
-                loading={isLoading}
+                loading={tableLoading}
                 columns={columns}
                 dataSource={countriesData}
                 pageSize={size}
@@ -267,11 +284,12 @@ const ManageCountryPage = () => {
       </section>
 
       <CountryDrawer
-        open={isEditable}
-        setOpen={setIsEditable}
-        valueObj={countryInfo}
-        valueFn={setCountryInfo}
+        open={openDrawer}
+        setOpen={setOpenDrawer}
+        // valueObj={countryInfo}
+        // valueFn={setCountryInfo}
       />
+
       <ConfirmModal
         submitFn={itemDeleteHandelar}
         setOpen={setOpen}

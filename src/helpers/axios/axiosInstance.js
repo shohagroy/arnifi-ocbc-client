@@ -26,8 +26,8 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   async function (response) {
     const responseObject = {
-      data: response?.data?.data,
-      meta: response?.data?.meta,
+      data: response?.data,
+      meta: response?.data?.meta || null,
     };
     return responseObject;
   },

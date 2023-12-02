@@ -4,7 +4,7 @@ export const countryApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     createCountry: build.mutation({
       query: (data) => ({
-        url: "/countries/create",
+        url: "/countries",
         method: "POST",
         data,
       }),
