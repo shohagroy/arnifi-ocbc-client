@@ -1,4 +1,4 @@
-import { Button, Drawer, Flex, Row, message } from "antd";
+import { Button, Drawer, Flex, message } from "antd";
 import React, { useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
 import Form from "../forms/From";
@@ -10,21 +10,16 @@ import {
 } from "@/redux/features/country/countryApi";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { countrySchema } from "@/schemas/country";
-import CreateUpdateInfoModal from "../modal/CreateUpdateInfoModal";
+import CreateUpdateInfoModal from "../modal/DeleteInfoModal";
 
-const CountryDrawer = ({
-  open,
-  setOpen,
-  setData,
-  data,
-  openModal,
-  setOpenModal,
-  modalText,
-  setModalText,
-}) => {
+const CountryDrawer = ({ open, setOpen, setData, data }) => {
   const [messageApi, contextHolder] = message.useMessage();
+  const [openModal, setOpenModal] = useState(false);
+  const [modalText, setModalText] = useState({});
+
   const [createCountry, { isLoading: createLoading }] =
     useCreateCountryMutation();
+
   const [updateCountry, { isLoading: updateLoading }] =
     useUpdateCountryMutation();
 
@@ -60,7 +55,7 @@ const CountryDrawer = ({
     if (data?.key) {
       // update country
       const result = await updateCountry(data).unwrap();
-      if (result?.data.success) {
+      if (result?.data?.success) {
         messageApi.open({
           type: "success",
           content: result?.data?.message || "Country Updated Successfully!",
@@ -75,16 +70,17 @@ const CountryDrawer = ({
       } else {
         messageApi.open({
           type: "error",
-          content: result?.data?.message || "Something went wrong!",
+          content: result?.message || "Something went wrong!",
         });
       }
     } else {
       // create new
       const result = await createCountry(data).unwrap();
-      if (result?.data.success) {
+
+      if (result?.data?.success) {
         messageApi.open({
           type: "success",
-          content: result?.data?.message || "Country Create Successfully!",
+          content: result?.message || "Country Create Successfully!",
         });
         setOpenModal(false);
         setOpen(false);
@@ -96,7 +92,7 @@ const CountryDrawer = ({
       } else {
         messageApi.open({
           type: "error",
-          content: result?.data?.message || "Something went wrong!",
+          content: result?.message || "Something went wrong!",
         });
       }
     }

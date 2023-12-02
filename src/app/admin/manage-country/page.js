@@ -14,8 +14,8 @@ import {
 } from "@/redux/features/country/countryApi";
 import AddButton from "../../../components/ui/button/AddButton";
 import SearchInput from "@/components/ui/dataInput/SearchInput";
-import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal";
 import dayjs from "dayjs";
+import DeleteInfoModal from "@/components/modal/DeleteInfoModal";
 
 const ManageCountryPage = () => {
   const [countryInfo, setCountryInfo] = useState({});
@@ -84,7 +84,7 @@ const ManageCountryPage = () => {
 
   const deleteHandelar = async () => {
     const result = await deleteCountry(countryInfo?.key).unwrap();
-    if (result?.data.success) {
+    if (result?.data?.success) {
       messageApi.open({
         type: "success",
         content: result?.data?.message || "Country Delete Successfully!",
@@ -98,7 +98,7 @@ const ManageCountryPage = () => {
     } else {
       messageApi.open({
         type: "error",
-        content: result?.data?.message || "Something went wrong!",
+        content: result?.message || "Something went wrong!",
       });
     }
   };
@@ -279,11 +279,11 @@ const ManageCountryPage = () => {
         setData={setCountryInfo}
         modalText={modalText}
         setModalText={setModalText}
-        openModal={openModal}
-        setOpenModal={setOpenModal}
+        // openModal={openModal}
+        // setOpenModal={setOpenModal}
       />
 
-      <CreateUpdateInfoModal
+      <DeleteInfoModal
         loading={deleteLoading}
         setOpen={setOpenModal}
         open={openModal}
