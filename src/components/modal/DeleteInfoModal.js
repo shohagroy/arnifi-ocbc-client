@@ -25,10 +25,11 @@ const DeleteInfoModal = ({ setOpen, open, loading, submitFn, modalText }) => {
         <Button
           className="bg-primary text-white font-bold "
           disabled={loading}
+          loading={loading}
           key={"yes"}
           onClick={handleOk}
         >
-          {loading ? "Loading..." : " Yes, Confirm"}
+          {loading ? "Loading.." : " Yes, Confirm"}
         </Button>,
       ]}
       onCancel={() => setOpen(false)}

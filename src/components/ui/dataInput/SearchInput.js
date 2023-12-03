@@ -8,7 +8,7 @@ const SearchInput = ({ change, placeholder }) => {
       <Input
         prefix={<SearchOutlined />}
         suffix={
-          <Button type="link" className="text-gray-500">
+          <Button type="link" className="text-gray-500 ">
             <CloseOutlined />
           </Button>
         }

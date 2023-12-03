@@ -4,34 +4,53 @@ import { CloseOutlined } from "@ant-design/icons";
 import Form from "../forms/From";
 import FormInput from "../forms/FormInput";
 
-import {
-  useCreateCountryMutation,
-  useUpdateCountryMutation,
-} from "@/redux/features/country/countryApi";
+import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { countrySchema } from "@/schemas/country";
 import CreateUpdateInfoModal from "../modal/DeleteInfoModal";
+import FormSelectField from "../forms/FormSelectField";
+import { idTypeSchema } from "@/schemas/IdType";
+import {
+  useCreateIdTypeMutation,
+  useUpdateIdTypesMutation,
+} from "@/redux/features/idType/idTypeApi";
 
-const CountryDrawer = ({ open, setOpen, setData, data }) => {
+const IdTypeDrawer = ({
+  open,
+  setOpen,
+  setData,
+  data,
+  options,
+  optionsLoading,
+}) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState({});
 
-  const [createCountry, { isLoading: createLoading }] =
-    useCreateCountryMutation();
+  // const { data: countriesData, isLoading: countryLoading } =
+  //   useGetAllCountryDataQuery();
 
-  const [updateCountry, { isLoading: updateLoading }] =
-    useUpdateCountryMutation();
+  // const options = countriesData?.data?.data.map((item) => {
+  //   return {
+  //     label: item?.name,
+  //     value: item?.id,
+  //   };
+  // });
+
+  const [createIdType, { isLoading: createLoading }] =
+    useCreateIdTypeMutation();
+
+  const [updateIdType, { isLoading: updateLoading }] =
+    useUpdateIdTypesMutation();
 
   const onSubmit = async (data) => {
     setOpenModal(true);
 
     if (data?.key) {
       const info = {
-        tittle: "Are you sure update this country info?",
+        tittle: "Are you sure update this ID Type?",
         details: (
           <p className="font-primary">
-            Country Name: <strong>{data?.name}</strong>
+            ID Type: <strong>{data?.tittle}</strong>
           </p>
         ),
       };
@@ -39,10 +58,10 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
       setData(data);
     } else {
       const info = {
-        tittle: "Are you sure create this country?",
+        tittle: "Are you sure create this ID Type?",
         details: (
           <p className="font-primary">
-            Country Name: <strong>{data?.name}</strong>
+            ID Type: <strong>{data?.tittle}</strong>
           </p>
         ),
       };
@@ -53,19 +72,18 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
 
   const modalOkHandelar = async () => {
     if (data?.key) {
-      // update country
-      const result = await updateCountry(data).unwrap();
+      // update
+      const result = await updateIdType(data).unwrap();
       if (result?.data?.success) {
         messageApi.open({
           type: "success",
-          content: result?.data?.message || "Country Updated Successfully!",
+          content: result?.data?.message || "ID Type Updated Successfully!",
         });
         setOpenModal(false);
         setOpen(false);
         setData({
-          name: "",
-          postalCode: "",
-          countryCode: "",
+          tittle: "",
+          countryId: "",
         });
       } else {
         messageApi.open({
@@ -75,19 +93,18 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
       }
     } else {
       // create new
-      const result = await createCountry(data).unwrap();
+      const result = await createIdType(data).unwrap();
 
       if (result?.data?.success) {
         messageApi.open({
           type: "success",
-          content: result?.message || "Country Create Successfully!",
+          content: result?.message || "ID Type Create Successfully!",
         });
         setOpenModal(false);
         setOpen(false);
         setData({
-          name: "",
-          postalCode: "",
-          countryCode: "",
+          tittle: "",
+          countryId: "",
         });
       } else {
         messageApi.open({
@@ -109,7 +126,7 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
         className="font-primary"
         title={
           <Flex className="font-primary" justify="space-between" align="center">
-            <h2> {data?.key ? "Update Country Info" : "Create New Country"}</h2>
+            <h2> {data?.key ? "Update ID Type" : "Create New ID Type"}</h2>
 
             <Button
               icon={<CloseOutlined />}
@@ -132,47 +149,32 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
           {contextHolder}
           <Form
             submitHandler={onSubmit}
-            resolver={yupResolver(countrySchema)}
+            resolver={yupResolver(idTypeSchema)}
             defaultValues={data}
           >
             <FormInput
-              name={"name"}
+              name={"tittle"}
               type={"text"}
               size="large"
-              label={"Country Full Name"}
-              placeholder={"Type Country Full Name"}
+              label={"ID Types Tittle"}
+              placeholder={"e.g. Emirates ID"}
               required
             />
 
-            <div className="grid my-2 gap-4 grid-cols-2">
-              <div>
-                <FormInput
-                  name={"postalCode"}
-                  type={"text"}
-                  size="large"
-                  label={"Postal Code"}
-                  placeholder={"e.g. 5403"}
-                  required
-                />
-              </div>
-
-              <div>
-                <FormInput
-                  name={"countryCode"}
-                  type={"text"}
-                  size="large"
-                  label={"Country Code"}
-                  placeholder={"e.g. +971"}
-                  required
-                />
-              </div>
-            </div>
+            <FormSelectField
+              loading={optionsLoading}
+              showSearch={true}
+              name={"countryId"}
+              label={"Select Country"}
+              options={options}
+              required
+            />
 
             <Button
               disabled={createLoading || updateLoading}
               htmlType="submit"
               // loading={createLoading}
-              className="my-4 bg-primary h-[50px] font-bold px-10"
+              className="my-4 bg-primary text-white h-[50px] font-bold px-10"
               type="primary"
               size="large"
             >
@@ -193,4 +195,4 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
   );
 };
 
-export default CountryDrawer;
+export default IdTypeDrawer;

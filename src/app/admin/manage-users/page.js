@@ -198,7 +198,7 @@ const ManageAdminPage = () => {
 
   const breadCrumbItems = [
     {
-      label: <Link href={"/admin"}>Admin</Link>,
+      label: <p href={"/admin"}>Admin</p>,
       link: "/admin",
     },
     {

@@ -27,8 +27,8 @@ const SideBar = () => {
       icon: <DashboardFilled />,
     },
     {
-      label: <Link href={`/admin/manage-admins`}>Manage Admins</Link>,
-      key: "/admin/manage-admins",
+      label: <Link href={`/admin/manage-users`}>Manage Users</Link>,
+      key: "/admin/manage-users",
       icon: <UserSwitchOutlined />,
     },
     {
@@ -40,11 +40,10 @@ const SideBar = () => {
           label: <Link href={`/admin/manage-countries`}>Manage Countries</Link>,
           key: `/admin/manage-countries`,
         },
-
-        {
-          label: <Link href={`/admin/manage-city`}>Manage City</Link>,
-          key: `/admin/manage-city`,
-        },
+        // {
+        //   label: <Link href={`/admin/manage-cities`}>Manage Cities</Link>,
+        //   key: `/admin/manage-cities`,
+        // },
         {
           label: <Link href={`/admin/manage-idtypes`}>Manage ID Types</Link>,
           key: `/admin/manage-idtypes`,
