@@ -28,3 +28,11 @@ export const createSchema = yup.object().shape({
     .required("Role field is required"),
   contact: yup.string().required("Contact field is required"),
 });
+
+export const loginSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email field is required"),
+  password: yup.string().required("Password field is required"),
+});

@@ -11,6 +11,14 @@ export const userApi = baseApi.injectEndpoints({
       invalidatesTags: ["users"],
     }),
 
+    login: build.mutation({
+      query: (data) => ({
+        url: "/auth/login",
+        method: "POST",
+        data,
+      }),
+    }),
+
     updateInfo: build.mutation({
       query: ({ key, ...other }) => ({
         url: `/users/${key}`,
@@ -44,4 +52,5 @@ export const {
   useUpdateInfoMutation,
   useGetAllUserQuery,
   useDeleteUserMutation,
+  useLoginMutation,
 } = userApi;
