@@ -5,7 +5,7 @@ import { Button, Dropdown, Flex } from "antd";
 
 import Avatar from "antd/es/avatar/avatar";
 import { UserOutlined } from "@ant-design/icons";
-import { userRole } from "@/constans/userRole";
+import { ENUM_USER_ROLE } from "@/constans/userRole";
 import { removeUserInfo } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 
@@ -40,7 +40,9 @@ const AdminHeader = ({ avatar, role, name }) => {
               <h3 className="text-md">{name || ""}</h3>
               <p>
                 <small>
-                  {role === userRole.SUPER_ADMIN ? "Super Admin" : "Admin"}
+                  {role === ENUM_USER_ROLE.SUPER_ADMIN
+                    ? "Super Admin"
+                    : "Admin"}
                 </small>
               </p>
             </div>

@@ -50,6 +50,7 @@ const FormInput = ({
               size={size}
               placeholder={placeholder}
               {...field}
+              disabled={disabled}
               value={value ? value : field.value}
             />
           ) : (

@@ -28,7 +28,7 @@ const SideBar = () => {
     },
     {
       label: <Link href={`/admin/manage-admins`}>Manage Admins</Link>,
-      key: "Manage Admins",
+      key: "/admin/manage-admins",
       icon: <UserSwitchOutlined />,
     },
     {
@@ -38,7 +38,7 @@ const SideBar = () => {
       children: [
         {
           label: <Link href={`/admin/manage-countries`}>Manage Countries</Link>,
-          key: `/adminmanage-countries`,
+          key: `/admin/manage-countries`,
         },
 
         {

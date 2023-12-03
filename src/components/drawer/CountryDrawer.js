@@ -97,6 +97,12 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
       }
     }
   };
+
+  const handleClose = () => {
+    setOpen(false);
+    setData({});
+  };
+
   return (
     <>
       <Drawer
@@ -107,9 +113,7 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
 
             <Button
               icon={<CloseOutlined />}
-              onClick={() => {
-                setOpen(!open);
-              }}
+              onClick={handleClose}
               type="link"
               size="large"
             >
@@ -168,7 +172,7 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
               disabled={createLoading || updateLoading}
               htmlType="submit"
               loading={createLoading}
-              className="my-4 bg-primary"
+              className="my-4 bg-primary h-[50px] font-bold px-10"
               type="primary"
               size="large"
             >

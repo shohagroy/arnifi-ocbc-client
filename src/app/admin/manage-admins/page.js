@@ -2,34 +2,35 @@
 
 import AdminBreadCrumb from "@/components/admin/AdminBreadCrumb";
 import DisplayTable from "@/components/table/DisplayTable";
-import { Button, Card, Col, Input, Row, Select, message } from "antd";
-import Head from "next/head";
+import { Button, Card, Col, Row, Select, message } from "antd";
 import Link from "next/link";
 import React, { useState } from "react";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
+import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import { useDebounced } from "@/redux/hooks/useDebounced";
-import ConfirmModal from "@/components/ui/ConfirmModal";
-import CountryDrawer from "@/components/drawer/CountryDrawer";
-import {
-  useDeleteCountryMutation,
-  useGetAllCountriesQuery,
-} from "@/redux/features/country/countryApi";
-import FormSelectField from "@/components/forms/FormSelectField";
 import AddButton from "../../../components/ui/button/AddButton";
 import SearchInput from "@/components/ui/dataInput/SearchInput";
+import dayjs from "dayjs";
+import DeleteInfoModal from "@/components/modal/DeleteInfoModal";
+import AdminDrawer from "@/components/drawer/AdminDrawer";
+import {
+  useDeleteUserMutation,
+  useGetAllUserQuery,
+} from "@/redux/features/user/userApi";
 
-const ManageAdminsPage = () => {
+const ManageAdminPage = () => {
+  const [userInfo, setUserInfo] = useState({ role: "admin" });
   const [messageApi, contextHolder] = message.useMessage();
-  const [isEditable, setIsEditable] = useState(false);
+
+  // filtar
   const [page, setPage] = useState(1);
-  const [size, setSize] = useState(10);
-  const [sortBy, setSortBy] = useState("");
-  const [sortOrder, setSortOrder] = useState("");
+  const [size, setSize] = useState(8);
+  const [sortBy, setSortBy] = useState("fullName");
+  const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const [open, setOpen] = useState(false);
-  const [countryInfo, setCountryInfo] = useState({});
+  // modal code
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState({});
 
   const query = {};
@@ -47,116 +48,137 @@ const ManageAdminsPage = () => {
     query["search"] = debouncedTerm;
   }
 
-  const { data, isLoading } = useGetAllCountriesQuery({ ...query });
-  const countriesData = data?.data?.map((item, i) => {
+  const { data, isLoading: tableLoading } = useGetAllUserQuery({
+    ...query,
+  });
+  const { meta } = data || {};
+
+  const usersData = data?.data?.data.map((item, i) => {
     return {
       key: item?.id,
       sl: page * size - size + i + 1,
-      name: item?.name,
-      createdAt: item?.createdAt,
+      fullName: item?.fullName,
+      email: item?.email,
+      password: "Hard@Password9",
+      repassword: "Hard@Password9",
+      role: item?.role,
+      contact: item?.contact,
+      createdAt: dayjs(item?.createdAt).format("MMM D, YYYY hh:mm A"),
     };
   });
-  const meta = data?.meta || {};
 
-  const [deleteCountry, { isLoading: deleteLoading }] =
-    useDeleteCountryMutation();
-
-  const itemDeleteHandelar = async () => {
-    const result = await deleteCountry(countryInfo?.key).unwrap();
-    if (result?.errorMessages) {
-      messageApi.open({
-        type: "error",
-        content: result.errorMessages || "Something went wrong!",
-      });
-    }
-    if (result?.data?.id) {
-      messageApi.open({
-        type: "success",
-        content: "Country Delete Successfully!",
-      });
-      setOpen(false);
-    }
-  };
+  const [deleteUser, { isLoading: deleteLoading }] = useDeleteUserMutation();
 
   const openModalHandelar = (data) => {
-    setCountryInfo(data);
-    setModalText({
-      tittle: "Are your sure Delete this Country?",
+    const info = {
+      tittle: "Are you sure delete this user?",
       details: (
-        <div>
-          <p>
-            Name: <span className="text-xl font-bold">{data?.name}</span>
+        <>
+          <p className="font-primary">
+            Name: <strong>{data?.fullName}</strong>
           </p>
-        </div>
+          <p className="font-primary">
+            Email: <strong>{data?.email}</strong>
+          </p>
+          <p className="font-primary">
+            Role:{" "}
+            <strong>
+              {data?.role === "super_admin" ? "Super Admin" : "Admin"}
+            </strong>
+          </p>
+        </>
       ),
-    });
-    setOpen(true);
+    };
+
+    setUserInfo(data);
+    setModalText(info);
+    setOpenModal(true);
   };
 
-  const handelCountryUpdate = (data) => {
-    setCountryInfo(data);
-    setIsEditable(true);
+  const deleteHandelar = async () => {
+    const result = await deleteUser(userInfo?.key).unwrap();
+    if (result?.data?.success) {
+      messageApi.open({
+        type: "success",
+        content: result?.data?.message || "User Delete Successfully!",
+      });
+      setOpenModal(false);
+      setUserInfo({
+        role: "admin",
+      });
+    } else {
+      messageApi.open({
+        type: "error",
+        content: result?.message || "Something went wrong!",
+      });
+    }
+  };
+
+  const updateHandelar = (data) => {
+    setUserInfo(data);
+    setOpenDrawer(true);
   };
 
   const columns = [
     {
       title: <p>SL No</p>,
-      width: 100,
+      width: 80,
       align: "center",
       dataIndex: "sl",
     },
     {
-      title: <p>Country Name</p>,
-      dataIndex: "name",
-      width: 300,
-      align: "center",
+      title: <p>Full Name</p>,
+      dataIndex: "fullName",
+      width: 200,
+      // align: "center",
     },
 
     {
-      title: <p>Postal Code</p>,
-      dataIndex: "postalCode",
-      width: 300,
-      align: "center",
+      title: <p>Email</p>,
+      dataIndex: "email",
+      width: 250,
+      // align: "center",
+    },
+    {
+      title: <p>Access Level</p>,
+      dataIndex: "role",
+      width: 150,
+      // align: "center",
     },
 
     {
-      title: <p>Country Code</p>,
-      dataIndex: "name",
-      width: 300,
-      align: "center",
+      title: <p>Contact</p>,
+      dataIndex: "contact",
+      width: 200,
+      // align: "center",
     },
-    // {
-    //   title: <p>Postal Code</p>,
-    //   dataIndex: "createdAt",
-    //   width: 250, // Set the width here
-    //   align: "center",
-    //   render: function (data) {
-    //     return data && dayjs(data).format("MMM D, YYYY hh:mm A");
-    //   },
-    //   sorter: true,
-    // },
+    {
+      title: <p>Created Date</p>,
+      dataIndex: "createdAt",
+      width: 200,
+      // align: "center",
+    },
+
     {
       title: <p>Action</p>,
-      width: 100, // Set the width here
+      width: 200, // Set the width here
       align: "center",
       render: function (data) {
         return (
           <>
             <Button
-              style={{
-                margin: "0px 5px",
-              }}
-              onClick={() => handelCountryUpdate(data)}
+              className="mx-2 bg-primary"
+              onClick={() => updateHandelar(data)}
               type="primary"
             >
-              <EditOutlined />
+              <EditFilled />
             </Button>
             <Button
               onClick={() => openModalHandelar(data)}
               type="primary"
               danger
             >
-              <DeleteOutlined />
+              <DeleteFilled />
             </Button>
           </>
         );
@@ -174,31 +196,14 @@ const ManageAdminsPage = () => {
     setSortOrder(order === "ascend" ? "asc" : "desc");
   };
 
-  // const resetFilters = () => {
-  //   setSortBy("");
-  //   setSortOrder("");
-  //   setSearchTerm("");
-  // };
-
   const breadCrumbItems = [
     {
       label: <Link href={"/admin"}>Admin</Link>,
       link: "/admin",
     },
     {
-      label: "Manage Country",
-      link: "/admin/manage-country",
-    },
-  ];
-
-  const dateOptions = [
-    {
-      label: "Up to Low",
-      value: "asd",
-    },
-    {
-      label: "Low to High",
-      value: "desc",
+      label: "Manage Admins",
+      link: "/admin/manage-admins",
     },
   ];
 
@@ -209,7 +214,7 @@ const ManageAdminsPage = () => {
         <AdminBreadCrumb items={breadCrumbItems} />
 
         <div className="max-w-7xl mx-auto my-4 px-2">
-          <Card className="mt-10 min-h-[70vh]">
+          <Card className="mt-10 min-h-[80vh]">
             <div>
               <Row gutter={16}>
                 <Col span={10}>
@@ -218,42 +223,60 @@ const ManageAdminsPage = () => {
                     change={(e) => setSearchTerm(e.target.value)}
                   />
                 </Col>
-                <Col span={10}>
-                  <div className="flex items-center font-primary text-xl">
-                    <p>Sort by Date:</p>
-
+                <Col span={10} className="flex items-center">
+                  <div className="flex items-center font-primary text-lg">
+                    <p>Sort by:</p>
                     <Select
-                      // style={
-                      //   errorMessage && {
-                      //     border: "1.5px solid #F15656",
-                      //     borderRadius: "10px",
-                      //   }
-                      // }
-                      className={`focus:border-primary h-[50px] w-[200px] ml-3`}
-                      // onChange={handleChange ? handleChange : onChange}
+                      onChange={(e) => setSortBy(e)}
+                      value={sortBy}
+                      className={`focus:border-primary h-[50px] w-[100px] ml-3`}
                       size={"large"}
-                      options={dateOptions}
+                      options={[
+                        {
+                          label: "Name",
+                          value: "fullName",
+                        },
+                        {
+                          label: "Date",
+                          value: "createdAt",
+                        },
+                      ]}
                     />
                   </div>
-                  {/* <SearchInput
-                    placeholder={"search..."}
-                    change={(e) => setSearchTerm(e.target.value)}
-                  /> */}
+
+                  <div className="flex items-center font-primary text-lg">
+                    <Select
+                      className={`focus:border-primary h-[50px] w-[200px] ml-3`}
+                      onChange={(e) => setSortOrder(e)}
+                      value={sortOrder}
+                      size={"large"}
+                      options={[
+                        {
+                          label: "Low to High",
+                          value: "asc",
+                        },
+                        {
+                          label: "High to Low",
+                          value: "desc",
+                        },
+                      ]}
+                    />
+                  </div>
                 </Col>
                 <Col span={4}>
                   <AddButton
-                    text={"Create New Admin"}
-                    click={() => setIsEditable(true)}
+                    text={"Add User"}
+                    click={() => setOpenDrawer(true)}
                   />
                 </Col>
               </Row>
             </div>
 
-            <div className=" my-4">
+            <div className="my-4">
               <DisplayTable
-                loading={isLoading}
+                loading={tableLoading}
                 columns={columns}
-                dataSource={countriesData}
+                dataSource={usersData}
                 pageSize={size}
                 totalPages={meta?.total}
                 showSizeChanger={true}
@@ -266,21 +289,26 @@ const ManageAdminsPage = () => {
         </div>
       </section>
 
-      <CountryDrawer
-        open={isEditable}
-        setOpen={setIsEditable}
-        valueObj={countryInfo}
-        valueFn={setCountryInfo}
+      <AdminDrawer
+        open={openDrawer}
+        setOpen={setOpenDrawer}
+        data={userInfo}
+        setData={setUserInfo}
+        modalText={modalText}
+        setModalText={setModalText}
+        // openModal={openModal}
+        // setOpenModal={setOpenModal}
       />
-      <ConfirmModal
-        submitFn={itemDeleteHandelar}
-        setOpen={setOpen}
-        open={open}
+
+      <DeleteInfoModal
         loading={deleteLoading}
+        setOpen={setOpenModal}
+        open={openModal}
+        submitFn={deleteHandelar}
         modalText={modalText}
       />
     </main>
   );
 };
 
-export default ManageAdminsPage;
+export default ManageAdminPage;
