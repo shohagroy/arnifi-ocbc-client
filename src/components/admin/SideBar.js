@@ -106,18 +106,12 @@ const SideBar = () => {
             className="duration-300"
           />
         )}
-        {/* <Image
-          height={70}
-          src={collapsed ? LogoSmall : LogoLarge}
-          alt="Arnifi"
-          className="duration-300"
-        /> */}
       </div>
 
       <Menu
         theme="dark"
         className="font-primary"
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={["3"]}
         mode="inline"
         items={sidebarItems}
       ></Menu>

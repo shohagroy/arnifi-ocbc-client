@@ -1,7 +1,6 @@
 import { instance as axiosInstance } from "@/helpers/axios/axiosInstance";
 import { getBaseUrl } from "@/helpers/config/envConfig";
 import { decodedToken } from "@/utils/jwt";
-
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 
 export const storeUserInfo = ({ accessToken }) => {
@@ -36,7 +35,7 @@ export const getNewAccessToken = async () => {
   });
 
   const accessToken = response?.data?.data?.accessToken;
-  setToLocalStorage("accessToken", accessToken);
+  accessToken && setToLocalStorage("accessToken", accessToken);
 
   return accessToken;
 };
