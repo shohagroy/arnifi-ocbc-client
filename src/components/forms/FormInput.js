@@ -46,6 +46,8 @@ const FormInput = ({
         render={({ field }) =>
           type === "password" ? (
             <Input.Password
+              style={errorMessage && { border: "1.5px solid #F15656" }}
+              className="focus:border-primary h-[50px] px-[20px] py-[12px]"
               type={type}
               size={size}
               placeholder={placeholder}

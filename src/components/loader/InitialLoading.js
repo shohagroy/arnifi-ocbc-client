@@ -6,7 +6,7 @@ const InitialLoading = () => {
     <Row justify="center" align="middle" className="w-full h-full">
       <Space>
         <div>
-          <Spin tip="Loading" size="large"></Spin>
+          <Spin size="large"></Spin>
         </div>
       </Space>
     </Row>

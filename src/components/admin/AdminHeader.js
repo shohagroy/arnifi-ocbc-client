@@ -9,7 +9,7 @@ import { ENUM_USER_ROLE } from "@/constans/userRole";
 import { removeUserInfo } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 
-const AdminHeader = ({ avatar, role, name }) => {
+const AdminHeader = ({ role, fullName }) => {
   const router = useRouter();
   const logOutHandler = () => {
     removeUserInfo("accessToken");
@@ -24,7 +24,7 @@ const AdminHeader = ({ avatar, role, name }) => {
           onClick={logOutHandler}
           type="primary"
           danger
-          style={{ width: "100%", margin: "0px 0" }}
+          className="w-full font-primary font-bold"
         >
           Log Out
         </Button>
@@ -37,7 +37,7 @@ const AdminHeader = ({ avatar, role, name }) => {
         <Flex className="h-[7.5vh]" gap="middle" justify="end" align="center">
           <Flex justify="center" align="center">
             <div className="text-right mr-4">
-              <h3 className="text-md">{name || ""}</h3>
+              <h3 className="text-md">{fullName || ""}</h3>
               <p>
                 <small>
                   {role === ENUM_USER_ROLE.SUPER_ADMIN
@@ -59,7 +59,6 @@ const AdminHeader = ({ avatar, role, name }) => {
                 style={{ cursor: "pointer" }}
                 onClick={(e) => e.preventDefault()}
                 size="large"
-                src={avatar}
                 icon={<UserOutlined />}
               />
             </Dropdown>

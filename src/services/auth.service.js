@@ -20,7 +20,7 @@ export const getUserInfo = () => {
 
 export const isLoggedIn = () => {
   const authToken = getFromLocalStorage("accessToken");
-  return !!authToken;
+  return authToken;
 };
 
 export const removeUserInfo = (key) => {
@@ -29,10 +29,14 @@ export const removeUserInfo = (key) => {
 
 export const getNewAccessToken = async () => {
   const response = await axiosInstance({
-    url: `${getBaseUrl()}/auth/v1/refresh-token`,
+    url: `${getBaseUrl()}/auth/refresh-token`,
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    data: { refreshToken: getFromLocalStorage("refreshToken") },
     withCredentials: true,
   });
+
+  const accessToken = response?.data?.data?.accessToken;
+  setToLocalStorage("accessToken", accessToken);
+
+  return accessToken;
 };
