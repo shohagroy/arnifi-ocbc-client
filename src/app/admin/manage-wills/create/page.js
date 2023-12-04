@@ -4,31 +4,30 @@ import AdminBreadCrumb from "@/components/admin/AdminBreadCrumb";
 import FormInput from "@/components/forms/FormInput";
 import FormSelectField from "@/components/forms/FormSelectField";
 import Form from "@/components/forms/From";
+import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal copy";
 import AddButton from "@/components/ui/button/AddButton";
 import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
+import { useCreateStepFildMutation } from "@/redux/features/stepFild/stepFildApi";
 import { formInputFildSchema } from "@/schemas/formSchema";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Card, Col, Row, message, Divider } from "antd";
+import { Button, Card, Col, Row, message, Divider, Checkbox } from "antd";
 import React, { useState } from "react";
 
 const CreateNewWillsPage = () => {
-  const [createInfo, setCreateInfo] = useState(
-    !!getFromLocalStorage("create-inputs")
-      ? Number(JSON.parse(getFromLocalStorage("create-inputs")))
-      : [] || []
-  );
-
-  const [defaultValue, setDefaultValue] = useState({
+  const [stepFild, setStepFild] = useState({
     countryId: null,
-    step: null,
+    stepId: null,
+    name: null,
     label: "",
-    name: "",
     type: null,
     placeholder: "",
     errorText: "",
+    isRequired: false,
   });
   const [messageApi, contextHolder] = message.useMessage();
+  const [openModal, setOpenModal] = useState(false);
+  const [modalText, setModalText] = useState({});
 
   const { data: countriesData, isLoading: countryLoading } =
     useGetAllCountryDataQuery();
@@ -39,6 +38,9 @@ const CreateNewWillsPage = () => {
       value: item?.id,
     };
   });
+
+  const [createStepFild, { isLoading: createLoading }] =
+    useCreateStepFildMutation();
 
   const formStepsOptions = [
     {
@@ -86,6 +88,33 @@ const CreateNewWillsPage = () => {
     },
   ];
 
+  const formInputValueName = [
+    {
+      label: "Full Name",
+      value: "fullName",
+    },
+    {
+      label: "Gender",
+      value: "gender",
+    },
+    {
+      label: "Type Of ID",
+      value: "idType",
+    },
+    {
+      label: "ID Number",
+      value: "idNumber",
+    },
+    {
+      label: "Citizenship",
+      value: "citizenship",
+    },
+    {
+      label: "Address",
+      value: "address",
+    },
+  ];
+
   const breadCrumbItems = [
     {
       label: <p href={"/admin"}>Admin</p>,
@@ -101,17 +130,63 @@ const CreateNewWillsPage = () => {
     },
   ];
 
-  const inputFildAddHandelar = (e) => {
-    console.log(createInfo);
-    // setToLocalStorage("create-inputs", JSON.stringify([...createInfo, e]));
-    // setDefaultValue({
-    //   countryId: "",
-    //   step: "",
+  const inputFildAddHandelar = (data) => {
+    const info = {
+      tittle: "Are you sure create this step fild?",
+      details: (
+        <>
+          <p className="font-primary">
+            Label: <strong>{data?.label}</strong>
+          </p>
+          <p className="font-primary">
+            Placeholder: <strong>{data?.placeholder}</strong>
+          </p>
+          <p className="font-primary">
+            Error: <strong>{data?.errorText}</strong>
+          </p>
+        </>
+      ),
+    };
+
+    setStepFild({ ...stepFild, ...data });
+    setModalText(info);
+    setOpenModal(true);
+  };
+
+  const modalOkHandelar = async () => {
+    const result = await createStepFild(stepFild).unwrap();
+    if (result?.data?.success) {
+      messageApi.open({
+        type: "success",
+        content: result?.data?.message || "User Created Successfully!",
+      });
+      setModalText({});
+      setOpenModal(false);
+      setStepFild({
+        countryId: null,
+        stepId: null,
+        label: "",
+        name: null,
+        type: "",
+        placeholder: "",
+        errorText: "",
+        isRequired: false,
+      });
+    } else {
+      messageApi.open({
+        type: "error",
+        content: result?.message || "Something went wrong!",
+      });
+    }
+    // setStepFild({
+    //   countryId: null,
+    //   stepId: null,
     //   label: "",
-    //   name: "",
+    //   name: null,
     //   type: "",
     //   placeholder: "",
     //   errorText: "",
+    //   isRequired: false,
     // });
   };
 
@@ -132,7 +207,7 @@ const CreateNewWillsPage = () => {
               <Form
                 submitHandler={inputFildAddHandelar}
                 resolver={yupResolver(formInputFildSchema)}
-                defaultValues={defaultValue}
+                stepFilds={stepFild}
               >
                 <Row gutter={8}>
                   <Col span={8} className=" items-center">
@@ -148,11 +223,29 @@ const CreateNewWillsPage = () => {
 
                   <Col span={8} className="">
                     <FormSelectField
-                      name={"step"}
+                      required
+                      name={"stepId"}
                       placeholder="select step"
                       label={"For form steps"}
                       options={formStepsOptions}
                     />
+                  </Col>
+
+                  <Col span={8} className="">
+                    <FormSelectField
+                      required
+                      name={"name"}
+                      placeholder="select step"
+                      label={"For Value"}
+                      options={formInputValueName}
+                    />
+                    {/* <FormSelectField
+                      required
+                      name={"name"}
+                      placeholder="select value name"
+                      label={"For Value"}
+                      options={formInputValueName}
+                    /> */}
                   </Col>
                 </Row>
 
@@ -162,7 +255,7 @@ const CreateNewWillsPage = () => {
                   </Divider>
                 </div>
                 <Row gutter={4} className="my-">
-                  <Col span={4}>
+                  <Col span={5}>
                     <FormSelectField
                       required
                       name={"type"}
@@ -171,23 +264,18 @@ const CreateNewWillsPage = () => {
                     />
                   </Col>
 
-                  <Col span={4} className="">
+                  <Col span={5} className="">
                     <FormInput
                       name={"label"}
+                      required
                       placeholder="enter fild lable tittle"
-                    />
-                  </Col>
-
-                  <Col span={4} className="">
-                    <FormInput
-                      name={"name"}
-                      placeholder="enter fild value name"
                     />
                   </Col>
 
                   <Col span={5} className="">
                     <FormInput
                       name={"placeholder"}
+                      required
                       placeholder="enter fild placeholder"
                     />
                   </Col>
@@ -195,14 +283,15 @@ const CreateNewWillsPage = () => {
                   <Col span={5} className="">
                     <FormInput
                       name={"errorText"}
+                      required
                       placeholder="enter fild error message"
                     />
                   </Col>
 
-                  <Col span={2}>
+                  <Col span={4}>
                     <Button
                       htmlType="submit"
-                      className="w-full h-[50px] font-primary font-bold"
+                      className="w-full h-[50px] bg-primary hover:bg-primary/90 font-primary font-bold"
                       type="primary"
                       size="large"
                     >
@@ -210,6 +299,19 @@ const CreateNewWillsPage = () => {
                     </Button>
                   </Col>
                 </Row>
+                <Col className="my-2">
+                  <Checkbox
+                    checked={stepFild?.isRequired}
+                    onChange={(e) =>
+                      setStepFild({
+                        ...stepFild,
+                        isRequired: e.target.checked,
+                      })
+                    }
+                  >
+                    Is Required
+                  </Checkbox>
+                </Col>
               </Form>
 
               <div className="my-6">
@@ -221,6 +323,14 @@ const CreateNewWillsPage = () => {
           </Card>
         </div>
       </section>
+
+      <CreateUpdateInfoModal
+        loading={createLoading}
+        setOpen={setOpenModal}
+        open={openModal}
+        submitFn={modalOkHandelar}
+        modalText={modalText}
+      />
     </main>
   );
 };

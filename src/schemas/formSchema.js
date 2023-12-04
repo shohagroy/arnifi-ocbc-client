@@ -33,10 +33,10 @@ export const generateFormValidator = (formData) => {
 
 export const formInputFildSchema = yup.object().shape({
   countryId: yup.string().required("Country Fild is required."),
-  step: yup.string().required("Step Fild is required."),
+  stepId: yup.string().required("Step Fild is required."),
+  name: yup.string().required("Value Name fild is required."),
   type: yup.string().required("Input type fild is required."),
   label: yup.string().required("Input lebel fild is required."),
-  name: yup.string().required("Input name fild is required."),
   placeholder: yup.string().required("Input placeholder fild is required."),
   errorText: yup.string().required("Input placeholder fild is required."),
 });

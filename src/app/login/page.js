@@ -17,18 +17,28 @@ const LoginPage = () => {
   const router = useRouter();
 
   const loginHandelar = async (data) => {
-    const result = await login(data).unwrap();
-    if (result?.data?.success) {
-      messageApi.open({
-        type: "success",
-        content: result?.data?.data?.message || "User Login Successfully!",
-      });
-      setToLocalStorage("accessToken", result?.data?.data?.accessToken);
-      router.push(router.query?.callbackUrl || "/admin");
-    } else {
+    try {
+      const result = await login(data).unwrap();
+
+      console.log(result?.data?.message);
+      if (result?.data?.success) {
+        messageApi.open({
+          type: "success",
+          content: result?.data?.message || "User Login Successfully!",
+        });
+
+        setToLocalStorage("accessToken", result?.data?.data?.accessToken);
+        router.push(router.query?.callbackUrl || "/admin");
+      } else {
+        messageApi.open({
+          type: "error",
+          content: result?.message || "Something went wrong!",
+        });
+      }
+    } catch (error) {
       messageApi.open({
         type: "error",
-        content: result?.message || "Something went wrong!",
+        content: error?.data || "Something went wrong!",
       });
     }
   };
