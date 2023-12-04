@@ -60,7 +60,7 @@ const FormSelectField = ({
             onChange={handleChange ? handleChange : onChange}
             size={size}
             options={options}
-            value={value}
+            value={defaultValue ? defaultValue : value}
             placeholder={placeholder}
           />
         )}

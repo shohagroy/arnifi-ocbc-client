@@ -12,6 +12,7 @@ import {
   GlobalOutlined,
   IdcardOutlined,
   FileTextOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 import LogoLarge from "../../assets/Primary_Logo-dark.png";
@@ -48,6 +49,13 @@ const SideBar = () => {
           label: <Link href={`/admin/manage-countries`}>Manage Countries</Link>,
           key: `/admin/manage-countries`,
           icon: <GlobalOutlined />,
+        },
+        {
+          label: (
+            <Link href={`/admin/manage-form-steps`}>Manage Form Steps</Link>
+          ),
+          key: `/admin/manage-form-steps`,
+          icon: <FormOutlined />,
         },
         // {
         //   label: <Link href={`/admin/manage-cities`}>Manage Cities</Link>,

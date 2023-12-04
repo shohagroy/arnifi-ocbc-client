@@ -1,11 +1,13 @@
 "use client";
 
 import AdminBreadCrumb from "@/components/admin/AdminBreadCrumb";
+import FormFildAdd from "@/components/admin/formFildAdd/FormFildAdd";
 import FormInput from "@/components/forms/FormInput";
 import FormSelectField from "@/components/forms/FormSelectField";
 import Form from "@/components/forms/From";
 import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal copy";
 import AddButton from "@/components/ui/button/AddButton";
+import DisplayAddedStrpFilds from "@/components/ui/will/DisplayAddedStrpFilds";
 import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
 import { useCreateStepFildMutation } from "@/redux/features/stepFild/stepFildApi";
 import { formInputFildSchema } from "@/schemas/formSchema";
@@ -15,19 +17,33 @@ import { Button, Card, Col, Row, message, Divider, Checkbox } from "antd";
 import React, { useState } from "react";
 
 const CreateNewWillsPage = () => {
+  // const [stepFild, setStepFild] = useState({
+  //   countryId: "96ab6713-12fe-41b0-af5a-3594f29c88c1",
+  //   stepId: null,
+  //   name: null,
+  //   label: "",
+  //   type: null,
+  //   placeholder: "",
+  //   errorText: "",
+  //   isRequired: false,
+  // });
+
   const [stepFild, setStepFild] = useState({
     countryId: null,
     stepId: null,
-    name: null,
-    label: "",
     type: null,
-    placeholder: "",
     errorText: "",
     isRequired: false,
+    label: "",
+    name: null,
+    placeholder: "",
   });
+
   const [messageApi, contextHolder] = message.useMessage();
   const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState({});
+
+  // console.log(stepFild);
 
   const { data: countriesData, isLoading: countryLoading } =
     useGetAllCountryDataQuery();
@@ -36,6 +52,7 @@ const CreateNewWillsPage = () => {
     return {
       label: item?.name,
       value: item?.id,
+      idOptions: item?.idTypes,
     };
   });
 
@@ -178,16 +195,6 @@ const CreateNewWillsPage = () => {
         content: result?.message || "Something went wrong!",
       });
     }
-    // setStepFild({
-    //   countryId: null,
-    //   stepId: null,
-    //   label: "",
-    //   name: null,
-    //   type: "",
-    //   placeholder: "",
-    //   errorText: "",
-    //   isRequired: false,
-    // });
   };
 
   return (
@@ -207,13 +214,19 @@ const CreateNewWillsPage = () => {
               <Form
                 submitHandler={inputFildAddHandelar}
                 resolver={yupResolver(formInputFildSchema)}
-                stepFilds={stepFild}
+                // stepFilds={stepFild}
+                defaultValues={stepFild}
+                persistKey="create-filds"
               >
                 <Row gutter={8}>
                   <Col span={8} className=" items-center">
                     <FormSelectField
                       showSearch
+                      loading={countryLoading}
                       required
+                      handleChange={(e) =>
+                        setStepFild({ ...stepFild, countryId: e })
+                      }
                       name={"countryId"}
                       placeholder="select country for wills"
                       label={"For Country"}
@@ -224,6 +237,9 @@ const CreateNewWillsPage = () => {
                   <Col span={8} className="">
                     <FormSelectField
                       required
+                      handleChange={(e) =>
+                        setStepFild({ ...stepFild, stepId: e })
+                      }
                       name={"stepId"}
                       placeholder="select step"
                       label={"For form steps"}
@@ -239,17 +255,12 @@ const CreateNewWillsPage = () => {
                       label={"For Value"}
                       options={formInputValueName}
                     />
-                    {/* <FormSelectField
-                      required
-                      name={"name"}
-                      placeholder="select value name"
-                      label={"For Value"}
-                      options={formInputValueName}
-                    /> */}
                   </Col>
                 </Row>
 
-                <div className="my-4 font-primary text-lg">
+                <FormFildAdd setValue={setStepFild} value={stepFild} />
+
+                {/* <div className="my-4 font-primary text-lg">
                   <Divider orientation="left">
                     <p className="font-primary text-lg">Add Form Input Filds</p>
                   </Divider>
@@ -311,13 +322,14 @@ const CreateNewWillsPage = () => {
                   >
                     Is Required
                   </Checkbox>
-                </Col>
+                </Col> */}
               </Form>
 
               <div className="my-6">
-                <Divider>
-                  <p className="font-primary text-lg">Added Form Input</p>
-                </Divider>
+                <DisplayAddedStrpFilds
+                  data={stepFild}
+                  countriesOptions={countriesOptions}
+                />
               </div>
             </div>
           </Card>

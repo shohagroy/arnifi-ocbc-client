@@ -21,8 +21,8 @@ export const stepFildApi = baseApi.injectEndpoints({
     // }),
 
     getStepFilds: build.query({
-      query: () => ({
-        url: "/step-filds/get-all",
+      query: (search) => ({
+        url: `/step-filds/get-all${search}`,
         method: "GET",
       }),
       providesTags: ["step-filds"],
