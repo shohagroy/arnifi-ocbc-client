@@ -47,7 +47,10 @@ const AdminDashboardLayout = ({ children }) => {
             background: "#EEEEEE",
           }}
         >
-          <AdminHeader role={tokenInfo?.role} fullName={tokenInfo?.fullName} />
+          <AdminHeader
+            role={tokenInfo?.role || "Admin"}
+            fullName={tokenInfo?.fullName || "Shohag Roy"}
+          />
           <div
             style={{
               padding: "10px",
