@@ -21,7 +21,7 @@ const LoginPage = () => {
     if (result?.data?.success) {
       messageApi.open({
         type: "success",
-        content: result?.data?.message || "User Login Successfully!",
+        content: result?.data?.data?.message || "User Login Successfully!",
       });
       setToLocalStorage("accessToken", result?.data?.data?.accessToken);
       router.push(router.query?.callbackUrl || "/admin");
