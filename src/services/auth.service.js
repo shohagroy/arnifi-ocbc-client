@@ -34,7 +34,6 @@ export const getNewAccessToken = async () => {
     withCredentials: true,
   });
 
-  console.log(accessToken);
   const accessToken = response?.data?.data?.accessToken;
   accessToken && setToLocalStorage("accessToken", accessToken);
 

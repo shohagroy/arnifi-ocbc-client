@@ -9,6 +9,9 @@ import {
   SettingFilled,
   ToolFilled,
   PieChartFilled,
+  GlobalOutlined,
+  IdcardOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 import LogoLarge from "../../assets/Primary_Logo-dark.png";
@@ -32,6 +35,11 @@ const SideBar = () => {
       icon: <UserSwitchOutlined />,
     },
     {
+      label: <Link href={`/admin/manage-wills`}>Manage Wills</Link>,
+      key: "/admin/manage-wills",
+      icon: <FileTextOutlined />,
+    },
+    {
       label: "Software Setting",
       key: "Software Setting",
       icon: <SettingFilled />,
@@ -39,6 +47,7 @@ const SideBar = () => {
         {
           label: <Link href={`/admin/manage-countries`}>Manage Countries</Link>,
           key: `/admin/manage-countries`,
+          icon: <GlobalOutlined />,
         },
         // {
         //   label: <Link href={`/admin/manage-cities`}>Manage Cities</Link>,
@@ -47,6 +56,7 @@ const SideBar = () => {
         {
           label: <Link href={`/admin/manage-idtypes`}>Manage ID Types</Link>,
           key: `/admin/manage-idtypes`,
+          icon: <IdcardOutlined />,
         },
       ],
     },

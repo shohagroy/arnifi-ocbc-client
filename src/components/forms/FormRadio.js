@@ -4,7 +4,7 @@ import { getErrorMessageByPropertyName } from "@/utils/schema-validator";
 import { Flex, Radio } from "antd";
 import { useFormContext, Controller } from "react-hook-form";
 import Image from "next/image";
-import { WarningOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 
 const FormRadio = ({
   name,
@@ -77,7 +77,7 @@ const FormRadio = ({
 
       {errorMessage && (
         <div style={{ color: "#F15656" }}>
-          <WarningOutlined />
+          <InfoCircleOutlined />
           <small className="mx-1">{errorMessage}</small>
         </div>
       )}

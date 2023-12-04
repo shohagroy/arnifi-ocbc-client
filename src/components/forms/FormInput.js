@@ -3,7 +3,7 @@
 import { getErrorMessageByPropertyName } from "@/utils/schema-validator";
 import { Input } from "antd";
 import { useFormContext, Controller } from "react-hook-form";
-import { WarningOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 
 const FormInput = ({
   name,
@@ -72,7 +72,7 @@ const FormInput = ({
 
       {errorMessage && (
         <div style={{ color: "#F15656" }}>
-          <WarningOutlined />
+          <InfoCircleOutlined />
           <small className="mx-1">{errorMessage}</small>
         </div>
       )}

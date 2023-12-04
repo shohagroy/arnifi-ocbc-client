@@ -182,6 +182,7 @@ const DetailsSubmitPage = () => {
       placeholder: "Enter your full name",
       errorText: "Full Name field is required",
     },
+
     gender: {
       name: "gender",
       label: "Gender",

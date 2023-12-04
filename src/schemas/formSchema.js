@@ -26,24 +26,17 @@ export const generateFormValidator = (formData) => {
         formErrorSchema[mainKey] = yup.object().shape(addressSchema);
       }
     });
-
-    // if (
-    //   typeof Object.keys(formData[key]).map((key) => formData[key][key]) ===
-    //   "object"
-    // ) {
-    //   console.log("its object");
-    // }
-    // if (addressFild) {
-    //   Object.keys(addressFild).map((key) => {
-    //     if (addressFild[key].required) {
-    //       addressSchema[addressFild[key].name] = yup
-    //         .string()
-    //         .required(addressFild[key]?.errorText);
-    //     }
-    //   });
-    //   formErrorSchema["address"] = yup.object().shape(addressSchema);
-    // }
   });
 
   return yup.object().shape(formErrorSchema);
 };
+
+export const formInputFildSchema = yup.object().shape({
+  countryId: yup.string().required("Country Fild is required."),
+  step: yup.string().required("Step Fild is required."),
+  type: yup.string().required("Input type fild is required."),
+  label: yup.string().required("Input lebel fild is required."),
+  name: yup.string().required("Input name fild is required."),
+  placeholder: yup.string().required("Input placeholder fild is required."),
+  errorText: yup.string().required("Input placeholder fild is required."),
+});

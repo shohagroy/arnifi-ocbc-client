@@ -3,7 +3,7 @@
 import { Select } from "antd";
 import { useFormContext, Controller } from "react-hook-form";
 import { getErrorMessageByPropertyName } from "@/utils/schema-validator";
-import { WarningOutlined } from "@ant-design/icons";
+import { InfoCircleOutlined } from "@ant-design/icons";
 
 const FormSelectField = ({
   name,
@@ -68,7 +68,7 @@ const FormSelectField = ({
 
       {errorMessage && (
         <div style={{ color: "#F15656" }}>
-          <WarningOutlined />
+          <InfoCircleOutlined />
           <small className="mx-1">{errorMessage}</small>
         </div>
       )}
