@@ -24,8 +24,6 @@ const StepperForm = ({ steps, persistKey }) => {
     setToLocalStorage("step", JSON.stringify({ step: current }));
   }, [current]);
 
-  // const resolver = generateFormValidator(steps[current]?.data);
-
   const prev = () => {
     setCurrent(current - 1);
   };

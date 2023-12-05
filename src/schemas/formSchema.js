@@ -60,3 +60,49 @@ export const formInputFildSchema = yup.object().shape({
   placeholder: yup.string().required("Input placeholder fild is required."),
   errorText: yup.string().required("Input placeholder fild is required."),
 });
+
+// export const generateFormValidatorUpdated = (formData) => {
+//   const formErrorSchema = {};
+
+//   Object.keys(formData).map((mainKey) => {
+//     // console.log(formData[mainKey]?.value);
+//     const fieldValidator = {};
+
+//     Object?.keys(formData[mainKey]?.value)?.map((fieldLey) => {
+//       // console.log(fieldLey);
+//       fieldValidator[fieldLey] = yup
+//         .string()
+//         .required("This Filed is Required.");
+//     });
+
+//     console.log(mainKey);
+//     formErrorSchema[mainKey] = yup.object().shape(fieldValidator);
+//   });
+
+//   return yup.object().shape(formErrorSchema);
+// };
+
+export const generateFormValidatorUpdated = (formData) => {
+  const formErrorSchema = {};
+
+  Object.keys(formData).map((firstKey) => {
+    const secendValue = {};
+
+    Object.keys(formData[firstKey]?.value).map((secendKey) => {
+      const lastValue = {};
+      const fields = formData[firstKey]?.value[secendKey];
+
+      Object.keys(fields)?.map((fieldKey) => {
+        lastValue[fieldKey] = yup
+          .string()
+          .required(`${firstKey} ${secendKey}  is required!`);
+      });
+      secendValue[secendKey] = yup.object().shape(lastValue);
+    });
+
+    console.log(firstKey);
+    formErrorSchema[firstKey] = yup.object().shape(secendValue);
+  });
+
+  return yup.object().shape(formErrorSchema);
+};

@@ -86,6 +86,7 @@ const PersonalInfo = ({
             )}
           </div>
         </div>
+
         {data?.map((item) => {
           const { id, type, placeholder, name, label, isRequired } = item || {};
           return type === "text" && name !== "fullName" ? (
@@ -126,7 +127,7 @@ const PersonalInfo = ({
             </div>
           ) : (
             type === "select" &&
-            !relation && (
+            name !== "relation" && (
               <div key={id}>
                 {isEditable && (
                   <UpdateDeleteBtn

@@ -7,6 +7,8 @@ import FormSelectField from "../forms/FormSelectField";
 import FormRadio from "../forms/FormRadio";
 
 const PersonalDetails = ({ filds }) => {
+  // const
+
   const fromDataArray = Object.keys(filds).map((key) => {
     return {
       name: filds[key]?.name || key,

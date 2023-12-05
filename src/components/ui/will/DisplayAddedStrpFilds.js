@@ -13,6 +13,7 @@ import MainExecutorForm from "./MainExecutorForm";
 import AlternativeExecutorForm from "./AlternativeExecutorForm";
 import BeneficiariesForm from "./BeneficiariesForm";
 import { ENUM_FORM_STEPS } from "@/constans/steps";
+import AssetAllocationForm from "./AssetAllocationForm";
 
 const DisplayAddedStrpFilds = ({
   data,
@@ -53,7 +54,8 @@ const DisplayAddedStrpFilds = ({
         </Button>
       </div>
 
-      {stepFields?.length ? (
+      {stepFields?.length ||
+      selectedStep?.value === ENUM_FORM_STEPS.ASSET_ALLOCATION ? (
         <div className="max-w-5xl mx-auto">
           <Form submitHandler={onSubmit} resolver={yupResolver(validator)}>
             {selectedStep?.value === ENUM_FORM_STEPS.PERSONAL_DETAILS && (
@@ -96,7 +98,17 @@ const DisplayAddedStrpFilds = ({
               />
             )}
 
-            <div className="flex justify-end">
+            {selectedStep?.value === ENUM_FORM_STEPS.ASSET_ALLOCATION && (
+              <AssetAllocationForm
+                isEditable={isEditable}
+                countriesOptions={countriesOptions}
+                formInputFields={stepFields}
+                idTypeOptions={idTypeOptions}
+                setStepFields={setStepFields}
+              />
+            )}
+
+            <div className="flex my-4 justify-end">
               <Button
                 htmlType="submit"
                 className="bg-primary font-bold px-10"

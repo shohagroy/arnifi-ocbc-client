@@ -12,9 +12,11 @@ const BeneficiariesForm = ({
   countriesOptions,
   idTypeOptions,
   isEditable,
-  setStepFild,
+  setStepFields,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
+
+  console.log(formInputFields);
 
   const [deleteStepFild, { isLoading: deleteLoading }] =
     useDeleteStepFildMutation();
@@ -58,7 +60,7 @@ const BeneficiariesForm = ({
         data={formInputFields}
         countriesOptions={countriesOptions}
         idTypeOptions={idTypeOptions}
-        setStepFild={setStepFild}
+        setStepFields={setStepFields}
         deleteModalOkHandelar={deleteModalOkHandelar}
         loading={deleteLoading}
       />

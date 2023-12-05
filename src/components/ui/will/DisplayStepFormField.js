@@ -5,7 +5,7 @@ import AlternativeExecutorForm from "./AlternativeExecutorForm";
 import BeneficiariesForm from "./BeneficiariesForm";
 
 const DisplayStepFormField = ({ tittle, data }) => {
-  console.log(data);
+  // console.log(data);
   return (
     <div>
       <div>

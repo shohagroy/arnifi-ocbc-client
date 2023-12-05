@@ -6,13 +6,14 @@ import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import FormHeading from "./FormHeading";
 import FormText from "./FormText";
 import FormLinkText from "./FormLinkText";
+import AlternativeExecutorForm from "./AlternativeExecutorForm";
 
 const MainExecutorForm = ({
   formInputFields,
   countriesOptions,
   idTypeOptions,
   isEditable,
-  setStepFild,
+  setStepFields,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -63,10 +64,22 @@ const MainExecutorForm = ({
         data={formInputFields}
         countriesOptions={countriesOptions}
         idTypeOptions={idTypeOptions}
-        setStepFild={setStepFild}
+        setStepFields={setStepFields}
         deleteModalOkHandelar={deleteModalOkHandelar}
         loading={deleteLoading}
       />
+
+      <div>
+        <AlternativeExecutorForm
+          isEditable={isEditable}
+          data={formInputFields}
+          countriesOptions={countriesOptions}
+          idTypeOptions={idTypeOptions}
+          setStepFields={setStepFields}
+          deleteModalOkHandelar={deleteModalOkHandelar}
+          loading={deleteLoading}
+        />
+      </div>
     </div>
   );
 };

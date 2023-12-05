@@ -409,10 +409,10 @@ const DetailsSubmitPage = () => {
 
   //id: "96ab6713-12fe-41b0-af5a-3594f29c88c1"
   const { data, isLoading } = useGetCountryFormStepsQuery(
-    "96ab6713-12fe-41b0-af5a-3594f29c88c1"
+    "90e9ce55-49b6-438c-b68d-93ac7a668836"
   );
 
-  console.log(data?.data?.data);
+  // console.log(data);
 
   const willSteps =
     data?.data?.data?.map((step) => {
@@ -487,7 +487,7 @@ const DetailsSubmitPage = () => {
   return (
     <section>
       <div className="max-w-5xl mx-auto">
-        <StepperForm steps={willSteps} persistKey={"form-data"} />
+        <StepperForm steps={steps} persistKey={"form-data"} />
       </div>
     </section>
   );

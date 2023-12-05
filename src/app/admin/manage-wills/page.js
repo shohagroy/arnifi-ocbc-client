@@ -252,6 +252,9 @@ const ManageWillsPage = () => {
                   </div>
                 </Col>
                 <Col span={4}>
+                  <Link href={"/admin/manage-wills/add-new"}>
+                    <AddButton text={"Add New"} />
+                  </Link>
                   <Link href={"/admin/manage-wills/create"}>
                     <AddButton text={"Create New Wills"} />
                   </Link>
