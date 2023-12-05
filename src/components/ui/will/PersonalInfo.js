@@ -11,12 +11,12 @@ const PersonalInfo = ({
   countriesOptions,
   idTypeOptions,
   isEditable,
-  setStepFild,
+  setStepFields,
   deleteModalOkHandelar,
   loading,
 }) => {
   const addressType = data?.find((item) => item.type === "address");
-  const fullName = data?.find((item) => item.name === "fullName");
+  const fullNameFields = data?.find((item) => item.name === "fullName");
   const gender = data?.find((item) => item.name === "gender");
   const relation = data?.find((item) => item.name === "relation");
 
@@ -25,22 +25,22 @@ const PersonalInfo = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            {fullName && (
+            {fullNameFields && (
               <div>
                 {isEditable && (
                   <UpdateDeleteBtn
-                    data={fullName}
+                    data={fullNameFields}
                     deleteModalOkHandelar={deleteModalOkHandelar}
-                    setStepFild={setStepFild}
+                    setStepFields={setStepFields}
                     loading={loading}
                   />
                 )}
                 <FormInput
-                  label={fullName?.label}
-                  name={fullName?.name}
-                  placeholder={fullName?.placeholder}
-                  type={fullName?.type}
-                  required={fullName?.isRequired}
+                  label={fullNameFields?.label}
+                  name={fullNameFields?.name}
+                  placeholder={fullNameFields?.placeholder}
+                  type={fullNameFields?.type}
+                  required={fullNameFields?.isRequired}
                 />
               </div>
             )}
@@ -53,7 +53,7 @@ const PersonalInfo = ({
                   <UpdateDeleteBtn
                     data={gender}
                     deleteModalOkHandelar={deleteModalOkHandelar}
-                    setStepFild={setStepFild}
+                    setStepFields={setStepFields}
                     loading={loading}
                   />
                 )}
@@ -71,7 +71,7 @@ const PersonalInfo = ({
                   <UpdateDeleteBtn
                     data={relation}
                     deleteModalOkHandelar={deleteModalOkHandelar}
-                    setStepFild={setStepFild}
+                    setStepFields={setStepFields}
                     loading={loading}
                   />
                 )}
@@ -88,13 +88,13 @@ const PersonalInfo = ({
         </div>
         {data?.map((item) => {
           const { id, type, placeholder, name, label, isRequired } = item || {};
-          return type === "text" && !fullName ? (
+          return type === "text" && name !== "fullName" ? (
             <div key={id}>
               {isEditable && (
                 <UpdateDeleteBtn
                   data={item}
                   deleteModalOkHandelar={deleteModalOkHandelar}
-                  setStepFild={setStepFild}
+                  setStepFields={setStepFields}
                   loading={loading}
                 />
               )}
@@ -112,7 +112,7 @@ const PersonalInfo = ({
                 <UpdateDeleteBtn
                   data={item}
                   deleteModalOkHandelar={deleteModalOkHandelar}
-                  setStepFild={setStepFild}
+                  setStepFields={setStepFields}
                   loading={loading}
                 />
               )}
@@ -131,7 +131,7 @@ const PersonalInfo = ({
                 {isEditable && (
                   <UpdateDeleteBtn
                     data={item}
-                    setStepFild={setStepFild}
+                    setStepFields={setStepFields}
                     deleteModalOkHandelar={deleteModalOkHandelar}
                     loading={loading}
                   />
@@ -155,7 +155,7 @@ const PersonalInfo = ({
             <div>
               <FormAddressField
                 data={addressType}
-                setStepFild={setStepFild}
+                setStepFields={setStepFields}
                 isEditable={isEditable}
                 deleteModalOkHandelar={deleteModalOkHandelar}
                 loading={loading}

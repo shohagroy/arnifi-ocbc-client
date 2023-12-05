@@ -1,13 +1,13 @@
 import { Button } from "antd";
 import React, { useState } from "react";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
-import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal copy";
+import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal";
 
 const UpdateDeleteBtn = ({
   data,
   deleteModalOkHandelar,
   loading,
-  setStepFild,
+  setStepFields,
 }) => {
   const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState({});
@@ -36,7 +36,7 @@ const UpdateDeleteBtn = ({
   return (
     <>
       <div className="flex justify-end bg-gray-200 rounded-md items-center">
-        <Button onClick={() => setStepFild(data)} type="link">
+        <Button onClick={() => setStepFields(data)} type="link">
           <EditFilled />
         </Button>
         <Button onClick={deleteHandelar} type="link" danger>

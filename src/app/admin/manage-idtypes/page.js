@@ -75,17 +75,13 @@ const ManageIdTypePage = () => {
   const { data: countriesData, isLoading: countryLoading } =
     useGetAllCountryDataQuery();
 
-  const countriesOptions = countriesData?.data?.data.map((item) => {
-    return {
-      label: item?.name,
-      value: item?.id,
-    };
-  });
-
-  countriesOptions?.unshift({
-    label: "All Countries",
-    value: "",
-  });
+  const countriesOptions =
+    countriesData?.data?.data.map((item) => {
+      return {
+        label: item?.name,
+        value: item?.id,
+      };
+    }) || [];
 
   const [deleteIdType, { isLoading: deleteLoading }] =
     useDeleteIdTypeMutation();
@@ -232,7 +228,10 @@ const ManageIdTypePage = () => {
                   <SearchSelect
                     value={countryId}
                     loading={countryLoading}
-                    options={countriesOptions}
+                    options={[
+                      { label: "All Countries", value: "" },
+                      ...countriesOptions,
+                    ]}
                     handleChange={(e) => setCountryId(e)}
                   />
                 </Col>

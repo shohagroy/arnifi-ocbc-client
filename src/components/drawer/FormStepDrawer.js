@@ -12,6 +12,7 @@ import {
   useCreateFormStepMutation,
   useUpdateFormStepMutation,
 } from "@/redux/features/formStep/formStepApi";
+import { formStepsOptions } from "@/constans/steps";
 
 const FormStepDrawer = ({
   open,
@@ -141,11 +142,20 @@ const FormStepDrawer = ({
             resolver={yupResolver(formStepSchema)}
             defaultValues={data}
           >
+            <FormSelectField
+              loading={false}
+              // showSearch={true}
+              name={"value"}
+              label={"Select Step"}
+              options={formStepsOptions}
+              required
+            />
+
             <FormInput
               name={"tittle"}
               type={"text"}
               size="large"
-              label={"Form Step Tittle"}
+              label={"Step Tittle"}
               placeholder={"e.g. Personal Details"}
               required
             />
@@ -154,7 +164,7 @@ const FormStepDrawer = ({
               loading={optionsLoading}
               showSearch={true}
               name={"countryId"}
-              label={"Select Country"}
+              label={"For Country"}
               options={options}
               required
             />

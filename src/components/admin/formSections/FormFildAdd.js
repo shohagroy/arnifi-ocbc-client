@@ -1,33 +1,11 @@
 import FormCheckbox from "@/components/forms/FormCheckbox";
 import FormInput from "@/components/forms/FormInput";
 import FormSelectField from "@/components/forms/FormSelectField";
+import { formInputTypeOptions } from "@/constans/steps";
 import { Button, Col, Divider, Row } from "antd";
 import React from "react";
 
-const FormFildAdd = ({ value }) => {
-  const formInputTypeOptions = [
-    {
-      value: "text",
-      label: " Input Type Text Fild",
-    },
-    {
-      value: "number",
-      label: "Input Type text Number Fild",
-    },
-    {
-      value: "select",
-      label: "Select Item Type Fild",
-    },
-    {
-      value: "radio",
-      label: "Radio Button Type Fild",
-    },
-    {
-      value: "address",
-      label: "Address Fild",
-    },
-  ];
-
+const FormFildAdd = ({ value, setValue }) => {
   return (
     <div>
       <div className="my-4 font-primary text-lg">
@@ -39,15 +17,17 @@ const FormFildAdd = ({ value }) => {
         <Col span={5}>
           <FormSelectField
             required
+            handleChange={(e) => setValue({ ...value, type: e })}
             name={"type"}
             placeholder="select find type"
-            options={formInputTypeOptions}
+            options={formInputTypeOptions || []}
           />
         </Col>
 
         <Col span={5} className="">
           <FormInput
             name={"label"}
+            handleChange={(e) => console.log(e)}
             required
             placeholder="enter fild lable tittle"
           />

@@ -53,7 +53,7 @@ export const generateSteperFormValidator = (formData) => {
 
 export const formInputFildSchema = yup.object().shape({
   countryId: yup.string().required("Country Fild is required."),
-  stepId: yup.string().required("Step Fild is required."),
+  stepValue: yup.string().required("Step Fild is required."),
   name: yup.string().required("Value Name fild is required."),
   type: yup.string().required("Input type fild is required."),
   label: yup.string().required("Input lebel fild is required."),

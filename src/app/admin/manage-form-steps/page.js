@@ -40,7 +40,6 @@ const ManageFormStepPage = () => {
   query["page"] = page;
   query["sortBy"] = sortBy;
   query["sortOrder"] = sortOrder;
-  // query["countryId"] = countryId;
 
   const debouncedTerm = useDebounced({
     searchQuery: searchTerm,
@@ -60,7 +59,7 @@ const ManageFormStepPage = () => {
   });
   const { meta } = data || {};
 
-  const idTypesData = data?.data?.data.map((item, i) => {
+  const formStepsDara = data?.data?.data.map((item, i) => {
     return {
       key: item?.id,
       sl: page * size - size + i + 1,
@@ -75,17 +74,18 @@ const ManageFormStepPage = () => {
   const { data: countriesData, isLoading: countryLoading } =
     useGetAllCountryDataQuery();
 
-  const countriesOptions = countriesData?.data?.data.map((item) => {
-    return {
-      label: item?.name,
-      value: item?.id,
-    };
-  });
+  const countriesOptions =
+    countriesData?.data?.data.map((item) => {
+      return {
+        label: item?.name,
+        value: item?.id,
+      };
+    }) || [];
 
-  countriesOptions?.unshift({
-    label: "All Countries",
-    value: "",
-  });
+  // countriesOptions?.unshift({
+  //   label: "All Countries",
+  //   value: "",
+  // });
 
   const [deleteFormStep, { isLoading: deleteLoading }] =
     useDeleteFormStepMutation();
@@ -232,7 +232,10 @@ const ManageFormStepPage = () => {
                   <SearchSelect
                     value={countryId}
                     loading={countryLoading}
-                    options={countriesOptions}
+                    options={[
+                      { label: "All Countries", value: "" },
+                      ...countriesOptions,
+                    ]}
                     handleChange={(e) => setCountryId(e)}
                   />
                 </Col>
@@ -289,7 +292,7 @@ const ManageFormStepPage = () => {
               <DisplayTable
                 loading={tableLoading}
                 columns={columns}
-                dataSource={idTypesData}
+                dataSource={formStepsDara}
                 pageSize={size}
                 totalPages={meta?.total}
                 showSizeChanger={true}

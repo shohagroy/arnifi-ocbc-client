@@ -15,7 +15,7 @@ const PersonalDetailsForm = ({
   countriesOptions,
   idTypeOptions,
   isEditable,
-  setStepFild,
+  setStepFields,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -48,7 +48,7 @@ const PersonalDetailsForm = ({
         data={formInputFields}
         countriesOptions={countriesOptions}
         idTypeOptions={idTypeOptions}
-        setStepFild={setStepFild}
+        setStepFields={setStepFields}
         deleteModalOkHandelar={deleteModalOkHandelar}
         loading={deleteLoading}
       />

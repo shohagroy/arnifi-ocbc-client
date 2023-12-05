@@ -4,8 +4,9 @@ import AdminBreadCrumb from "@/components/admin/AdminBreadCrumb";
 import FormFildAdd from "@/components/admin/formSections/FormFildAdd";
 import FormSelectField from "@/components/forms/FormSelectField";
 import Form from "@/components/forms/From";
-import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal copy";
+import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal";
 import DisplayAddedStrpFilds from "@/components/ui/will/DisplayAddedStrpFilds";
+import { allStepsFields, formStepsOptions } from "@/constans/steps";
 import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
 import {
   useCreateStepFildMutation,
@@ -17,25 +18,16 @@ import { Card, Col, Row, message } from "antd";
 import React, { useState } from "react";
 
 const CreateNewWillsPage = () => {
-  const [stepFild, setStepFild] = useState({
-    countryId: null,
-    stepId: null,
-    type: null,
-    errorText: "",
-    isRequired: false,
-    label: "",
-    name: null,
-    placeholder: "",
-  });
+  const [stepFields, setStepFields] = useState({});
 
   const [messageApi, contextHolder] = message.useMessage();
   const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState({});
 
-  const [createStepFild, { isLoading: createLoading }] =
+  const [createStepFields, { isLoading: createLoading }] =
     useCreateStepFildMutation();
 
-  const [updateStepFild, { isLoading: updateLoading }] =
+  const [updateStepFields, { isLoading: updateLoading }] =
     useUpdateStepFildMutation();
 
   const { data: countriesData, isLoading: countryLoading } =
@@ -51,16 +43,8 @@ const CreateNewWillsPage = () => {
   });
 
   const selectedCountry = countriesOptions?.find(
-    (item) => item?.value === stepFild?.countryId
+    (item) => item?.value === stepFields?.countryId
   );
-
-  const formStepOptions = selectedCountry?.formSteps?.map((item) => {
-    return {
-      label: item?.tittle,
-      value: item?.id,
-      data: item,
-    };
-  });
 
   const idTypeOptions = selectedCountry?.idTypes?.map((item) => {
     return {
@@ -69,37 +53,6 @@ const CreateNewWillsPage = () => {
       data: item,
     };
   });
-
-  const formInputValueName = [
-    {
-      label: "Full Name",
-      value: "fullName",
-    },
-    {
-      label: "Gender",
-      value: "gender",
-    },
-    {
-      label: "Relation",
-      value: "relation",
-    },
-    {
-      label: "Type Of ID",
-      value: "idType",
-    },
-    {
-      label: "ID Number",
-      value: "idNumber",
-    },
-    {
-      label: "Citizenship",
-      value: "citizenship",
-    },
-    {
-      label: "Address",
-      value: "address",
-    },
-  ];
 
   const breadCrumbItems = [
     {
@@ -117,8 +70,9 @@ const CreateNewWillsPage = () => {
   ];
 
   const inputFildAddHandelar = (data) => {
+    let info = {};
     if (data?.id) {
-      const info = {
+      info = {
         tittle: "Are you sure update this step fild?",
         details: (
           <>
@@ -134,12 +88,11 @@ const CreateNewWillsPage = () => {
           </>
         ),
       };
-
-      setStepFild(data);
-      setModalText(info);
-      setOpenModal(true);
+      // setStepFields(data);
+      // setModalText(info);
+      // setOpenModal(true);
     } else {
-      const info = {
+      info = {
         tittle: "Are you sure create this step fild?",
         details: (
           <>
@@ -155,18 +108,20 @@ const CreateNewWillsPage = () => {
           </>
         ),
       };
-
-      setStepFild(data);
-      setModalText(info);
-      setOpenModal(true);
+      // setStepFields(data);
+      // setModalText(info);
+      // setOpenModal(true);
     }
+
+    setStepFields(data);
+    setModalText(info);
+    setOpenModal(true);
   };
 
   const modalOkHandelar = async () => {
-    console.log(stepFild);
     try {
-      if (stepFild?.id) {
-        const result = await updateStepFild(stepFild).unwrap();
+      if (stepFields?.id) {
+        const result = await updateStepFields(stepFields).unwrap();
         messageApi.open({
           type: "success",
           content:
@@ -174,20 +129,12 @@ const CreateNewWillsPage = () => {
         });
         setModalText({});
         setOpenModal(false);
-        setStepFild({
-          // ...stepFild,
-          // label: "",
-          countryId: stepFild?.countryId,
-          stepId: stepFild?.stepId,
-          name: null,
-          type: null,
-          // placeholder: "",
-          // errorText: "",
-          isRequired: false,
-          id: null,
+        setStepFields({
+          countryId: stepFields?.countryId,
+          stepValue: stepFields?.stepValue,
         });
       } else {
-        const result = await createStepFild(stepFild).unwrap();
+        const result = await createStepFields(stepFields).unwrap();
         messageApi.open({
           type: "success",
           content:
@@ -195,19 +142,12 @@ const CreateNewWillsPage = () => {
         });
         setModalText({});
         setOpenModal(false);
-        setStepFild({
-          ...stepFild,
-          label: "",
-          name: null,
-          type: null,
-          placeholder: "",
-          errorText: "",
-          isRequired: false,
-          id: null,
+        setStepFields({
+          countryId: stepFields?.countryId,
+          stepValue: stepFields?.stepValue,
         });
       }
     } catch (error) {
-      console.log(error);
       messageApi.open({
         type: "error",
         content: error?.data || "Something went wrong!",
@@ -232,9 +172,7 @@ const CreateNewWillsPage = () => {
               <Form
                 submitHandler={inputFildAddHandelar}
                 resolver={yupResolver(formInputFildSchema)}
-                // stepFilds={stepFild}
-                defaultValues={stepFild}
-                persistKey="create-filds"
+                defaultValues={stepFields}
               >
                 <Row gutter={8}>
                   <Col span={8} className=" items-center">
@@ -243,7 +181,7 @@ const CreateNewWillsPage = () => {
                       loading={countryLoading}
                       required
                       handleChange={(e) =>
-                        setStepFild({ ...stepFild, countryId: e })
+                        setStepFields({ ...stepFields, countryId: e })
                       }
                       name={"countryId"}
                       placeholder="select country for wills"
@@ -256,33 +194,36 @@ const CreateNewWillsPage = () => {
                     <FormSelectField
                       required
                       handleChange={(e) =>
-                        setStepFild({ ...stepFild, stepId: e })
+                        setStepFields({ ...stepFields, stepValue: e })
                       }
-                      name={"stepId"}
+                      name={"stepValue"}
                       placeholder="select step"
                       label={"For form steps"}
-                      options={formStepOptions || []}
+                      options={formStepsOptions || []}
                     />
                   </Col>
 
                   <Col span={8} className="">
                     <FormSelectField
+                      handleChange={(e) =>
+                        setStepFields({ ...stepFields, name: e })
+                      }
                       required
                       name={"name"}
                       placeholder="select step"
                       label={"For Value"}
-                      options={formInputValueName}
+                      options={allStepsFields || []}
                     />
                   </Col>
                 </Row>
 
-                <FormFildAdd setValue={setStepFild} value={stepFild} />
+                <FormFildAdd setValue={setStepFields} value={stepFields} />
               </Form>
 
               <div className="my-6">
                 <DisplayAddedStrpFilds
-                  data={stepFild}
-                  setStepFild={setStepFild}
+                  data={stepFields}
+                  setStepFields={setStepFields}
                   idTypeOptions={idTypeOptions}
                   countriesOptions={countriesOptions}
                 />

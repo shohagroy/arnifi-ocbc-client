@@ -37,7 +37,6 @@ const StepperForm = ({ steps, persistKey }) => {
   const onSubmit = (data) => {
     // next();
     setCurrent(current + 1);
-    console.log(data, "submit");
   };
 
   return (

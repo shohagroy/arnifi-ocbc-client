@@ -12,16 +12,16 @@ import { useGetCountryFormStepsQuery } from "@/redux/features/formStep/formStepA
 import MainExecutorForm from "./MainExecutorForm";
 import AlternativeExecutorForm from "./AlternativeExecutorForm";
 import BeneficiariesForm from "./BeneficiariesForm";
+import { ENUM_FORM_STEPS } from "@/constans/steps";
 
 const DisplayAddedStrpFilds = ({
   data,
   countriesOptions,
   idTypeOptions,
-  setStepFild,
+  setStepFields,
 }) => {
   const [isEditable, setIsEditable] = useState(false);
-  const { countryId, stepId } = data || {};
-  const search = `/${countryId}/${stepId}`;
+  const { countryId, stepValue } = data || {};
 
   const { data: formStepsData, isLoading } =
     useGetCountryFormStepsQuery(countryId);
@@ -30,13 +30,11 @@ const DisplayAddedStrpFilds = ({
     console.log(data);
   };
 
-  const selectedStep =
-    formStepsData?.data?.data?.find((item) => item?.id === stepId) || {};
-
-  // console.log(selectedStep)?.tittle;
+  const selectedStep = formStepsData?.data?.data?.find(
+    (item) => item.value === stepValue
+  );
 
   const stepFields = selectedStep?.stepFilds || [];
-
   const validator = generateSteperFormValidator(stepFields);
 
   return (
@@ -58,27 +56,27 @@ const DisplayAddedStrpFilds = ({
       {stepFields?.length ? (
         <div className="max-w-5xl mx-auto">
           <Form submitHandler={onSubmit} resolver={yupResolver(validator)}>
-            {selectedStep?.tittle === "Personal Details" && (
+            {selectedStep?.value === ENUM_FORM_STEPS.PERSONAL_DETAILS && (
               <PersonalDetailsForm
                 isEditable={isEditable}
                 countriesOptions={countriesOptions}
                 formInputFields={stepFields}
                 idTypeOptions={idTypeOptions}
-                setStepFild={setStepFild}
+                setStepFields={setStepFields}
               />
             )}
 
-            {selectedStep?.tittle === "Executors" && (
+            {selectedStep?.value === ENUM_FORM_STEPS.EXECUTORS && (
               <MainExecutorForm
                 isEditable={isEditable}
                 countriesOptions={countriesOptions}
                 formInputFields={stepFields}
                 idTypeOptions={idTypeOptions}
-                setStepFild={setStepFild}
+                setStepFields={setStepFields}
               />
             )}
 
-            {selectedStep?.tittle === "Alternative Executor" && (
+            {/* {selectedStep?.value === ENUM_FORM_STEPS. && (
               <AlternativeExecutorForm
                 isEditable={isEditable}
                 countriesOptions={countriesOptions}
@@ -86,15 +84,15 @@ const DisplayAddedStrpFilds = ({
                 idTypeOptions={idTypeOptions}
                 setStepFild={setStepFild}
               />
-            )}
+            )} */}
 
-            {selectedStep?.tittle === "Beneficiaries" && (
+            {selectedStep?.value === ENUM_FORM_STEPS.BENEFICIARIES && (
               <BeneficiariesForm
                 isEditable={isEditable}
                 countriesOptions={countriesOptions}
                 formInputFields={stepFields}
                 idTypeOptions={idTypeOptions}
-                setStepFild={setStepFild}
+                setStepFields={setStepFields}
               />
             )}
 
