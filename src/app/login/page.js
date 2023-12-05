@@ -20,7 +20,7 @@ const LoginPage = () => {
     try {
       const result = await login(data).unwrap();
 
-      console.log(result?.data?.message);
+      // console.log(result?.data?.message);
       if (result?.data?.success) {
         messageApi.open({
           type: "success",

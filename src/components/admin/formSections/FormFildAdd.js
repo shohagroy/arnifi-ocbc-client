@@ -1,9 +1,33 @@
+import FormCheckbox from "@/components/forms/FormCheckbox";
 import FormInput from "@/components/forms/FormInput";
 import FormSelectField from "@/components/forms/FormSelectField";
-import { Button, Checkbox, Col, Divider, Row } from "antd";
+import { Button, Col, Divider, Row } from "antd";
 import React from "react";
 
-const FormFildAdd = ({ formInputTypeOptions = [], value, setValue }) => {
+const FormFildAdd = ({ value }) => {
+  const formInputTypeOptions = [
+    {
+      value: "text",
+      label: " Input Type Text Fild",
+    },
+    {
+      value: "number",
+      label: "Input Type text Number Fild",
+    },
+    {
+      value: "select",
+      label: "Select Item Type Fild",
+    },
+    {
+      value: "radio",
+      label: "Radio Button Type Fild",
+    },
+    {
+      value: "address",
+      label: "Address Fild",
+    },
+  ];
+
   return (
     <div>
       <div className="my-4 font-primary text-lg">
@@ -52,22 +76,12 @@ const FormFildAdd = ({ formInputTypeOptions = [], value, setValue }) => {
             type="primary"
             size="large"
           >
-            Add +
+            {value?.id ? "Update" : "Add +"}
           </Button>
         </Col>
       </Row>
       <Col className="my-2">
-        <Checkbox
-          checked={value?.isRequired}
-          onChange={(e) =>
-            setValue({
-              ...stepFild,
-              isRequired: e.target.checked,
-            })
-          }
-        >
-          Is Required
-        </Checkbox>
+        <FormCheckbox name={"isRequired"} />
       </Col>
     </div>
   );

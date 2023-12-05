@@ -31,6 +31,26 @@ export const generateFormValidator = (formData) => {
   return yup.object().shape(formErrorSchema);
 };
 
+export const generateSteperFormValidator = (formData) => {
+  const formErrorSchema = {};
+
+  formData?.map((item) => {
+    if (item?.type !== "address" && item?.isRequired) {
+      formErrorSchema[item?.name] = yup.string().required(item?.errorText);
+    }
+
+    if (item?.type == "address") {
+      formErrorSchema["address"] = yup.object().shape({
+        line1: yup.string().required("The Address field is required."),
+        country: yup.string().required("Country field is required."),
+        postalCode: yup.string().required("The Address field is required."),
+      });
+    }
+  });
+
+  return yup.object().shape(formErrorSchema);
+};
+
 export const formInputFildSchema = yup.object().shape({
   countryId: yup.string().required("Country Fild is required."),
   stepId: yup.string().required("Step Fild is required."),

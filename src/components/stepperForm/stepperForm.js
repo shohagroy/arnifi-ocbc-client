@@ -24,7 +24,7 @@ const StepperForm = ({ steps, persistKey }) => {
     setToLocalStorage("step", JSON.stringify({ step: current }));
   }, [current]);
 
-  const resolver = generateFormValidator(steps[current]?.data);
+  // const resolver = generateFormValidator(steps[current]?.data);
 
   const prev = () => {
     setCurrent(current - 1);
@@ -46,7 +46,7 @@ const StepperForm = ({ steps, persistKey }) => {
         defaultValues={savedValues}
         persistKey={persistKey}
         submitHandler={onSubmit}
-        resolver={yupResolver(resolver)}
+        // resolver={yupResolver(resolver)}
       >
         <Steps current={current} items={items} />
         <div>{steps[current].content}</div>

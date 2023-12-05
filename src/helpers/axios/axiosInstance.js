@@ -33,7 +33,7 @@ instance.interceptors.response.use(
     return responseObject;
   },
   async (error) => {
-    console.log(error);
+    // console.log(error);
     if (error?.response?.data?.message === "jwt expired") {
       removeUserInfo("accessToken");
       try {

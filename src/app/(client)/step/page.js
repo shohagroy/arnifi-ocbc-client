@@ -1,3 +1,5 @@
+"use client";
+
 import AssetAllocation from "@/components/stepperForm/AssetAllocation";
 import Beneficiaries from "@/components/stepperForm/Beneficiaries";
 import Executors from "@/components/stepperForm/Executors";
@@ -8,6 +10,11 @@ import StepperForm from "@/components/stepperForm/stepperForm";
 import React from "react";
 import MIcon from "../../../assets/male-icon.png";
 import FIcon from "../../../assets/female-icon.png";
+import {
+  useGetAllFormStepsQuery,
+  useGetCountryFormStepsQuery,
+} from "@/redux/features/formStep/formStepApi";
+import DisplayStepFormField from "@/components/ui/will/DisplayStepFormField";
 
 const DetailsSubmitPage = () => {
   const countryOptions = [
@@ -400,6 +407,46 @@ const DetailsSubmitPage = () => {
     },
   };
 
+  //id: "96ab6713-12fe-41b0-af5a-3594f29c88c1"
+  const { data, isLoading } = useGetCountryFormStepsQuery(
+    "96ab6713-12fe-41b0-af5a-3594f29c88c1"
+  );
+
+  console.log(data?.data?.data);
+
+  const willSteps =
+    data?.data?.data?.map((step) => {
+      return {
+        title: step?.tittle,
+        content: (
+          <DisplayStepFormField tittle={step?.tittle} data={step?.stepFilds} />
+        ),
+        data: step,
+      };
+    }) || [];
+
+  willSteps?.push({
+    title: "Review",
+    content: <ReviewAndSubmit />,
+  });
+  // console.log(willSteps);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  // const willFormSteps = data?.data?.data.map((step) => {
+  //   console.log(step);
+  //   return {
+  //     id: step?.id,
+  //     title: step?.tittle,
+  //     content: (
+  //       <PersonalDetails filds={personalDataForm} persistKey={"form-data"} />
+  //     ),
+  //   };
+  // });
+
+  // console.log(willFormSteps);
+
   const steps = [
     {
       title: "Personal Details",
@@ -440,7 +487,7 @@ const DetailsSubmitPage = () => {
   return (
     <section>
       <div className="max-w-5xl mx-auto">
-        <StepperForm steps={steps} persistKey={"form-data"} />
+        <StepperForm steps={willSteps} persistKey={"form-data"} />
       </div>
     </section>
   );

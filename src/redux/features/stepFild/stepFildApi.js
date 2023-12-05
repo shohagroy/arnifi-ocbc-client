@@ -8,7 +8,7 @@ export const stepFildApi = baseApi.injectEndpoints({
         method: "POST",
         data,
       }),
-      invalidatesTags: ["step-filds"],
+      invalidatesTags: ["step-filds", "form-step"],
     }),
 
     // getAllCountries: build.query({
@@ -33,16 +33,16 @@ export const stepFildApi = baseApi.injectEndpoints({
         url: `/step-filds/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["step-filds"],
+      invalidatesTags: ["step-filds", "form-step"],
     }),
 
     updateStepFild: build.mutation({
-      query: ({ key, sl, ...data }) => ({
-        url: `/step-filds/${key}`,
+      query: ({ id, ...data }) => ({
+        url: `/step-filds/${id}`,
         method: "PATCH",
         data,
       }),
-      invalidatesTags: ["step-filds"],
+      invalidatesTags: ["step-filds", "form-step"],
     }),
   }),
 });
