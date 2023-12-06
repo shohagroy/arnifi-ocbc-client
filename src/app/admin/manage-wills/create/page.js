@@ -6,8 +6,9 @@ import FormSelectField from "@/components/forms/FormSelectField";
 import Form from "@/components/forms/From";
 import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal";
 import DisplayAddedStrpFilds from "@/components/ui/will/DisplayAddedStrpFilds";
-import { allStepsFields, formStepsOptions } from "@/constans/steps";
+import { allStepsFields } from "@/constans/steps";
 import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
+import { useGetAllFormStepsQuery } from "@/redux/features/formStep/formStepApi";
 import {
   useCreateStepFildMutation,
   useUpdateStepFildMutation,
@@ -42,6 +43,16 @@ const CreateNewWillsPage = () => {
     };
   });
 
+  const { data: stepsData, isLoading } = useGetAllFormStepsQuery({
+    size: 100,
+  });
+
+  const formStepsOptions = stepsData?.data?.data?.map((step) => {
+    return {
+      label: step?.tittle,
+      value: step?.value,
+    };
+  });
   const selectedCountry = countriesOptions?.find(
     (item) => item?.value === stepFields?.countryId
   );
@@ -192,6 +203,7 @@ const CreateNewWillsPage = () => {
 
                   <Col span={8} className="">
                     <FormSelectField
+                      loading={isLoading}
                       required
                       handleChange={(e) =>
                         setStepFields({ ...stepFields, stepValue: e })

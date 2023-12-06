@@ -5,7 +5,7 @@ import PersonalInfo from "./PersonalInfo";
 import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import FormHeading from "./FormHeading";
 import FormText from "./FormText";
-import FormLinkText from "./FormLinkText";
+// import FormLinkText from "./FormModalText";
 import AlternativeExecutorForm from "./AlternativeExecutorForm";
 
 const MainExecutorForm = ({
@@ -53,10 +53,10 @@ const MainExecutorForm = ({
             Testator’s demise. An Executor can also be a Beneficiary under a
             Will.`}
         />
-        <FormLinkText
+        {/* <FormLinkText
           text={" More information about Executors and their responsibilities"}
           link={"/"}
-        />
+        /> */}
       </div>
 
       <PersonalInfo

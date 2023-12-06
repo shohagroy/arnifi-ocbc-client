@@ -3,8 +3,11 @@
 import { Card } from "antd";
 import React from "react";
 import FormSelectField from "../forms/FormSelectField";
+import { ENUM_FORM_STEPS } from "@/constans/steps";
 
 const Instructions = () => {
+  const stepValue = ENUM_FORM_STEPS.INSTRUCTIONS;
+
   const idTypeOptions = [
     {
       value: "Options - 1",
@@ -76,7 +79,7 @@ const Instructions = () => {
             <div>
               <FormSelectField
                 label={"Religion"}
-                name={"beneficiary"}
+                name={`${stepValue}.religion`}
                 required
                 options={idTypeOptions}
                 type={"text"}
@@ -87,7 +90,7 @@ const Instructions = () => {
             <div>
               <FormSelectField
                 label={"Instructions"}
-                name={"Instructions"}
+                name={`${stepValue}.instructions`}
                 required
                 options={idTypeOptions}
                 type={"text"}

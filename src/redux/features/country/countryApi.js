@@ -61,6 +61,14 @@ export const countryApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["countries"],
     }),
+
+    getActiveCountryWill: build.query({
+      query: () => ({
+        url: "/countries/wills/active",
+        method: "GET",
+      }),
+      providesTags: ["countries"],
+    }),
   }),
 });
 
@@ -72,4 +80,5 @@ export const {
   useGetAllCountryDataQuery,
   useGetCountriesWillsQuery,
   useChangeActiveStatusMutation,
+  useGetActiveCountryWillQuery,
 } = countryApi;

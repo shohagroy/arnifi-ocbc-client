@@ -5,10 +5,9 @@ import PersonalInfo from "./PersonalInfo";
 import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import FormHeading from "./FormHeading";
 import FormText from "./FormText";
-import FormModalText from "./FormModalText";
 // import FormLinkText from "./FormModalText";
 
-const BeneficiariesForm = ({
+const OtherBeneficiariesForm = ({
   formInputFields,
   countriesOptions,
   idTypeOptions,
@@ -42,20 +41,6 @@ const BeneficiariesForm = ({
     <div>
       {contextHolder}
 
-      <div className="">
-        <FormHeading heading={"Who will be the Beneficiaries of Your Will?"} />
-        <FormText
-          text={
-            "The Beneficiaries are the people who will benefit from the asset allocation indicated in this will."
-          }
-        />
-
-        <FormModalText
-          text={"More information about Beneficiaries"}
-          data={[]}
-        />
-      </div>
-
       <PersonalInfo
         isEditable={isEditable}
         data={formInputFields}
@@ -69,4 +54,4 @@ const BeneficiariesForm = ({
   );
 };
 
-export default BeneficiariesForm;
+export default OtherBeneficiariesForm;

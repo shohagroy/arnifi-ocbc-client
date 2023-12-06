@@ -1,85 +1,107 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormInput from "../forms/FormInput";
 import FormSelectField from "../forms/FormSelectField";
 import { Button, Card, Checkbox } from "antd";
 import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
+import { ENUM_FORM_STEPS } from "@/constans/steps";
+import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
+import FormAddressField from "./FormAddressField";
+import FormHeading from "../ui/will/FormHeading";
+import FormText from "../ui/will/FormText";
+import FormModalText from "../ui/will/FormModalText";
+import AlternativeExecutors from "./AlternativeExecutors";
 
-const Executors = ({ filds, persistKey }) => {
-  const [savedValus, setSavedValues] = useState(
-    !!getFromLocalStorage(persistKey)
-      ? JSON.parse(getFromLocalStorage(persistKey))
-      : ""
-  );
-  const [sameAddress, setSameAddress] = useState(false);
-  const sameAddressHandelar = (isChack) => {
-    setSameAddress(isChack);
-    if (isChack) {
-      savedValus["mainExecutorAddress"] = savedValus?.address;
-      setToLocalStorage(persistKey, JSON.stringify(savedValus));
-    } else {
-      savedValus["mainExecutorAddress"] = {};
-      setToLocalStorage(persistKey, JSON.stringify(savedValus));
-      setSavedValues({ ...savedValus, address: {} });
-    }
-  };
+const Executors = ({ setStepValue, country, stepFields }) => {
+  const [showAlternativeExecutors, setShowAlternativeExecutors] =
+    useState(false);
 
-  const fromDataArray = Object.keys(filds).map((key) => {
+  const { idTypes, id } = country || {};
+  const stepValue = ENUM_FORM_STEPS.EXECUTORS;
+
+  useEffect(() => {
+    setStepValue(stepValue);
+  }, [setStepValue, stepValue]);
+
+  const idTypeOptions = idTypes?.map((item) => {
     return {
-      name: filds[key]?.name || key,
-      label: filds[key]?.label,
-      type: filds[key]?.type,
-      required: filds[key]?.required,
-      placeholder: filds[key]?.placeholder,
-      errorText: filds[key]?.errorText,
-      options: filds[key]?.options,
+      label: item?.tittle,
+      value: item?.id,
     };
   });
+
+  const { data, isLoading } = useGetAllCountryDataQuery();
+
+  const countryOptions = data?.data?.data?.map((country) => {
+    return {
+      label: country?.name,
+      value: country?.id,
+    };
+  });
+
+  const addressFild = stepFields?.find((item) => item.type === "address");
+
+  const modalTextData = [
+    {
+      info: " An Executor is the person appointed by the Testator under his Will to carry out the wishes of the Testator in accordance with the Will. An Executor can also be a beneficiary under a Will and a Testator can appoint more than one Executor in his Will. Where there are more than one Executors, they must act jointly (together). ",
+      others: [],
+    },
+    {
+      info: " Please note that the Online Will Generator does not cater to joint Executors. However, the Online Will Generator allows the Testator to include an alternative Executor. If circumstances cause the main Executor to be unable to execute the terms of the Will, the execution power will be passed on to the alternative Executor. ",
+      others: [],
+    },
+    {
+      info: " An Executor must be over the age of 21, not be a bankrupt and is of sound mind to carry out his or her duties under the Will upon the Testator’s demise. ",
+      others: [],
+    },
+    {
+      info: " Some of the Executor’s duties would include: ",
+      others: [
+        " (a) Applying for Grant of Probate for the deceased;",
+        " (b) Making funeral arrangements for the deceased;",
+        " (c) Settling the lawful just debts owed by the deceased;",
+        " (d) Taking possession of and Distributing the assets of the deceased in accordance with the Will. ",
+      ],
+    },
+    {
+      info: " If circumstances are such that an Executor refuses or is unable to take up his office, the relevant persons will have to seek legal advice as to how next to proceed.",
+    },
+  ];
 
   return (
     <div>
       <div className="p-2">
-        <h2 className="pt-10 font-semibold text-3xl">
-          Who will be the Executor(s) of your Will?
-        </h2>
+        <FormHeading heading={" Who will be the Executor(s) of your Will?"} />
+        <FormText
+          text={
+            "The Main Executor is the person appointed to carry out the wishes of this Will."
+          }
+        />
+        <FormText
+          text={
+            "An Executor must be over the age of 21, not be a bankrupt and is of sound mind to carry out his or her duties under the Will upon the Testator’s demise. An Executor can also be a Beneficiary under a Will"
+          }
+        />
 
-        <div className="text-sm ">
-          <p className="py-6">
-            The Main Executor is the person appointed to carry out the wishes of
-            this Will.
-          </p>
-
-          <p>
-            An Executor must be over the age of 21, not be a bankrupt and is of
-            sound mind to carry out his or her duties under the Will upon the
-            Testator’s demise. An Executor can also be a Beneficiary under a
-            Will
-          </p>
-        </div>
-
-        <div className="py-6 ">
-          <a className="text-primary flex" href="/">
-            <QuestionCircleOutlined />
-            <p className="px-2">
-              More information about Executors and their responsibilities
-            </p>
-          </a>
-        </div>
+        <FormModalText
+          tittle={"Executor(s) of Will"}
+          text={"More information about Executors and their responsibilities"}
+          data={modalTextData}
+        />
       </div>
+
       <Card>
         <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {fromDataArray?.map((data) => {
-            const { type, placeholder, name, label, required, options } =
-              data || {};
-
-            return name === "mainExecutorFullName" ? (
-              <div key={data?.name} className="col-span-2 grid grid-cols-2">
+          {stepFields?.map((data) => {
+            const { type, placeholder, name, label, required } = data || {};
+            return type === "text" && name === "fullName" ? (
+              <div key={name} className="col-span-2 grid grid-cols-2">
                 <div>
                   <FormInput
                     label={label}
-                    name={name}
+                    name={`${stepValue}.${name}`}
                     placeholder={placeholder}
                     type={type}
                     required={required}
@@ -88,95 +110,64 @@ const Executors = ({ filds, persistKey }) => {
 
                 <div></div>
               </div>
-            ) : type === "text" && name !== "mainExecutorFullName" ? (
-              <div key={name}>
-                <FormInput
-                  label={label}
-                  name={name}
-                  placeholder={placeholder}
-                  type={type}
-                  required={required}
-                />
-              </div>
+            ) : type === "text" ? (
+              <>
+                <div key={name}>
+                  <FormInput
+                    label={label}
+                    name={`${stepValue}.${name}`}
+                    placeholder={placeholder}
+                    type={type}
+                    required={required}
+                  />
+                </div>
+              </>
             ) : (
               type === "select" && (
                 <div key={data?.name}>
                   <FormSelectField
+                    loading={isLoading}
                     label={label}
-                    name={name}
+                    name={`${stepValue}.${name}`}
                     showSearch={true}
                     required={required}
-                    options={options}
+                    options={name === "idType" ? idTypeOptions : countryOptions}
                   />
                 </div>
               )
             );
           })}
 
-          {filds["mainExecutorAddress"] && (
+          {addressFild && (
             <>
               <hr className="border-[#EEEEEE] col-span-2 my-4" />
-              <div>
-                <FormInput
-                  label={"Address"}
-                  required
-                  type={"text"}
-                  value={sameAddress ? savedValus?.address?.line1 : ""}
-                  placeholder={"Address line 1"}
-                  name={"mainExecutorAddress.line1"}
-                />
-              </div>
-              <div></div>
-              <div className="">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="col-span-2">
-                    <FormInput
-                      type={"text"}
-                      placeholder={"Address line 2"}
-                      value={sameAddress ? savedValus?.address?.line2 : ""}
-                      name={"mainExecutorAddress.line2"}
-                    />
-                  </div>
-                  <div>
-                    <FormSelectField
-                      required={true}
-                      name={"mainExecutorAddress.country"}
-                      value={sameAddress ? savedValus?.address?.country : ""}
-                      options={filds["mainExecutorAddress"]?.country?.options}
-                      showSearch={true}
-                    />
-                  </div>
-                  <div>
-                    <FormInput
-                      required
-                      type={"number"}
-                      value={sameAddress ? savedValus?.address?.postalCode : ""}
-                      placeholder={"postal code"}
-                      name={"mainExecutorAddress.postalCode"}
-                    />
-                  </div>
-                </div>
-                <Checkbox
-                  className="py-2"
-                  onChange={(e) => sameAddressHandelar(e.target.checked)}
-                >
-                  Same as my address
-                </Checkbox>
-              </div>
+              <FormAddressField value={stepValue} />
             </>
           )}
         </div>
       </Card>
 
       <div className="my-10">
-        <Button
-          icon={<PlusOutlined />}
-          className="bg-primary hover:bg-secondary px-[12px]"
-          size="large"
-          type="primary"
-        >
-          Add Alternative Executor
-        </Button>
+        {showAlternativeExecutors ? (
+          <AlternativeExecutors
+            setShow={setShowAlternativeExecutors}
+            countryId={id}
+            setStepValue={setStepValue}
+            idTypeOptions={idTypeOptions}
+            countriesOptions={countryOptions}
+            stepFields={stepFields}
+          />
+        ) : (
+          <Button
+            onClick={() => setShowAlternativeExecutors(true)}
+            icon={<PlusOutlined />}
+            className="bg-primary hover:bg-secondary px-[12px]"
+            size="large"
+            type="primary"
+          >
+            Add Alternative Executor
+          </Button>
+        )}
       </div>
 
       <hr className="border-[#EEEEEE] col-span-2 my-10" />

@@ -23,7 +23,6 @@ const ManageWillsPage = () => {
   const [idTypeInfo, setIdTypeInfo] = useState({});
   const [messageApi, contextHolder] = message.useMessage();
 
-  // filtar
   const [page, setPage] = useState(1);
   const [size, setSize] = useState(8);
   const [sortBy, setSortBy] = useState("tittle");
@@ -31,7 +30,6 @@ const ManageWillsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [countryId, setCountryId] = useState("");
 
-  // modal code
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState({});
@@ -41,7 +39,6 @@ const ManageWillsPage = () => {
   query["page"] = page;
   query["sortBy"] = sortBy;
   query["sortOrder"] = sortOrder;
-  // query["countryId"] = countryId;
 
   const debouncedTerm = useDebounced({
     searchQuery: searchTerm,

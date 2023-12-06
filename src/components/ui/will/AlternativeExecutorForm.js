@@ -5,7 +5,7 @@ import PersonalInfo from "./PersonalInfo";
 import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import FormHeading from "./FormHeading";
 import FormText from "./FormText";
-import FormLinkText from "./FormLinkText";
+// import FormLinkText from "./FormModalText";
 
 const AlternativeExecutorForm = ({
   formInputFields,

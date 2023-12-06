@@ -5,47 +5,30 @@ import React, { useState } from "react";
 import FormInput from "../forms/FormInput";
 import FormSelectField from "../forms/FormSelectField";
 import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { ENUM_FORM_STEPS } from "@/constans/steps";
+import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
 
-const AssetAllocation = () => {
+const AssetAllocation = ({ country }) => {
+  const { idTypes } = country || {};
+  const stepValue = ENUM_FORM_STEPS.ASSET_ALLOCATION;
+
+  const idTypeOptions = idTypes?.map((item) => {
+    return {
+      label: item?.tittle,
+      value: item?.id,
+    };
+  });
+
+  const { data, isLoading } = useGetAllCountryDataQuery();
+
+  const countryOptions = data?.data?.data?.map((country) => {
+    return {
+      label: country?.name,
+      value: country?.id,
+    };
+  });
+
   const [address, setAddress] = useState(false);
-  const idTypeOptions = [
-    {
-      value: "Options - 1",
-      label: "Options - 1",
-    },
-    {
-      value: "Options - 2",
-      label: "Options - 2",
-    },
-    {
-      value: "Options - 3",
-      label: "Options - 3",
-    },
-    {
-      value: "Options - 5",
-      label: "Options - 5",
-    },
-    {
-      value: "Options - 6",
-      label: "Options - 6",
-    },
-    {
-      value: "Options - 7",
-      label: "Options - 7",
-    },
-    {
-      value: "Options - 8",
-      label: "Options - 8",
-    },
-    {
-      value: "Options - 9",
-      label: "Options - 9",
-    },
-    {
-      value: "Options - 10",
-      label: "Options - 10",
-    },
-  ];
 
   return (
     <div>
@@ -86,16 +69,17 @@ const AssetAllocation = () => {
                 required
                 type={"text"}
                 placeholder={"address line 1"}
-                name={"address.line1"}
+                name={`${stepValue}.address.line1`}
               />
             </div>
 
             <div>
               <FormSelectField
+                loading={isLoading}
                 label={"Beneficiary"}
                 name={"idType"}
                 required
-                options={idTypeOptions}
+                options={countryOptions || []}
                 type={"text"}
               />
             </div>
@@ -106,14 +90,14 @@ const AssetAllocation = () => {
                   <FormInput
                     type={"text"}
                     placeholder={"address line 2"}
-                    name={"address.line2"}
+                    name={`${stepValue}.address.line2`}
                   />
                 </div>
                 <div>
                   <FormSelectField
                     required
-                    name={"citizenship"}
-                    options={idTypeOptions}
+                    name={`${stepValue}.address.citizenship`}
+                    options={countryOptions}
                     type={"text"}
                   />
                 </div>
@@ -122,7 +106,7 @@ const AssetAllocation = () => {
                     required
                     type={"text"}
                     placeholder={"postal code"}
-                    name={"postalCode"}
+                    name={`${stepValue}.address.postalCode`}
                   />
                 </div>
               </div>

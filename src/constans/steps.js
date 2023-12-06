@@ -1,7 +1,17 @@
 export const ENUM_FORM_STEPS = {
   PERSONAL_DETAILS: "personalDetails",
   EXECUTORS: "executors",
+  ALTERNATIVE_EXECUTORS: "alternativeExecutors",
   BENEFICIARIES: "beneficiaries",
+  SECEND_BENEFICIARIES: "secondBeneficiaries",
+  THIRD_BENEFICIARIES: "thirdBeneficiaries",
+  FOURTH_BENEFICIARIES: "fourthBeneficiaries",
+  FIFTH_BENEFICIARIES: "fifthBeneficiaries",
+  SIXTH_BENEFICIARIES: "sixthBeneficiaries",
+  SEVENTH_BENEFICIARIES: "seventhBeneficiaries",
+  EIGHTH_BENEFICIARIES: "eighthBeneficiaries",
+  NINETH_BENEFICIARIES: "ninthBeneficiaries",
+  TENTH_BENEFICIARIES: "tenthBeneficiaries",
   ASSET_ALLOCATION: "assetAllocation",
   INSTRUCTIONS: "instructions",
 };
@@ -47,8 +57,48 @@ export const formStepsOptions = [
     value: "executors",
   },
   {
+    label: "Alternative Executor",
+    value: "alternativeExecutors",
+  },
+  {
     label: "Beneficiaries",
     value: "beneficiaries",
+  },
+  {
+    label: "Second Beneficiaries",
+    value: "secondBeneficiaries",
+  },
+  {
+    label: "Third Beneficiaries",
+    value: "thirdBeneficiaries",
+  },
+  {
+    label: "Fourth Beneficiaries",
+    value: "fourthBeneficiaries",
+  },
+  {
+    label: "Fifth Beneficiaries",
+    value: "fifthBeneficiaries",
+  },
+  {
+    label: "Sixth Beneficiaries",
+    value: "SixthBeneficiaries",
+  },
+  {
+    label: "Seventh Beneficiaries",
+    value: "seventhBeneficiaries",
+  },
+  {
+    label: "Eighth Beneficiaries",
+    value: "eighthBeneficiaries",
+  },
+  {
+    label: "Ninth Beneficiaries",
+    value: "ninthBeneficiaries",
+  },
+  {
+    label: "Tenth Beneficiaries",
+    value: "tenthBeneficiaries",
   },
   {
     label: "Asset Allocation",

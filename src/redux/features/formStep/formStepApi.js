@@ -28,6 +28,15 @@ export const formStepApi = baseApi.injectEndpoints({
       providesTags: ["form-step"],
     }),
 
+    //new
+    getWillStepFilds: build.query({
+      query: (params) => ({
+        url: `/form-step/${params}`,
+        method: "GET",
+      }),
+      providesTags: ["form-step"],
+    }),
+
     deleteFormStep: build.mutation({
       query: (id) => ({
         url: `/form-step/${id}`,
@@ -53,4 +62,5 @@ export const {
   useGetCountryFormStepsQuery,
   useDeleteFormStepMutation,
   useUpdateFormStepMutation,
+  useGetWillStepFildsQuery,
 } = formStepApi;

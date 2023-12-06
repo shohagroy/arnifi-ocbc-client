@@ -61,10 +61,9 @@ const FormStepDrawer = ({
   };
 
   const modalOkHandelar = async () => {
-    if (data?.key) {
-      // update
-      const result = await updateFormStep(data).unwrap();
-      if (result?.data?.success) {
+    try {
+      if (data?.key) {
+        const result = await updateFormStep(data).unwrap();
         messageApi.open({
           type: "success",
           content: result?.data?.message || "Form Step Updated Successfully!",
@@ -73,19 +72,10 @@ const FormStepDrawer = ({
         setOpen(false);
         setData({
           tittle: "",
-          countryId: "",
         });
       } else {
-        messageApi.open({
-          type: "error",
-          content: result?.message || "Something went wrong!",
-        });
-      }
-    } else {
-      // create new
-      const result = await createFormStep(data).unwrap();
-
-      if (result?.data?.success) {
+        // create new
+        const result = await createFormStep(data).unwrap();
         messageApi.open({
           type: "success",
           content: result?.message || "Form Step Create Successfully!",
@@ -94,14 +84,13 @@ const FormStepDrawer = ({
         setOpen(false);
         setData({
           tittle: "",
-          countryId: "",
-        });
-      } else {
-        messageApi.open({
-          type: "error",
-          content: result?.message || "Something went wrong!",
         });
       }
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: error?.data || "Something went wrong!",
+      });
     }
   };
 
@@ -160,14 +149,14 @@ const FormStepDrawer = ({
               required
             />
 
-            <FormSelectField
+            {/* <FormSelectField
               loading={optionsLoading}
               showSearch={true}
               name={"countryId"}
               label={"For Country"}
               options={options}
               required
-            />
+            /> */}
 
             <Button
               disabled={createLoading || updateLoading}
