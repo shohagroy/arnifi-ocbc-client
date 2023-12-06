@@ -2,20 +2,20 @@
 
 import AdminBreadCrumb from "@/components/admin/AdminBreadCrumb";
 import DisplayTable from "@/components/table/DisplayTable";
-import { Button, Card, Col, Row, Select, message } from "antd";
+import { Button, Card, Col, Row, Select, Switch, message } from "antd";
 import React, { useState } from "react";
 import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import { useDebounced } from "@/redux/hooks/useDebounced";
 import AddButton from "../../../components/ui/button/AddButton";
-import SearchInput from "@/components/ui/dataInput/SearchInput";
 import dayjs from "dayjs";
 import DeleteInfoModal from "@/components/modal/DeleteInfoModal";
 import IdTypeDrawer from "@/components/drawer/IdTypeDrawer";
+import { useDeleteIdTypeMutation } from "@/redux/features/idType/idTypeApi";
 import {
-  useDeleteIdTypeMutation,
-  useGetAllIdTypesQuery,
-} from "@/redux/features/idType/idTypeApi";
-import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
+  useChangeActiveStatusMutation,
+  useGetAllCountryDataQuery,
+  useGetCountriesWillsQuery,
+} from "@/redux/features/country/countryApi";
 import SearchSelect from "@/components/ui/dataInput/SearchSelect";
 import Link from "next/link";
 
@@ -56,79 +56,98 @@ const ManageWillsPage = () => {
     query["countryId"] = countryId;
   }
 
-  const { data, isLoading: tableLoading } = useGetAllIdTypesQuery({
-    ...query,
+  const { data, isLoading: tableLoading } = useGetCountriesWillsQuery({
+    // ...query,
   });
+
+  const [updateCountry, { isLoading: updateLoading }] =
+    useChangeActiveStatusMutation();
+
+  // console.log(data);
+
   const { meta } = data || {};
 
-  const idTypesData = data?.data?.data.map((item, i) => {
+  const countryWillsData = data?.data?.data.map((item, i) => {
     return {
       key: item?.id,
       sl: page * size - size + i + 1,
-      tittle: item?.tittle,
-      country: item?.country?.name,
-      countryCode: item?.country?.countryCode,
-      countryId: item?.countryId,
+      tittle: item?.name,
+      countryCode: item?.countryCode,
       createdAt: dayjs(item?.createdAt).format("MMM D, YYYY hh:mm A"),
+      data: item,
     };
   });
 
-  const { data: countriesData, isLoading: countryLoading } =
-    useGetAllCountryDataQuery();
+  // const { data: countriesData, isLoading: countryLoading } =
+  //   useGetAllCountryDataQuery();
 
-  const countriesOptions = countriesData?.data?.data.map((item) => {
-    return {
-      label: item?.name,
-      value: item?.id,
-    };
-  });
+  // const countriesOptions = countriesData?.data?.data.map((item) => {
+  //   return {
+  //     label: item?.name,
+  //     value: item?.id,
+  //   };
+  // });
 
-  countriesOptions?.unshift({
-    label: "All Countries",
-    value: "",
-  });
+  // countriesOptions?.unshift({
+  //   label: "All Countries",
+  //   value: "",
+  // });
 
-  const [deleteIdType, { isLoading: deleteLoading }] =
-    useDeleteIdTypeMutation();
+  // const [deleteIdType, { isLoading: deleteLoading }] =
+  //   useDeleteIdTypeMutation();
 
-  const openModalHandelar = (data) => {
-    const info = {
-      tittle: "Are you sure delete this ID Types?",
-      details: (
-        <p className="font-primary">
-          Tittle: <strong>{data?.tittle}</strong>
-        </p>
-      ),
-    };
+  // const openModalHandelar = (data) => {
+  //   const info = {
+  //     tittle: "Are you sure delete this ID Types?",
+  //     details: (
+  //       <p className="font-primary">
+  //         Tittle: <strong>{data?.tittle}</strong>
+  //       </p>
+  //     ),
+  //   };
 
-    setIdTypeInfo(data);
-    setModalText(info);
-    setOpenModal(true);
-  };
+  //   setIdTypeInfo(data);
+  //   setModalText(info);
+  //   setOpenModal(true);
+  // };
 
-  const deleteHandelar = async () => {
-    const result = await deleteIdType(idTypeInfo?.key).unwrap();
-    if (result?.data?.success) {
+  // const deleteHandelar = async () => {
+  //   const result = await deleteIdType(idTypeInfo?.key).unwrap();
+  //   if (result?.data?.success) {
+  //     messageApi.open({
+  //       type: "success",
+  //       content: result?.data?.message || "Id Type Delete Successfully!",
+  //     });
+  //     setOpenModal(false);
+  //     setIdTypeInfo({
+  //       tittle: "",
+  //       countryId: "",
+  //     });
+  //   } else {
+  //     messageApi.open({
+  //       type: "error",
+  //       content: result?.message || "Something went wrong!",
+  //     });
+  //   }
+  // };
+
+  const activeStatusChangeHandelar = async (data) => {
+    const newData = { ...data };
+    newData.isActive = !data.isActive;
+
+    try {
+      const result = await updateCountry(data).unwrap();
+
       messageApi.open({
         type: "success",
-        content: result?.data?.message || "Id Type Delete Successfully!",
+        content: result?.data?.message || "Country Wills Update Successfully!",
       });
-      setOpenModal(false);
-      setIdTypeInfo({
-        tittle: "",
-        countryId: "",
-      });
-    } else {
+    } catch (error) {
       messageApi.open({
         type: "error",
-        content: result?.message || "Something went wrong!",
+        content: error?.data || "Something went wrong!",
       });
     }
-  };
-
-  const updateHandelar = (data) => {
-    setIdTypeInfo(data);
-    setOpenDrawer(true);
   };
 
   const columns = [
@@ -139,16 +158,9 @@ const ManageWillsPage = () => {
       dataIndex: "sl",
     },
     {
-      title: <p>ID Type Tittle</p>,
+      title: <p>Country Name</p>,
       dataIndex: "tittle",
       width: 250,
-      // align: "center",
-    },
-
-    {
-      title: <p>Country Name</p>,
-      dataIndex: "country",
-      width: 150,
       // align: "center",
     },
 
@@ -156,7 +168,24 @@ const ManageWillsPage = () => {
       title: <p>Country Code</p>,
       dataIndex: "countryCode",
       width: 120,
-      // align: "center",
+      align: "center",
+    },
+    {
+      title: <p>Active Status</p>,
+      dataIndex: "data",
+      width: 150,
+      align: "center",
+      render: function (data) {
+        return (
+          <>
+            <Switch
+              loading={updateLoading}
+              onChange={() => activeStatusChangeHandelar(data)}
+              checked={data?.isActive}
+            />
+          </>
+        );
+      },
     },
     {
       title: <p>Created Date</p>,
@@ -173,14 +202,16 @@ const ManageWillsPage = () => {
         return (
           <>
             <Button
-              className="mx-2 bg-primary"
-              onClick={() => updateHandelar(data)}
+              className="mx-2"
+              disabled
+              // onClick={() => updateHandelar(data)}
               type="primary"
             >
               <EditFilled />
             </Button>
             <Button
-              onClick={() => openModalHandelar(data)}
+              disabled
+              // onClick={() => openModalHandelar(data)}
               type="primary"
               danger
             >
@@ -224,15 +255,15 @@ const ManageWillsPage = () => {
             <div>
               <Row gutter={1}>
                 <Col span={8}>
-                  <SearchSelect
+                  {/* <SearchSelect
                     value={countryId}
                     loading={countryLoading}
                     options={countriesOptions}
                     handleChange={(e) => setCountryId(e)}
-                  />
+                  /> */}
                 </Col>
                 <Col span={12} className="flex items-center">
-                  <div className="flex items-center font-primary text-lg">
+                  {/* <div className="flex items-center font-primary text-lg">
                     <Select
                       className={`focus:border-primary h-[50px] w-[250px] ml-3`}
                       onChange={(e) => setSortOrder(e)}
@@ -249,12 +280,12 @@ const ManageWillsPage = () => {
                         },
                       ]}
                     />
-                  </div>
+                  </div> */}
                 </Col>
                 <Col span={4}>
-                  <Link href={"/admin/manage-wills/add-new"}>
+                  {/* <Link href={"/admin/manage-wills/add-new"}>
                     <AddButton text={"Add New"} />
-                  </Link>
+                  </Link> */}
                   <Link href={"/admin/manage-wills/create"}>
                     <AddButton text={"Create New Wills"} />
                   </Link>
@@ -266,7 +297,7 @@ const ManageWillsPage = () => {
               <DisplayTable
                 loading={tableLoading}
                 columns={columns}
-                dataSource={idTypesData}
+                dataSource={countryWillsData}
                 pageSize={size}
                 totalPages={meta?.total}
                 showSizeChanger={true}
@@ -279,7 +310,7 @@ const ManageWillsPage = () => {
         </div>
       </section>
 
-      <IdTypeDrawer
+      {/* <IdTypeDrawer
         open={openDrawer}
         setOpen={setOpenDrawer}
         data={idTypeInfo}
@@ -288,15 +319,15 @@ const ManageWillsPage = () => {
         setModalText={setModalText}
         options={countriesOptions}
         optionsLoading={countryLoading}
-      />
+      /> */}
 
-      <DeleteInfoModal
+      {/* <DeleteInfoModal
         loading={deleteLoading}
         setOpen={setOpenModal}
         open={openModal}
         submitFn={deleteHandelar}
         modalText={modalText}
-      />
+      /> */}
     </main>
   );
 };

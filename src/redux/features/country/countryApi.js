@@ -28,6 +28,14 @@ export const countryApi = baseApi.injectEndpoints({
       providesTags: ["countries"],
     }),
 
+    getCountriesWills: build.query({
+      query: () => ({
+        url: "/countries/wills",
+        method: "GET",
+      }),
+      providesTags: ["countries"],
+    }),
+
     deleteCountry: build.mutation({
       query: (id) => ({
         url: `/countries/${id}`,
@@ -44,6 +52,15 @@ export const countryApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["countries"],
     }),
+
+    changeActiveStatus: build.mutation({
+      query: (data) => ({
+        url: `/countries/wills-status/${data?.id}`,
+        method: "PATCH",
+        data,
+      }),
+      invalidatesTags: ["countries"],
+    }),
   }),
 });
 
@@ -53,4 +70,6 @@ export const {
   useDeleteCountryMutation,
   useUpdateCountryMutation,
   useGetAllCountryDataQuery,
+  useGetCountriesWillsQuery,
+  useChangeActiveStatusMutation,
 } = countryApi;
