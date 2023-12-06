@@ -31,7 +31,7 @@ export const formStepApi = baseApi.injectEndpoints({
     //new
     getWillStepFilds: build.query({
       query: (params) => ({
-        url: `/form-step/${params}`,
+        url: `/form-step${params}`,
         method: "GET",
       }),
       providesTags: ["form-step"],
