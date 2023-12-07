@@ -11,9 +11,10 @@ import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
 import FormModalText from "../ui/will/FormModalText";
 import FormAddressField from "./FormAddressField";
+import SecendBeneficiaries from "./SecendBeneficiaries";
 
 const Beneficiaries = ({ setStepValue, country, stepFields }) => {
-  const { idTypes } = country || {};
+  const { idTypes, id } = country || {};
   const stepValue = ENUM_FORM_STEPS.BENEFICIARIES;
 
   useEffect(() => {
@@ -28,7 +29,6 @@ const Beneficiaries = ({ setStepValue, country, stepFields }) => {
   });
 
   const addressFild = stepFields?.find((item) => item.type === "address");
-
   const modalTextData = [
     {
       info: "A Beneficiary is the person who benefits from the deceased’s assets under his Will.",
@@ -60,11 +60,11 @@ const Beneficiaries = ({ setStepValue, country, stepFields }) => {
 
       <Card>
         <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {stepFields?.map((data) => {
+          {stepFields?.map((data, i) => {
             const { type, placeholder, name, label, required } = data || {};
 
             return type === "text" ? (
-              <div key={name}>
+              <div key={i}>
                 <FormInput
                   label={label}
                   name={`${stepValue}.${name}`}
@@ -75,7 +75,7 @@ const Beneficiaries = ({ setStepValue, country, stepFields }) => {
               </div>
             ) : (
               type === "select" && (
-                <div key={name}>
+                <div key={i}>
                   <FormSelectField
                     label={label}
                     name={`${stepValue}.${name}`}
@@ -98,17 +98,8 @@ const Beneficiaries = ({ setStepValue, country, stepFields }) => {
       </Card>
 
       <div className="my-10">
-        <Button
-          icon={<PlusOutlined />}
-          className="bg-primary hover:bg-secondary px-[12px]"
-          size="large"
-          type="primary"
-        >
-          Add another beneficiary
-        </Button>
+        <SecendBeneficiaries idTypeOptions={idTypeOptions} countryId={id} />
       </div>
-
-      <hr className="border-[#EEEEEE] col-span-2 my-10" />
     </div>
   );
 };

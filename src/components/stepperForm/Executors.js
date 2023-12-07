@@ -15,9 +15,6 @@ import FormModalText from "../ui/will/FormModalText";
 import AlternativeExecutors from "./AlternativeExecutors";
 
 const Executors = ({ setStepValue, country, stepFields }) => {
-  const [showAlternativeExecutors, setShowAlternativeExecutors] =
-    useState(false);
-
   const { idTypes, id } = country || {};
   const stepValue = ENUM_FORM_STEPS.EXECUTORS;
 
@@ -94,10 +91,10 @@ const Executors = ({ setStepValue, country, stepFields }) => {
 
       <Card>
         <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {stepFields?.map((data) => {
+          {stepFields?.map((data, i) => {
             const { type, placeholder, name, label, required } = data || {};
             return type === "text" && name === "fullName" ? (
-              <div key={name} className="col-span-2 grid grid-cols-2">
+              <div key={i} className="col-span-2 grid grid-cols-2">
                 <div>
                   <FormInput
                     label={label}
@@ -112,7 +109,7 @@ const Executors = ({ setStepValue, country, stepFields }) => {
               </div>
             ) : type === "text" ? (
               <>
-                <div key={name}>
+                <div key={i}>
                   <FormInput
                     label={label}
                     name={`${stepValue}.${name}`}
@@ -124,7 +121,7 @@ const Executors = ({ setStepValue, country, stepFields }) => {
               </>
             ) : (
               type === "select" && (
-                <div key={data?.name}>
+                <div key={i}>
                   <FormSelectField
                     loading={isLoading}
                     label={label}
@@ -148,26 +145,13 @@ const Executors = ({ setStepValue, country, stepFields }) => {
       </Card>
 
       <div className="my-10">
-        {showAlternativeExecutors ? (
-          <AlternativeExecutors
-            setShow={setShowAlternativeExecutors}
-            countryId={id}
-            setStepValue={setStepValue}
-            idTypeOptions={idTypeOptions}
-            countriesOptions={countryOptions}
-            stepFields={stepFields}
-          />
-        ) : (
-          <Button
-            onClick={() => setShowAlternativeExecutors(true)}
-            icon={<PlusOutlined />}
-            className="bg-primary hover:bg-secondary px-[12px]"
-            size="large"
-            type="primary"
-          >
-            Add Alternative Executor
-          </Button>
-        )}
+        <AlternativeExecutors
+          countryId={id}
+          setStepValue={setStepValue}
+          idTypeOptions={idTypeOptions}
+          countriesOptions={countryOptions}
+          stepFields={stepFields}
+        />
       </div>
 
       <hr className="border-[#EEEEEE] col-span-2 my-10" />
