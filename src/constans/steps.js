@@ -132,3 +132,26 @@ export const formInputTypeOptions = [
     label: "Address Fild",
   },
 ];
+
+export const relationsOptions = [
+  {
+    label: "Spouse",
+    value: "spouse",
+  },
+  {
+    label: "Child",
+    value: "child",
+  },
+  {
+    label: "Parent",
+    value: "parent",
+  },
+  {
+    label: "Relative",
+    value: "relative",
+  },
+  {
+    label: "Other",
+    value: "other",
+  },
+];

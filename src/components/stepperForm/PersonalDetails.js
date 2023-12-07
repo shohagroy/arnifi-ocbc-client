@@ -13,14 +13,10 @@ import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi"
 import CardLoader from "../skeleton-loader/CardLoader";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
 
-const PersonalDetails = ({ setStepValue, country }) => {
+const PersonalDetails = ({ country }) => {
   const { idTypes, id } = country || {};
 
   const stepValue = ENUM_FORM_STEPS.PERSONAL_DETAILS;
-
-  useEffect(() => {
-    setStepValue(stepValue);
-  }, [setStepValue, stepValue]);
 
   const { data: findStepsData, isLoading: willLoading } =
     useGetWillStepFildsQuery(`/${stepValue}/${id}`);

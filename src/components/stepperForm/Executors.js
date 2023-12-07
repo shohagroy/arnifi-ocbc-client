@@ -17,7 +17,7 @@ import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi"
 import CardLoader from "../skeleton-loader/CardLoader";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
 
-const Executors = ({ setStepValue, country }) => {
+const Executors = ({ country }) => {
   const { idTypes, id } = country || {};
   const stepValue = ENUM_FORM_STEPS.EXECUTORS;
 
@@ -25,10 +25,6 @@ const Executors = ({ setStepValue, country }) => {
     useGetWillStepFildsQuery(`/${stepValue}/${id}`);
 
   const stepFields = findStepsData?.data?.data?.stepFilds || [];
-
-  useEffect(() => {
-    setStepValue(stepValue);
-  }, [setStepValue, stepValue]);
 
   const idTypeOptions = idTypes?.map((item) => {
     return {
@@ -159,7 +155,6 @@ const Executors = ({ setStepValue, country }) => {
       <div className="my-10">
         <AlternativeExecutors
           countryId={id}
-          setStepValue={setStepValue}
           idTypeOptions={idTypeOptions}
           countriesOptions={countryOptions}
           stepFields={stepFields}

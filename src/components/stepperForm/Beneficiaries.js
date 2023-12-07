@@ -1,22 +1,19 @@
 "use client";
 
-import { Button, Card, Checkbox } from "antd";
-import React, { useEffect, useState } from "react";
+import { Card } from "antd";
+import React from "react";
 import FormInput from "../forms/FormInput";
 import FormSelectField from "../forms/FormSelectField";
-import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
-import { ENUM_FORM_STEPS } from "@/constans/steps";
+import { ENUM_FORM_STEPS, relationsOptions } from "@/constans/steps";
 import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
 import FormModalText from "../ui/will/FormModalText";
 import FormAddressField from "./FormAddressField";
 import SecendBeneficiaries from "./SecendBeneficiaries";
 import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
-import CardLoader from "../skeleton-loader/CardLoader";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
 
-const Beneficiaries = ({ setStepValue, country }) => {
+const Beneficiaries = ({ country }) => {
   const { idTypes, id } = country || {};
   const stepValue = ENUM_FORM_STEPS.BENEFICIARIES;
 
@@ -24,10 +21,6 @@ const Beneficiaries = ({ setStepValue, country }) => {
     useGetWillStepFildsQuery(`/${stepValue}/${id}`);
 
   const stepFields = findStepsData?.data?.data?.stepFilds || [];
-
-  useEffect(() => {
-    setStepValue(stepValue);
-  }, [setStepValue, stepValue]);
 
   const idTypeOptions = idTypes?.map((item) => {
     return {
@@ -93,7 +86,9 @@ const Beneficiaries = ({ setStepValue, country }) => {
                     name={`${stepValue}.${name}`}
                     showSearch={true}
                     required={required}
-                    options={idTypeOptions}
+                    options={
+                      name === "idType" ? idTypeOptions : relationsOptions
+                    }
                   />
                 </div>
               )

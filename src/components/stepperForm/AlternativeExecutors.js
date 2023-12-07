@@ -3,18 +3,13 @@
 import React, { useEffect, useState } from "react";
 import FormInput from "../forms/FormInput";
 import FormSelectField from "../forms/FormSelectField";
-import { Button, Card, Checkbox } from "antd";
-import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Card } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { ENUM_FORM_STEPS } from "@/constans/steps";
-import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
 import FormAddressField from "./FormAddressField";
-import FormHeading from "../ui/will/FormHeading";
-import FormText from "../ui/will/FormText";
-import FormModalText from "../ui/will/FormModalText";
 import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
 import { DeleteOutlined } from "@ant-design/icons";
-import CardLoader from "../skeleton-loader/CardLoader";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
 
 const AlternativeExecutors = ({

@@ -6,7 +6,7 @@ import FormInput from "../forms/FormInput";
 import FormSelectField from "../forms/FormSelectField";
 import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
-import { ENUM_FORM_STEPS } from "@/constans/steps";
+import { ENUM_FORM_STEPS, relationsOptions } from "@/constans/steps";
 import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
 import FormModalText from "../ui/will/FormModalText";
@@ -104,7 +104,9 @@ const FourthBeneficiaries = ({ countryId, idTypeOptions }) => {
                         name={`${stepValue}.${name}`}
                         showSearch={true}
                         required={required}
-                        options={idTypeOptions}
+                        options={
+                          name === "idType" ? idTypeOptions : relationsOptions
+                        }
                       />
                     </div>
                   )

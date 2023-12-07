@@ -40,20 +40,16 @@ const DetailsSubmitPage = () => {
   const steps = [
     {
       title: "Personal Details",
-      content: (
-        <PersonalDetails setStepValue={setStepValue} country={activeCountry} />
-      ),
+      content: <PersonalDetails country={activeCountry} />,
     },
     {
       title: "Executors",
-      content: (
-        <Executors setStepValue={setStepValue} country={activeCountry} />
-      ),
+      content: <Executors country={activeCountry} />,
     },
     {
       title: "Beneficiaries",
       content: (
-        <Beneficiaries setStepValue={setStepValue} country={activeCountry} />
+        <Beneficiaries country={activeCountry} />
       ),
     },
     {

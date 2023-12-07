@@ -1,17 +1,16 @@
 "use client";
 
-import { Button, Card, Checkbox } from "antd";
+import { Button, Card } from "antd";
 import React, { useEffect, useState } from "react";
 import FormInput from "../forms/FormInput";
 import FormSelectField from "../forms/FormSelectField";
 import { PlusOutlined } from "@ant-design/icons";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
-import { ENUM_FORM_STEPS } from "@/constans/steps";
+import { ENUM_FORM_STEPS, relationsOptions } from "@/constans/steps";
 import FormAddressField from "./FormAddressField";
 import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
 import { DeleteOutlined } from "@ant-design/icons";
 import ThirdBeneficiaries from "./ThirdBeneficiaries";
-import CardLoader from "../skeleton-loader/CardLoader";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
 
 const SecendBeneficiaries = ({ countryId, idTypeOptions }) => {
@@ -97,9 +96,11 @@ const SecendBeneficiaries = ({ countryId, idTypeOptions }) => {
                       <FormSelectField
                         label={label}
                         name={`${stepValue}.${name}`}
-                        showSearch={true}
+                        // showSearch={true}
                         required={required}
-                        options={idTypeOptions}
+                        options={
+                          name === "idType" ? idTypeOptions : relationsOptions
+                        }
                       />
                     </div>
                   )
