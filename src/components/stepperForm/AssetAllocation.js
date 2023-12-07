@@ -1,25 +1,69 @@
 "use client";
 
-import { Button, Card, Checkbox } from "antd";
+import { Button } from "antd";
 import React, { useState } from "react";
-import FormInput from "../forms/FormInput";
-import FormSelectField from "../forms/FormSelectField";
-import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { ENUM_FORM_STEPS } from "@/constans/steps";
 import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
+import FormHeading from "../ui/will/FormHeading";
+import FormText from "../ui/will/FormText";
+import FormModalText from "../ui/will/FormModalText";
+import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
+import CardFormLoader from "../skeleton-loader/CardFormLoader";
+import AssetLocations from "./AssetLocations";
+import { getFromLocalStorage } from "@/utils/local-storage";
+import AssetSum from "./AssetSum";
 
 const AssetAllocation = ({ country }) => {
-  const { idTypes } = country || {};
+  const [locationCount, setLocationCount] = useState(
+    !!getFromLocalStorage("form-data")
+      ? Number(
+          JSON.parse(getFromLocalStorage("form-data"))?.assetAllocation
+            ?.locations?.length
+        )
+      : 1
+  );
+
+  const [sumCount, setSumCount] = useState(
+    !!getFromLocalStorage("form-data")
+      ? Number(
+          JSON.parse(getFromLocalStorage("form-data"))?.assetAllocation
+            ?.sumMoney?.length
+        ) || 1
+      : 1
+  );
+
   const stepValue = ENUM_FORM_STEPS.ASSET_ALLOCATION;
 
-  const idTypeOptions = idTypes?.map((item) => {
+  const { data: findStepsData, isLoading: willLoading } =
+    useGetWillStepFildsQuery(`/${stepValue}/${country?.id}`);
+
+  const stepFields = findStepsData?.data?.data?.stepFilds || [];
+  const addressFields = stepFields?.find((item) => item.type === "address");
+  const beneficiaryFields = stepFields?.find(
+    (item) => item.name === "beneficiary"
+  );
+  const sumMoneyFields = stepFields?.find((item) => item.name === "sumMoney");
+
+  const assetLocations = [...Array(locationCount)]?.map((_) => {
     return {
-      label: item?.tittle,
-      value: item?.id,
+      addressFields,
+      beneficiaryFields,
     };
   });
 
-  const { data, isLoading } = useGetAllCountryDataQuery();
+  const assetSums = [...Array(sumCount)]?.map((_) => {
+    return {
+      sumMoneyFields,
+      beneficiaryFields,
+    };
+  });
+
+  const { data } = useGetAllCountryDataQuery();
+
+  if (willLoading) {
+    return <CardFormLoader />;
+  }
 
   const countryOptions = data?.data?.data?.map((country) => {
     return {
@@ -28,100 +72,61 @@ const AssetAllocation = ({ country }) => {
     };
   });
 
-  const [address, setAddress] = useState(false);
+  const modalTextData = [
+    {
+      info: "Gift of Immovable Property refers to the transference of rights, title, interest and benefits that the Testator has in a specified property, to a specified beneficiary. Residuary distribution of assets will be performed after the gifting of these property(ies) is completed. ",
+      others: [],
+    },
+  ];
+
+  const modalTextData2 = [
+    {
+      info: "Gift of Immovable Property refers to the transference of rights, title, interest and benefits that the Testator has in a specified property, to a specified beneficiary. Residuary distribution of assets will be performed after the gifting of these property(ies) is completed. ",
+      others: [],
+    },
+  ];
 
   return (
     <div>
       <div>
-        <div className="p-2">
-          <div className="pt-10 font-semibold">
-            <p>(Optional)</p>
-            <h2 className="text-3xl">
-              Do you have any property to give to your beneficiaries?
-            </h2>
-          </div>
+        <div className="py-4">
+          <FormHeading
+            optional
+            heading={"Do you have any property to give to your beneficiaries?"}
+          />
+          <FormText
+            text={
+              "You can choose to allocate your owned properties (if any) to your beneficiaries. "
+            }
+          />
+          <FormText
+            text={
+              "This is only applicable for property under single ownership and may not apply for other types of property ownership arrangements."
+            }
+          />
 
-          <div className="text-sm py-6">
-            <p className="">
-              You can choose to allocate your owned properties (if any) to your
-              beneficiaries.
-            </p>
-            <p className="">
-              This is only applicable for property under single ownership and
-              may not apply for other types of property ownership arrangements.
-            </p>
-          </div>
-
-          <div className="py-6 ">
-            <a className="text-primary flex" href="/">
-              <QuestionCircleOutlined />
-              <p className="px-2">
-                More information about Gift of Immovable Property
-              </p>
-            </a>
-          </div>
+          <FormModalText
+            data={modalTextData}
+            tittle={"More information about Gift of Immovable Property"}
+            text={"More information about Gift of Immovable Propert"}
+          />
         </div>
-        <Card>
-          <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <FormInput
-                label={"Address"}
-                required
-                type={"text"}
-                placeholder={"address line 1"}
-                name={`${stepValue}.address.line1`}
-              />
-            </div>
 
-            <div>
-              <FormSelectField
-                loading={isLoading}
-                label={"Beneficiary"}
-                name={"idType"}
-                required
-                options={countryOptions || []}
-                type={"text"}
-              />
-            </div>
-
-            <div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
-                  <FormInput
-                    type={"text"}
-                    placeholder={"address line 2"}
-                    name={`${stepValue}.address.line2`}
-                  />
-                </div>
-                <div>
-                  <FormSelectField
-                    required
-                    name={`${stepValue}.address.citizenship`}
-                    options={countryOptions}
-                    type={"text"}
-                  />
-                </div>
-                <div>
-                  <FormInput
-                    required
-                    type={"text"}
-                    placeholder={"postal code"}
-                    name={`${stepValue}.address.postalCode`}
-                  />
-                </div>
-              </div>
-              <Checkbox
-                className="py-2"
-                onChange={(e) => setAddress(e.target.checked)}
-              >
-                Same as my address
-              </Checkbox>
-            </div>
-          </div>
-        </Card>
+        {assetLocations?.map((item, i) => (
+          <AssetLocations
+            value={`${stepValue}.locations.${i}`}
+            data={item}
+            setLocationCount={setLocationCount}
+            locationCount={locationCount}
+            index={i}
+            key={i}
+            countryOptions={countryOptions}
+          />
+        ))}
 
         <div className="my-10">
           <Button
+            onClick={() => setLocationCount(locationCount + 1)}
             icon={<PlusOutlined />}
             className="bg-primary hover:bg-secondary px-[12px]"
             size="large"
@@ -134,53 +139,39 @@ const AssetAllocation = ({ country }) => {
 
       <div>
         <div className="p-2">
-          <div className="pt-10 font-semibold">
-            <p>(Optional)</p>
-            <h2 className="text-3xl">
-              Do you wish to give a sum of money to your beneficiaries?
-            </h2>
-          </div>
+          <FormHeading
+            optional
+            heading={
+              "Do you wish to give a sum of money to your beneficiaries?"
+            }
+          />
 
-          <div className="text-sm py-6">
-            <p className="">
-              A “sum of money” here refers to a fixed amount of money that you
-              wish to allocate to your beneficiaries.
-            </p>
-          </div>
+          <FormText
+            text={
+              "A “sum of money” here refers to a fixed amount of wish to allocate to your beneficiaries."
+            }
+          />
 
-          <div className="py-6 ">
-            <a className="text-primary flex" href="/">
-              <QuestionCircleOutlined />
-              <p className="px-2">More information about Gift of Monies</p>
-            </a>
-          </div>
+          <FormModalText
+            text={"More information about Gift of Monies"}
+            data={modalTextData2}
+            tittle={"More information about Gift of Monies"}
+          />
         </div>
-        <Card>
-          <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <FormInput
-                label={"Sum of money (in SGD)"}
-                required
-                type={"text"}
-                placeholder={"money"}
-                name={"money"}
-              />
-            </div>
-
-            <div>
-              <FormSelectField
-                label={"Beneficiary"}
-                name={"beneficiary"}
-                required
-                options={idTypeOptions}
-                type={"text"}
-              />
-            </div>
-          </div>
-        </Card>
+        {assetSums?.map((item, i) => (
+          <AssetSum
+            key={i}
+            value={`${stepValue}.sumMoney.${i}`}
+            data={item}
+            setSumCount={setSumCount}
+            sumCount={sumCount}
+            index={i}
+          />
+        ))}
 
         <div className="my-10">
           <Button
+            onClick={() => setSumCount(sumCount + 1)}
             icon={<PlusOutlined />}
             className="bg-primary hover:bg-secondary px-[12px]"
             size="large"

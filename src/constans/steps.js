@@ -45,6 +45,14 @@ export const allStepsFields = [
     label: "Address",
     value: "address",
   },
+  {
+    label: "Beneficiary",
+    value: "beneficiary",
+  },
+  {
+    label: "Sum Money",
+    value: "sumMoney",
+  },
 ];
 
 export const formStepsOptions = [

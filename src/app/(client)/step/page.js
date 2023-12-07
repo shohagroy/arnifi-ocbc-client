@@ -7,31 +7,15 @@ import Instructions from "@/components/stepperForm/Instructions";
 import PersonalDetails from "@/components/stepperForm/PersonalDetails";
 import ReviewAndSubmit from "@/components/stepperForm/ReviewAndSubmit";
 import StepperForm from "@/components/stepperForm/stepperForm";
-import React, { useState } from "react";
-import MIcon from "../../../assets/male-icon.png";
-import FIcon from "../../../assets/female-icon.png";
-import {
-  useGetAllFormStepsQuery,
-  useGetCountryFormStepsQuery,
-  useGetWillStepFildsQuery,
-} from "@/redux/features/formStep/formStepApi";
-import DisplayStepFormField from "@/components/ui/will/DisplayStepFormField";
+import React from "react";
 import { useGetActiveCountryWillQuery } from "@/redux/features/country/countryApi";
 import InitialCardLoading from "@/components/skeleton-loader/InitialCardLoading";
 
 const DetailsSubmitPage = () => {
-  const [stepValue, setStepValue] = useState("");
-
   const { data: activeWillCountry, isLoading: countryLoading } =
     useGetActiveCountryWillQuery();
 
   const activeCountry = activeWillCountry?.data?.data || {};
-
-  // const { data: findStepsData, isLoading: willLoading } =
-  //   useGetWillStepFildsQuery(`/${stepValue}/${activeCountry?.id}`);
-
-  // const loading = countryLoading || willLoading;
-  // const stepData = findStepsData?.data?.data || {};
 
   if (countryLoading) {
     return <InitialCardLoading />;
@@ -48,9 +32,7 @@ const DetailsSubmitPage = () => {
     },
     {
       title: "Beneficiaries",
-      content: (
-        <Beneficiaries country={activeCountry} />
-      ),
+      content: <Beneficiaries country={activeCountry} />,
     },
     {
       title: "Asset Allocation",

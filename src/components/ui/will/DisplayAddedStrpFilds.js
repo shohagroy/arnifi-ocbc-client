@@ -41,8 +41,6 @@ const DisplayAddedStrpFilds = ({
   const stepFields = findStep?.stepFilds || [];
   const validator = generateSteperFormValidator(stepFields);
 
-  console.log(stepFields);
-
   return (
     <div>
       <Divider>
@@ -92,10 +90,22 @@ const DisplayAddedStrpFilds = ({
                   setStepFields={setStepFields}
                 />
               </div>
+            ) : findStep?.value === ENUM_FORM_STEPS.ASSET_ALLOCATION ? (
+              <div>
+                <AssetAllocationForm
+                  isEditable={isEditable}
+                  countriesOptions={countriesOptions}
+                  formInputFields={stepFields}
+                  idTypeOptions={idTypeOptions}
+                  setStepFields={setStepFields}
+                />
+              </div>
             ) : findStep?.value === ENUM_FORM_STEPS.SECEND_BENEFICIARIES ||
               ENUM_FORM_STEPS.THIRD_BENEFICIARIES ||
               ENUM_FORM_STEPS.FOURTH_BENEFICIARIES ||
               ENUM_FORM_STEPS.FIFTH_BENEFICIARIES ||
+              ENUM_FORM_STEPS.SIXTH_BENEFICIARIES ||
+              ENUM_FORM_STEPS.SEVENTH_BENEFICIARIES ||
               ENUM_FORM_STEPS.EIGHTH_BENEFICIARIES ||
               ENUM_FORM_STEPS.NINETH_BENEFICIARIES ||
               ENUM_FORM_STEPS.THIRD_BENEFICIARIES ? (
@@ -130,76 +140,6 @@ const DisplayAddedStrpFilds = ({
           <Empty />
         </div>
       )}
-
-      {/* {stepFields?.length ||
-      findStep?.value === ENUM_FORM_STEPS.ASSET_ALLOCATION ? (
-        <div className="max-w-5xl mx-auto">
-          <Form submitHandler={onSubmit} resolver={yupResolver(validator)}>
-            {selectedStep?.value === ENUM_FORM_STEPS.PERSONAL_DETAILS && (
-              <PersonalDetailsForm
-                isEditable={isEditable}
-                countriesOptions={countriesOptions}
-                formInputFields={stepFields}
-                idTypeOptions={idTypeOptions}
-                setStepFields={setStepFields}
-              />
-            )}
-
-            {selectedStep?.value === ENUM_FORM_STEPS.EXECUTORS && (
-              <MainExecutorForm
-                isEditable={isEditable}
-                countriesOptions={countriesOptions}
-                formInputFields={stepFields}
-                idTypeOptions={idTypeOptions}
-                setStepFields={setStepFields}
-              />
-            )}
-
-            {selectedStep?.value === ENUM_FORM_STEPS. && (
-              <AlternativeExecutorForm
-                isEditable={isEditable}
-                countriesOptions={countriesOptions}
-                formInputFields={stepFields}
-                idTypeOptions={idTypeOptions}
-                setStepFild={setStepFild}
-              />
-            )}
-
-            {selectedStep?.value === ENUM_FORM_STEPS.BENEFICIARIES && (
-              <BeneficiariesForm
-                isEditable={isEditable}
-                countriesOptions={countriesOptions}
-                formInputFields={stepFields}
-                idTypeOptions={idTypeOptions}
-                setStepFields={setStepFields}
-              />
-            )}
-
-            {selectedStep?.value === ENUM_FORM_STEPS.ASSET_ALLOCATION && (
-              <AssetAllocationForm
-                isEditable={isEditable}
-                countriesOptions={countriesOptions}
-                formInputFields={stepFields}
-                idTypeOptions={idTypeOptions}
-                setStepFields={setStepFields}
-              />
-            )}
-
-            <div className="flex my-4 justify-end">
-              <Button
-                htmlType="submit"
-                className="bg-primary font-bold px-10"
-                size="large"
-                type="primary"
-              >
-                Next
-              </Button>
-            </div>
-          </Form>
-        </div>
-      ) : (
-        <div>no data found</div>
-      )} */}
     </div>
   );
 };

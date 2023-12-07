@@ -5,7 +5,6 @@ import PersonalInfo from "./PersonalInfo";
 import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import FormHeading from "./FormHeading";
 import FormText from "./FormText";
-// import FormLinkText from "./FormModalText";
 
 const OtherBeneficiariesForm = ({
   formInputFields,
@@ -15,8 +14,6 @@ const OtherBeneficiariesForm = ({
   setStepFields,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
-
-  console.log(formInputFields);
 
   const [deleteStepFild, { isLoading: deleteLoading }] =
     useDeleteStepFildMutation();

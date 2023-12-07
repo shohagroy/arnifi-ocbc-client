@@ -17,8 +17,6 @@ const BeneficiariesForm = ({
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
-  console.log(formInputFields);
-
   const [deleteStepFild, { isLoading: deleteLoading }] =
     useDeleteStepFildMutation();
 

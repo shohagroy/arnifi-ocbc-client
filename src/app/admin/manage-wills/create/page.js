@@ -222,7 +222,7 @@ const CreateNewWillsPage = () => {
                       }
                       required
                       name={"name"}
-                      placeholder="select step"
+                      placeholder="select type"
                       label={"For Value"}
                       options={allStepsFields || []}
                     />

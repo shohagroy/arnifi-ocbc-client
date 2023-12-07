@@ -1,140 +1,153 @@
 "use client";
 
-import { Button, Card, Checkbox } from "antd";
+import { Button, Card, Checkbox, message } from "antd";
 import React, { useState } from "react";
 // import FormInput from "../forms/FormInput";
 // import FormSelectField from "../forms/FormSelectField";
 import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import FormInput from "@/components/forms/FormInput";
 import FormSelectField from "@/components/forms/FormSelectField";
+import FormHeading from "./FormHeading";
+import FormText from "./FormText";
+import FormModalText from "./FormModalText";
+import PersonalInfo from "./PersonalInfo";
+import { useDeleteStepFildMutation } from "@/redux/features/stepFild/stepFildApi";
+import FormAddressField from "@/components/stepperForm/FormAddressField";
+import UpdateDeleteBtn from "@/components/admin/formSections/UpdateDeleteBtn";
 
-const AssetAllocationForm = () => {
+const AssetAllocationForm = ({
+  formInputFields,
+  countriesOptions,
+  idTypeOptions,
+  isEditable,
+  setStepFields,
+}) => {
   const [address, setAddress] = useState(false);
-  const idTypeOptions = [
-    {
-      value: "Options - 1",
-      label: "Options - 1",
-    },
-    {
-      value: "Options - 2",
-      label: "Options - 2",
-    },
-    {
-      value: "Options - 3",
-      label: "Options - 3",
-    },
-    {
-      value: "Options - 5",
-      label: "Options - 5",
-    },
-    {
-      value: "Options - 6",
-      label: "Options - 6",
-    },
-    {
-      value: "Options - 7",
-      label: "Options - 7",
-    },
-    {
-      value: "Options - 8",
-      label: "Options - 8",
-    },
-    {
-      value: "Options - 9",
-      label: "Options - 9",
-    },
-    {
-      value: "Options - 10",
-      label: "Options - 10",
-    },
-  ];
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const [deleteStepFild, { isLoading: deleteLoading }] =
+    useDeleteStepFildMutation();
+
+  const deleteModalOkHandelar = async (data) => {
+    try {
+      const result = await deleteStepFild(data?.id).unwrap();
+      messageApi.open({
+        type: "success",
+        content: result?.data?.message || "Deleted Successfully!",
+      });
+      isEditable(false);
+    } catch (error) {
+      messageApi.open({
+        type: "success",
+        content: error?.message || "Deleted Successfully!",
+      });
+    }
+  };
+
+  const addressType = formInputFields?.find((item) => item.type === "address");
+  const beneficiaryType = formInputFields?.find(
+    (item) => item.type === "select"
+  );
+  const sumMoneyType = formInputFields?.find((item) => item.type === "text");
 
   return (
     <div>
       <div>
         <div className="p-2">
-          <div className="pt-10 font-semibold">
-            <p>(Optional)</p>
-            <h2 className="text-3xl">
-              Do you have any property to give to your beneficiaries?
-            </h2>
-          </div>
+          <FormHeading
+            optional
+            heading={"Do you have any property to give to your beneficiaries?"}
+          />
+          <FormText
+            text={
+              "You can choose to allocate your owned properties (if any) to your beneficiaries."
+            }
+          />
+          <FormText
+            text={
+              "This is only applicable for property under single ownership and may not apply for other types of property ownership arrangements."
+            }
+          />
 
-          <div className="text-sm py-6">
-            <p className="">
-              You can choose to allocate your owned properties (if any) to your
-              beneficiaries.
-            </p>
-            <p className="">
-              This is only applicable for property under single ownership and
-              may not apply for other types of property ownership arrangements.
-            </p>
-          </div>
-
-          <div className="py-6 ">
-            <a className="text-primary flex" href="/">
-              <QuestionCircleOutlined />
-              <p className="px-2">
-                More information about Gift of Immovable Property
-              </p>
-            </a>
-          </div>
+          <FormModalText
+            text={"More information about Gift of Immovable Property"}
+          />
         </div>
+
         <Card>
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <FormInput
-                label={"Address"}
-                required
-                type={"text"}
-                placeholder={"address line 1"}
-                name={"address.line1"}
-              />
-            </div>
+            {addressType && (
+              <div>
+                {isEditable && (
+                  <UpdateDeleteBtn
+                    data={addressType}
+                    setStepFields={setStepFields}
+                    deleteModalOkHandelar={deleteModalOkHandelar}
+                    loading={deleteLoading}
+                  />
+                )}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="col-span-full">
+                    <FormInput
+                      label={"Address"}
+                      required
+                      type={"text"}
+                      placeholder={"address line 1"}
+                      name={"address.line1"}
+                    />
+                  </div>
 
-            <div>
-              <FormSelectField
-                label={"Beneficiary"}
-                name={"idType"}
-                required
-                options={idTypeOptions}
-                type={"text"}
-              />
-            </div>
+                  <div className="col-span-full">
+                    <FormInput
+                      required
+                      type={"text"}
+                      placeholder={"address line 2"}
+                      name={"address.line2"}
+                    />
+                  </div>
 
-            <div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
-                  <FormInput
-                    type={"text"}
-                    placeholder={"address line 2"}
-                    name={"address.line2"}
-                  />
-                </div>
-                <div>
-                  <FormSelectField
-                    required
-                    name={"citizenship"}
-                    options={idTypeOptions}
-                    type={"text"}
-                  />
-                </div>
-                <div>
-                  <FormInput
-                    required
-                    type={"text"}
-                    placeholder={"postal code"}
-                    name={"postalCode"}
-                  />
+                  <div>
+                    <FormSelectField
+                      name={"address.country"}
+                      placeholder="select country"
+                      required
+                      options={[]}
+                      type={"text"}
+                    />
+                  </div>
+
+                  <div className="">
+                    <FormInput
+                      required
+                      type={"text"}
+                      placeholder={"postal code"}
+                      name={"address.postalCode"}
+                    />
+                  </div>
                 </div>
               </div>
-              <Checkbox
-                className="py-2"
-                onChange={(e) => setAddress(e.target.checked)}
-              >
-                Same as my address
-              </Checkbox>
-            </div>
+            )}
+
+            {beneficiaryType && (
+              <div>
+                {isEditable && (
+                  <UpdateDeleteBtn
+                    data={beneficiaryType}
+                    setStepFields={setStepFields}
+                    deleteModalOkHandelar={deleteModalOkHandelar}
+                    loading={deleteLoading}
+                  />
+                )}
+                <FormSelectField
+                  label={"Beneficiary"}
+                  name={"beneficiary"}
+                  required
+                  options={idTypeOptions}
+                  type={"text"}
+                />
+              </div>
+            )}
           </div>
         </Card>
 
@@ -152,48 +165,64 @@ const AssetAllocationForm = () => {
 
       <div>
         <div className="p-2">
-          <div className="pt-10 font-semibold">
-            <p>(Optional)</p>
-            <h2 className="text-3xl">
-              Do you wish to give a sum of money to your beneficiaries?
-            </h2>
-          </div>
+          <FormHeading
+            optional
+            heading={
+              "Do you wish to give a sum of money to your beneficiaries?"
+            }
+          />
+          <FormText
+            text={
+              "A “sum of money” here refers to a fixed amount of money that you wish to allocate to your beneficiaries. "
+            }
+          />
 
-          <div className="text-sm py-6">
-            <p className="">
-              A “sum of money” here refers to a fixed amount of money that you
-              wish to allocate to your beneficiaries.
-            </p>
-          </div>
-
-          <div className="py-6 ">
-            <a className="text-primary flex" href="/">
-              <QuestionCircleOutlined />
-              <p className="px-2">More information about Gift of Monies</p>
-            </a>
-          </div>
+          <FormModalText text={"More information about Gift of Monies"} />
         </div>
         <Card>
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <FormInput
-                label={"Sum of money (in SGD)"}
-                required
-                type={"text"}
-                placeholder={"money"}
-                name={"money"}
-              />
+              {sumMoneyType && (
+                <div>
+                  {isEditable && (
+                    <UpdateDeleteBtn
+                      data={sumMoneyType}
+                      setStepFields={setStepFields}
+                      deleteModalOkHandelar={deleteModalOkHandelar}
+                      loading={deleteLoading}
+                    />
+                  )}
+                  <FormInput
+                    label={"Sum of money (in SGD)"}
+                    required
+                    type={"text"}
+                    placeholder={"money"}
+                    name={"sumMoney"}
+                  />
+                </div>
+              )}
             </div>
 
-            <div>
-              <FormSelectField
-                label={"Beneficiary"}
-                name={"beneficiary"}
-                required
-                options={idTypeOptions}
-                type={"text"}
-              />
-            </div>
+            {beneficiaryType && (
+              <div>
+                {isEditable && (
+                  <UpdateDeleteBtn
+                    data={beneficiaryType}
+                    setStepFields={setStepFields}
+                    deleteModalOkHandelar={deleteModalOkHandelar}
+                    loading={deleteLoading}
+                  />
+                )}
+
+                <FormSelectField
+                  label={"Beneficiary"}
+                  name={"beneficiary"}
+                  required
+                  options={idTypeOptions}
+                  type={"text"}
+                />
+              </div>
+            )}
           </div>
         </Card>
 
