@@ -12,10 +12,18 @@ import FormText from "../ui/will/FormText";
 import FormModalText from "../ui/will/FormModalText";
 import FormAddressField from "./FormAddressField";
 import SecendBeneficiaries from "./SecendBeneficiaries";
+import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
+import CardLoader from "../skeleton-loader/CardLoader";
+import CardFormLoader from "../skeleton-loader/CardFormLoader";
 
-const Beneficiaries = ({ setStepValue, country, stepFields }) => {
+const Beneficiaries = ({ setStepValue, country }) => {
   const { idTypes, id } = country || {};
   const stepValue = ENUM_FORM_STEPS.BENEFICIARIES;
+
+  const { data: findStepsData, isLoading: willLoading } =
+    useGetWillStepFildsQuery(`/${stepValue}/${id}`);
+
+  const stepFields = findStepsData?.data?.data?.stepFilds || [];
 
   useEffect(() => {
     setStepValue(stepValue);
@@ -27,6 +35,10 @@ const Beneficiaries = ({ setStepValue, country, stepFields }) => {
       value: item?.id,
     };
   });
+
+  if (willLoading) {
+    return <CardFormLoader />;
+  }
 
   const addressFild = stepFields?.find((item) => item.type === "address");
   const modalTextData = [

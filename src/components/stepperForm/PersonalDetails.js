@@ -9,15 +9,23 @@ import FormGenderRadio from "../forms/FormGenderRadio";
 import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
 import FormHeading from "../ui/will/FormHeading";
 import FormAddressField from "./FormAddressField";
+import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
+import CardLoader from "../skeleton-loader/CardLoader";
+import CardFormLoader from "../skeleton-loader/CardFormLoader";
 
-const PersonalDetails = ({ setStepValue, country, stepFields }) => {
-  const { idTypes } = country || {};
+const PersonalDetails = ({ setStepValue, country }) => {
+  const { idTypes, id } = country || {};
 
   const stepValue = ENUM_FORM_STEPS.PERSONAL_DETAILS;
 
   useEffect(() => {
     setStepValue(stepValue);
   }, [setStepValue, stepValue]);
+
+  const { data: findStepsData, isLoading: willLoading } =
+    useGetWillStepFildsQuery(`/${stepValue}/${id}`);
+
+  const stepFields = findStepsData?.data?.data?.stepFilds || [];
 
   const idTypeOptions = idTypes?.map((item) => {
     return {
@@ -34,6 +42,10 @@ const PersonalDetails = ({ setStepValue, country, stepFields }) => {
       value: country?.id,
     };
   });
+
+  if (willLoading) {
+    return <CardFormLoader />;
+  }
 
   const addressFild = stepFields?.find((item) => item.type === "address");
 

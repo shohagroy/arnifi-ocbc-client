@@ -13,10 +13,18 @@ import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
 import FormModalText from "../ui/will/FormModalText";
 import AlternativeExecutors from "./AlternativeExecutors";
+import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
+import CardLoader from "../skeleton-loader/CardLoader";
+import CardFormLoader from "../skeleton-loader/CardFormLoader";
 
-const Executors = ({ setStepValue, country, stepFields }) => {
+const Executors = ({ setStepValue, country }) => {
   const { idTypes, id } = country || {};
   const stepValue = ENUM_FORM_STEPS.EXECUTORS;
+
+  const { data: findStepsData, isLoading: willLoading } =
+    useGetWillStepFildsQuery(`/${stepValue}/${id}`);
+
+  const stepFields = findStepsData?.data?.data?.stepFilds || [];
 
   useEffect(() => {
     setStepValue(stepValue);
@@ -37,6 +45,10 @@ const Executors = ({ setStepValue, country, stepFields }) => {
       value: country?.id,
     };
   });
+
+  if (willLoading) {
+    return <CardFormLoader />;
+  }
 
   const addressFild = stepFields?.find((item) => item.type === "address");
 

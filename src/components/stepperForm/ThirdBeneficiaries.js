@@ -14,6 +14,8 @@ import FormAddressField from "./FormAddressField";
 import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
 import { DeleteOutlined } from "@ant-design/icons";
 import FourthBeneficiaries from "./FourthBeneficiaries";
+import CardLoader from "../skeleton-loader/CardLoader";
+import CardFormLoader from "../skeleton-loader/CardFormLoader";
 
 const ThirdBeneficiaries = ({ countryId, idTypeOptions }) => {
   const [savedValues, setSavedValues] = useState({});
@@ -26,6 +28,10 @@ const ThirdBeneficiaries = ({ countryId, idTypeOptions }) => {
   const stepValue = ENUM_FORM_STEPS.THIRD_BENEFICIARIES;
   const { data: findStepsData, isLoading: willLoading } =
     useGetWillStepFildsQuery(`/${stepValue}/${countryId}`);
+
+  if (willLoading) {
+    return <CardFormLoader />;
+  }
 
   const stepFields = findStepsData?.data?.data?.stepFilds || [];
   const addressFild = stepFields?.find((item) => item.type === "address");

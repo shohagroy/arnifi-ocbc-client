@@ -17,6 +17,7 @@ import {
 } from "@/redux/features/formStep/formStepApi";
 import DisplayStepFormField from "@/components/ui/will/DisplayStepFormField";
 import { useGetActiveCountryWillQuery } from "@/redux/features/country/countryApi";
+import InitialCardLoading from "@/components/skeleton-loader/InitialCardLoading";
 
 const DetailsSubmitPage = () => {
   const [stepValue, setStepValue] = useState("");
@@ -26,46 +27,33 @@ const DetailsSubmitPage = () => {
 
   const activeCountry = activeWillCountry?.data?.data || {};
 
-  const { data: findStepsData, isLoading: willLoading } =
-    useGetWillStepFildsQuery(`/${stepValue}/${activeCountry?.id}`);
+  // const { data: findStepsData, isLoading: willLoading } =
+  //   useGetWillStepFildsQuery(`/${stepValue}/${activeCountry?.id}`);
 
-  const loading = countryLoading || willLoading;
-  const stepData = findStepsData?.data?.data || {};
-  const stepFields = stepData?.stepFilds || [];
+  // const loading = countryLoading || willLoading;
+  // const stepData = findStepsData?.data?.data || {};
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (countryLoading) {
+    return <InitialCardLoading />;
   }
 
   const steps = [
     {
       title: "Personal Details",
       content: (
-        <PersonalDetails
-          stepFields={stepFields}
-          setStepValue={setStepValue}
-          country={activeCountry}
-        />
+        <PersonalDetails setStepValue={setStepValue} country={activeCountry} />
       ),
     },
     {
       title: "Executors",
       content: (
-        <Executors
-          stepFields={stepFields}
-          setStepValue={setStepValue}
-          country={activeCountry}
-        />
+        <Executors setStepValue={setStepValue} country={activeCountry} />
       ),
     },
     {
       title: "Beneficiaries",
       content: (
-        <Beneficiaries
-          stepFields={stepFields}
-          setStepValue={setStepValue}
-          country={activeCountry}
-        />
+        <Beneficiaries setStepValue={setStepValue} country={activeCountry} />
       ),
     },
     {
