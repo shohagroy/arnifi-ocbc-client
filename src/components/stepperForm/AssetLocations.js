@@ -11,6 +11,7 @@ const AssetLocations = ({
   index,
   locationCount,
   setLocationCount,
+  beneficiaryOptions,
 }) => {
   const { addressFields, beneficiaryFields } = data || {};
 
@@ -38,9 +39,11 @@ const AssetLocations = ({
           {index + 1}
         </p>
         <div className="w-[150px] flex justify-end text-xl text-gray-500">
-          <Button danger type="link" onClick={locationRemoveHandelar}>
-            <DeleteOutlined />
-          </Button>
+          {index !== 0 && (
+            <Button danger type="link" onClick={locationRemoveHandelar}>
+              <DeleteOutlined />
+            </Button>
+          )}
         </div>
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -60,7 +63,7 @@ const AssetLocations = ({
             label={beneficiaryFields?.label}
             name={`${value}.beneficiary.${name}}`}
             required
-            options={[]}
+            options={beneficiaryOptions || []}
             type={"text"}
           />
         </div>

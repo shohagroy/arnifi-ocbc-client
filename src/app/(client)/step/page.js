@@ -7,11 +7,19 @@ import Instructions from "@/components/stepperForm/Instructions";
 import PersonalDetails from "@/components/stepperForm/PersonalDetails";
 import ReviewAndSubmit from "@/components/stepperForm/ReviewAndSubmit";
 import StepperForm from "@/components/stepperForm/stepperForm";
-import React from "react";
+import React, { useState } from "react";
 import { useGetActiveCountryWillQuery } from "@/redux/features/country/countryApi";
 import InitialCardLoading from "@/components/skeleton-loader/InitialCardLoading";
+import { getFromLocalStorage } from "@/utils/local-storage";
+import AssetDistribute from "@/components/stepperForm/AssetDistribute";
 
 const DetailsSubmitPage = () => {
+  const [assetStep, setAssetStep] = useState(
+    !!getFromLocalStorage("assetStep")
+      ? Number(JSON.parse(getFromLocalStorage("assetStep")))
+      : 1
+  );
+
   const { data: activeWillCountry, isLoading: countryLoading } =
     useGetActiveCountryWillQuery();
 
@@ -36,7 +44,15 @@ const DetailsSubmitPage = () => {
     },
     {
       title: "Asset Allocation",
-      content: <AssetAllocation country={activeCountry} />,
+      content: (
+        <div>
+          {assetStep === 1 ? (
+            <AssetAllocation key={"main-step"} country={activeCountry} />
+          ) : (
+            <AssetDistribute />
+          )}
+        </div>
+      ),
     },
     {
       title: "Instructions",
@@ -51,7 +67,12 @@ const DetailsSubmitPage = () => {
   return (
     <section>
       <div className="max-w-5xl mx-auto">
-        <StepperForm steps={steps} persistKey={"form-data"} />
+        <StepperForm
+          setAssetStep={setAssetStep}
+          assetStep={assetStep}
+          steps={steps}
+          persistKey={"form-data"}
+        />
       </div>
     </section>
   );

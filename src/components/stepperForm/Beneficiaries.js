@@ -1,19 +1,26 @@
 "use client";
 
-import { Card } from "antd";
-import React from "react";
-import FormInput from "../forms/FormInput";
-import FormSelectField from "../forms/FormSelectField";
-import { ENUM_FORM_STEPS, relationsOptions } from "@/constans/steps";
+import { Button } from "antd";
+import React, { useState } from "react";
+import { ENUM_FORM_STEPS } from "@/constans/steps";
 import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
 import FormModalText from "../ui/will/FormModalText";
-import FormAddressField from "./FormAddressField";
-import SecendBeneficiaries from "./SecendBeneficiaries";
 import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
+import { getFromLocalStorage } from "@/utils/local-storage";
+import { PlusOutlined } from "@ant-design/icons";
+import BeneficiaryCard from "./BeneficiaryCard";
 
 const Beneficiaries = ({ country }) => {
+  const [beneficiariesCount, setBeneficiariesCount] = useState(
+    !!getFromLocalStorage("form-data")
+      ? Number(
+          JSON.parse(getFromLocalStorage("form-data"))?.beneficiaries?.length
+        ) || 1
+      : 1
+  );
+
   const { idTypes, id } = country || {};
   const stepValue = ENUM_FORM_STEPS.BENEFICIARIES;
 
@@ -34,6 +41,14 @@ const Beneficiaries = ({ country }) => {
   }
 
   const addressFild = stepFields?.find((item) => item.type === "address");
+
+  const beneficiariesData = [...Array(beneficiariesCount)]?.map((_) => {
+    return {
+      addressFild,
+      stepFields,
+    };
+  });
+
   const modalTextData = [
     {
       info: "A Beneficiary is the person who benefits from the deceased’s assets under his Will.",
@@ -63,49 +78,28 @@ const Beneficiaries = ({ country }) => {
         />
       </div>
 
-      <Card>
-        <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {stepFields?.map((data, i) => {
-            const { type, placeholder, name, label, required } = data || {};
-
-            return type === "text" ? (
-              <div key={i}>
-                <FormInput
-                  label={label}
-                  name={`${stepValue}.${name}`}
-                  placeholder={placeholder}
-                  type={type}
-                  required={required}
-                />
-              </div>
-            ) : (
-              type === "select" && (
-                <div key={i}>
-                  <FormSelectField
-                    label={label}
-                    name={`${stepValue}.${name}`}
-                    showSearch={true}
-                    required={required}
-                    options={
-                      name === "idType" ? idTypeOptions : relationsOptions
-                    }
-                  />
-                </div>
-              )
-            );
-          })}
-
-          {addressFild && (
-            <>
-              <hr className="border-[#EEEEEE] col-span-2 my-4" />
-              <FormAddressField value={stepValue} />
-            </>
-          )}
-        </div>
-      </Card>
+      {beneficiariesData?.map((item, i) => (
+        <BeneficiaryCard
+          stepValue={`${stepValue}`}
+          data={item}
+          index={i}
+          key={i}
+          idTypeOptions={idTypeOptions}
+          setBeneficiariesCount={setBeneficiariesCount}
+          beneficiariesCount={beneficiariesCount}
+        />
+      ))}
 
       <div className="my-10">
-        <SecendBeneficiaries idTypeOptions={idTypeOptions} countryId={id} />
+        <Button
+          onClick={() => setBeneficiariesCount(beneficiariesCount + 1)}
+          icon={<PlusOutlined />}
+          className="bg-primary hover:bg-secondary px-[12px]"
+          size="large"
+          type="primary"
+        >
+          Add another beneficiary
+        </Button>
       </div>
     </div>
   );

@@ -5,8 +5,15 @@ import { Button, Card } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 
-const AssetSum = ({ data, value, index, setSumCount, sumCount }) => {
-  const { addressFields, beneficiaryFields } = data || {};
+const AssetSum = ({
+  data,
+  value,
+  index,
+  setSumCount,
+  sumCount,
+  beneficiaryOptions,
+}) => {
+  const { sumMoneyFields, beneficiaryFields } = data || {};
 
   const sumMoneyRemoveHandelar = () => {
     const savedValues = JSON.parse(getFromLocalStorage("form-data"));
@@ -30,17 +37,19 @@ const AssetSum = ({ data, value, index, setSumCount, sumCount }) => {
           {index + 1}
         </p>
         <div className="w-[150px] flex justify-end text-xl text-gray-500">
-          <Button danger type="link" onClick={sumMoneyRemoveHandelar}>
-            <DeleteOutlined />
-          </Button>
+          {index !== 0 && (
+            <Button danger type="link" onClick={sumMoneyRemoveHandelar}>
+              <DeleteOutlined />
+            </Button>
+          )}
         </div>
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <FormInput
-            label={"Sum of money (in SGD)"}
+            label={sumMoneyFields?.label}
             required
-            type={"text"}
+            type={sumMoneyFields?.type}
             placeholder={"money"}
             name={`${value}.money`}
           />
@@ -48,10 +57,10 @@ const AssetSum = ({ data, value, index, setSumCount, sumCount }) => {
 
         <div>
           <FormSelectField
-            label={"Beneficiary"}
+            label={beneficiaryFields?.label}
             name={`${value}.beneficiary`}
             required
-            options={[]}
+            options={beneficiaryOptions || []}
             type={"text"}
           />
         </div>

@@ -20,7 +20,7 @@ const AssetAllocation = ({ country }) => {
       ? Number(
           JSON.parse(getFromLocalStorage("form-data"))?.assetAllocation
             ?.locations?.length
-        )
+        ) || 1
       : 1
   );
 
@@ -32,6 +32,19 @@ const AssetAllocation = ({ country }) => {
         ) || 1
       : 1
   );
+
+  const [beneficiariesData, setBeneficiariesData] = useState(
+    !!getFromLocalStorage("form-data")
+      ? JSON.parse(getFromLocalStorage("form-data"))?.beneficiaries
+      : []
+  );
+
+  const beneficiaryOptions = beneficiariesData?.map((item) => {
+    return {
+      label: item.fullName,
+      value: item.fullName,
+    };
+  });
 
   const stepValue = ENUM_FORM_STEPS.ASSET_ALLOCATION;
 
@@ -115,6 +128,7 @@ const AssetAllocation = ({ country }) => {
         {assetLocations?.map((item, i) => (
           <AssetLocations
             value={`${stepValue}.locations.${i}`}
+            beneficiaryOptions={beneficiaryOptions}
             data={item}
             setLocationCount={setLocationCount}
             locationCount={locationCount}
@@ -160,6 +174,7 @@ const AssetAllocation = ({ country }) => {
         </div>
         {assetSums?.map((item, i) => (
           <AssetSum
+            beneficiaryOptions={beneficiaryOptions}
             key={i}
             value={`${stepValue}.sumMoney.${i}`}
             data={item}

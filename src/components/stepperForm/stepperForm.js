@@ -8,12 +8,13 @@ import { generateFormValidator } from "@/schemas/formSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 
-const StepperForm = ({ steps, persistKey }) => {
+const StepperForm = ({ steps, persistKey, setAssetStep, assetStep }) => {
   const [current, setCurrent] = useState(
     !!getFromLocalStorage("step")
       ? Number(JSON.parse(getFromLocalStorage("step"))?.step)
       : 0
   );
+
   const [savedValues, setSavedValues] = useState(
     !!getFromLocalStorage(persistKey)
       ? JSON.parse(getFromLocalStorage(persistKey))
@@ -25,16 +26,26 @@ const StepperForm = ({ steps, persistKey }) => {
   }, [current]);
 
   const prev = () => {
-    setCurrent(current - 1);
+    if (current === 3 && assetStep > 1) {
+      setToLocalStorage("assetStep", JSON.stringify(assetStep - 1));
+      setAssetStep(assetStep - 1);
+    } else {
+      setCurrent(current - 1);
+    }
   };
+
   const items = steps.map((item) => ({
     key: item.title,
     title: item.title,
   }));
 
   const onSubmit = (data) => {
-    // next();
-    setCurrent(current + 1);
+    if (current === 3 && assetStep === 1) {
+      setToLocalStorage("assetStep", JSON.stringify(assetStep + 1));
+      setAssetStep(assetStep + 1);
+    } else {
+      setCurrent(current + 1);
+    }
   };
 
   return (
@@ -68,17 +79,6 @@ const StepperForm = ({ steps, persistKey }) => {
             </Link>
           )}
           {current < steps.length - 1 && (
-            // <Link href={"/step"}>
-            //   <Button
-            //     htmlType="submit"
-            //     className="bg-primary font-bold px-10"
-            //     size="large"
-            //     type="primary"
-            //     onClick={() => next()}
-            //   >
-            //     Next
-            //   </Button>
-            // </Link>
             <Button
               htmlType="submit"
               className="bg-primary font-bold px-10"

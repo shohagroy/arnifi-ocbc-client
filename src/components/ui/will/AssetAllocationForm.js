@@ -140,11 +140,11 @@ const AssetAllocationForm = ({
                   />
                 )}
                 <FormSelectField
-                  label={"Beneficiary"}
-                  name={"beneficiary"}
+                  label={beneficiaryType?.label}
+                  name={beneficiaryType?.name}
                   required
                   options={idTypeOptions}
-                  type={"text"}
+                  type={beneficiaryType?.type}
                 />
               </div>
             )}
@@ -193,11 +193,11 @@ const AssetAllocationForm = ({
                     />
                   )}
                   <FormInput
-                    label={"Sum of money (in SGD)"}
+                    label={sumMoneyType?.label}
                     required
-                    type={"text"}
-                    placeholder={"money"}
-                    name={"sumMoney"}
+                    type={sumMoneyType?.type}
+                    placeholder={sumMoneyType?.placeholder}
+                    name={sumMoneyType?.name}
                   />
                 </div>
               )}
@@ -215,11 +215,11 @@ const AssetAllocationForm = ({
                 )}
 
                 <FormSelectField
-                  label={"Beneficiary"}
-                  name={"beneficiary"}
+                  label={beneficiaryType?.label}
+                  name={beneficiaryType?.name}
                   required
                   options={idTypeOptions}
-                  type={"text"}
+                  type={beneficiaryType?.type}
                 />
               </div>
             )}
