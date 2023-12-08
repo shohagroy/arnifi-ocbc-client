@@ -1,78 +1,42 @@
 "use client";
 
-import { Card } from "antd";
-import React from "react";
+import { Button, Card } from "antd";
+import React, { useState } from "react";
 import FormSelectField from "../forms/FormSelectField";
-import { ENUM_FORM_STEPS } from "@/constans/steps";
+import {
+  ENUM_FORM_STEPS,
+  instructionsOptions,
+  religionOptions,
+} from "@/constans/steps";
+import FormHeading from "../ui/will/FormHeading";
+import FormText from "../ui/will/FormText";
+import FormInput from "../forms/FormInput";
+import FormTextarea from "../forms/FormTextarea";
+import InstructionsAssetCard from "./InstructionsAssetCard";
+import { PlusOutlined } from "@ant-design/icons";
 
 const Instructions = () => {
+  const [assetCount, setAssetCount] = useState(1);
   const stepValue = ENUM_FORM_STEPS.INSTRUCTIONS;
 
-  const idTypeOptions = [
-    {
-      value: "Options - 1",
-      label: "Options - 1",
-    },
-    {
-      value: "Options - 2",
-      label: "Options - 2",
-    },
-    {
-      value: "Options - 3",
-      label: "Options - 3",
-    },
-    {
-      value: "Options - 5",
-      label: "Options - 5",
-    },
-    {
-      value: "Options - 6",
-      label: "Options - 6",
-    },
-    {
-      value: "Options - 7",
-      label: "Options - 7",
-    },
-    {
-      value: "Options - 8",
-      label: "Options - 8",
-    },
-    {
-      value: "Options - 9",
-      label: "Options - 9",
-    },
-    {
-      value: "Options - 10",
-      label: "Options - 10",
-    },
-  ];
+  const assetsDetails = [...Array(assetCount)]?.map((_) => {
+    return {};
+  });
 
   return (
     <div>
       <div>
         <div className="p-2">
-          <div className="pt-10 font-semibold">
-            <p>(Optional)</p>
-            <h2 className="text-3xl">
-              Do you wish to set any funeral instructions?
-            </h2>
-          </div>
+          <FormHeading
+            optional
+            heading={"Do you wish to set any funeral instructions?"}
+          />
 
-          <div className="text-sm py-6">
-            <p className="">
-              You may provide detailed instructions for your preferred funeral
-              arrangements. Funeral instructions are not compulsory and may not
-              be legally binding, but they will help your executor carry out
-              your wishes.
-            </p>
-          </div>
-
-          {/* <div className="py-6 ">
-            <a className="text-primary flex" href="/">
-              <QuestionCircleOutlined />
-              <p className="px-2">More information about Gift of Monies</p>
-            </a>
-          </div> */}
+          <FormText
+            text={
+              "You may provide detailed instructions for preferred funeral arrangements. Funeral instructions are not compulsory and may not be legally binding, but they will help your executor carry out your wishes."
+            }
+          />
         </div>
         <Card>
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -81,7 +45,7 @@ const Instructions = () => {
                 label={"Religion"}
                 name={`${stepValue}.religion`}
                 required
-                options={idTypeOptions}
+                options={religionOptions}
                 type={"text"}
               />
             </div>
@@ -92,12 +56,52 @@ const Instructions = () => {
                 label={"Instructions"}
                 name={`${stepValue}.instructions`}
                 required
-                options={idTypeOptions}
+                options={instructionsOptions}
                 type={"text"}
               />
             </div>
           </div>
         </Card>
+      </div>
+
+      <div>
+        <div className="">
+          <div className="p-2">
+            <FormHeading
+              optional
+              heading={"Do you have any assets that you would like to specify?"}
+            />
+
+            <FormText
+              text={
+                "The information provided here will be attached as an appendix to your Will. These instructions are not compulsory and may not be legally binding, but they may help the executor(s) locate your assets easily."
+              }
+            />
+          </div>
+
+          {assetsDetails?.map((item, i) => {
+            return (
+              <InstructionsAssetCard
+                key={i}
+                index={i}
+                setAssetCount={setAssetCount}
+                assetCount={assetCount}
+              />
+            );
+          })}
+        </div>
+
+        <div className="my-10">
+          <Button
+            onClick={() => setAssetCount(assetCount + 1)}
+            icon={<PlusOutlined />}
+            className="bg-primary hover:bg-secondary px-[12px]"
+            size="large"
+            type="primary"
+          >
+            Add another asset
+          </Button>
+        </div>
       </div>
 
       <hr className="border-[#EEEEEE] col-span-2 my-10" />

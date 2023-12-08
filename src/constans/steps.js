@@ -163,3 +163,53 @@ export const relationsOptions = [
     value: "other",
   },
 ];
+
+export const religionOptions = [
+  {
+    label: "Buddhist",
+    value: "Buddhist",
+  },
+  {
+    label: "Catholic",
+    value: "Catholic",
+  },
+  {
+    label: "Christian",
+    value: "Christian",
+  },
+  {
+    label: "Hindu",
+    value: "Hindu",
+  },
+  {
+    label: "Protestant",
+    value: "Protestant",
+  },
+  {
+    label: "Taoist",
+    value: "Taoist",
+  },
+  {
+    label: "Others",
+    value: "Others",
+  },
+];
+
+export const instructionsOptions = [
+  {
+    label: "Buried",
+    value: "Buried",
+  },
+  {
+    label: "Cremated and the ashes scattered",
+    value: "Cremated and the ashes scattered",
+  },
+  {
+    label: "Cermated and the ashes stored",
+    value: "Cermated and the ashes stored",
+  },
+  {
+    label: "Other",
+    value: "Other",
+  },
+];

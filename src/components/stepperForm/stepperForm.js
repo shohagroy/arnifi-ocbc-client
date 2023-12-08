@@ -8,7 +8,14 @@ import { generateFormValidator } from "@/schemas/formSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 
-const StepperForm = ({ steps, persistKey, setAssetStep, assetStep }) => {
+const StepperForm = ({
+  steps,
+  persistKey,
+  setAssetStep,
+  assetStep,
+  setAdditional,
+  additional,
+}) => {
   const [current, setCurrent] = useState(
     !!getFromLocalStorage("step")
       ? Number(JSON.parse(getFromLocalStorage("step"))?.step)
@@ -29,6 +36,9 @@ const StepperForm = ({ steps, persistKey, setAssetStep, assetStep }) => {
     if (current === 3 && assetStep > 1) {
       setToLocalStorage("assetStep", JSON.stringify(assetStep - 1));
       setAssetStep(assetStep - 1);
+    } else if (current === 4 && additional > 1) {
+      setToLocalStorage("additional", JSON.stringify(additional - 1));
+      setAdditional(additional - 1);
     } else {
       setCurrent(current - 1);
     }
@@ -43,6 +53,9 @@ const StepperForm = ({ steps, persistKey, setAssetStep, assetStep }) => {
     if (current === 3 && assetStep === 1) {
       setToLocalStorage("assetStep", JSON.stringify(assetStep + 1));
       setAssetStep(assetStep + 1);
+    } else if (current === 4 && additional === 1) {
+      setToLocalStorage("additional", JSON.stringify(additional + 1));
+      setAdditional(additional + 1);
     } else {
       setCurrent(current + 1);
     }
