@@ -20,14 +20,6 @@ export const idTypeApi = baseApi.injectEndpoints({
       providesTags: ["idTypes"],
     }),
 
-    getCountryIdTypes: build.query({
-      query: (id) => ({
-        url: `/idTypes/get-all/${id}`,
-        method: "GET",
-      }),
-      providesTags: ["idTypes"],
-    }),
-
     deleteIdType: build.mutation({
       query: (id) => ({
         url: `/idTypes/${id}`,
@@ -50,7 +42,6 @@ export const idTypeApi = baseApi.injectEndpoints({
 export const {
   useCreateIdTypeMutation,
   useGetAllIdTypesQuery,
-  useGetCountryIdTypesQuery,
   useDeleteIdTypeMutation,
   useUpdateIdTypesMutation,
 } = idTypeApi;

@@ -1,4 +1,4 @@
-import { useDeleteStepFildMutation } from "@/redux/features/stepFild/stepFildApi";
+import { useDeleteStepFildMutation } from "@/redux/features/stepField/stepFieldApi";
 import { message } from "antd";
 import React from "react";
 import FormText from "@/components/ui/will/FormText";

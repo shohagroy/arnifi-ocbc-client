@@ -10,24 +10,6 @@ export const stepFildApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["step-filds", "form-step"],
     }),
-
-    // getAllCountries: build.query({
-    //   query: (arg) => ({
-    //     url: "/step-filds",
-    //     method: "GET",
-    //     params: arg,
-    //   }),
-    //   providesTags: ["step-filds"],
-    // }),
-
-    getStepFilds: build.query({
-      query: (search) => ({
-        url: `/step-filds/get-all${search}`,
-        method: "GET",
-      }),
-      providesTags: ["step-filds"],
-    }),
-
     deleteStepFild: build.mutation({
       query: (id) => ({
         url: `/step-filds/${id}`,
@@ -35,7 +17,6 @@ export const stepFildApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["step-filds", "form-step"],
     }),
-
     updateStepFild: build.mutation({
       query: ({ id, ...data }) => ({
         url: `/step-filds/${id}`,
@@ -49,7 +30,6 @@ export const stepFildApi = baseApi.injectEndpoints({
 
 export const {
   useCreateStepFildMutation,
-  useGetStepFildsQuery,
   useDeleteStepFildMutation,
   useUpdateStepFildMutation,
 } = stepFildApi;

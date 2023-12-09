@@ -20,15 +20,6 @@ export const formStepApi = baseApi.injectEndpoints({
       providesTags: ["form-step"],
     }),
 
-    getCountryFormSteps: build.query({
-      query: (id) => ({
-        url: `/form-step/get-all/${id}`,
-        method: "GET",
-      }),
-      providesTags: ["form-step"],
-    }),
-
-    //new
     getWillStepFilds: build.query({
       query: (params) => ({
         url: `/form-step${params}`,
@@ -59,7 +50,6 @@ export const formStepApi = baseApi.injectEndpoints({
 export const {
   useCreateFormStepMutation,
   useGetAllFormStepsQuery,
-  useGetCountryFormStepsQuery,
   useDeleteFormStepMutation,
   useUpdateFormStepMutation,
   useGetWillStepFildsQuery,

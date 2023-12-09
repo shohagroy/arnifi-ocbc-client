@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import FormInput from "@/components/forms/FormInput";
 import FormSelectField from "@/components/forms/FormSelectField";
-import { useDeleteStepFildMutation } from "@/redux/features/stepFild/stepFildApi";
+import { useDeleteStepFildMutation } from "@/redux/features/stepField/stepFieldApi";
 import UpdateDeleteBtn from "@/components/admin/formSections/UpdateDeleteBtn";
 import FormHeading from "@/components/ui/will/FormHeading";
 import FormText from "@/components/ui/will/FormText";

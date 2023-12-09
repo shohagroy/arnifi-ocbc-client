@@ -144,22 +144,11 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
             <div className="grid my-2 gap-4 grid-cols-2">
               <div>
                 <FormInput
-                  name={"postalCode"}
-                  type={"text"}
-                  size="large"
-                  label={"Postal Code"}
-                  placeholder={"e.g. 5403"}
-                  required
-                />
-              </div>
-
-              <div>
-                <FormInput
                   name={"countryCode"}
                   type={"text"}
                   size="large"
                   label={"Country Code"}
-                  placeholder={"e.g. +971"}
+                  placeholder={"e.g. UAE"}
                   required
                 />
               </div>

@@ -3,7 +3,7 @@
 import { Card, message } from "antd";
 import React from "react";
 import FormSelectField from "@/components/forms/FormSelectField";
-import { useDeleteStepFildMutation } from "@/redux/features/stepFild/stepFildApi";
+import { useDeleteStepFildMutation } from "@/redux/features/stepField/stepFieldApi";
 import UpdateDeleteBtn from "@/components/admin/formSections/UpdateDeleteBtn";
 import FormHeading from "@/components/ui/will/FormHeading";
 import FormText from "@/components/ui/will/FormText";
