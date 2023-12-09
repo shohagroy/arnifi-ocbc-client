@@ -1,19 +1,15 @@
 import { useDeleteStepFildMutation } from "@/redux/features/stepFild/stepFildApi";
 import { message } from "antd";
 import React from "react";
-import PersonalInfo from "./PersonalInfo";
-import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import FormHeading from "./FormHeading";
-import FormText from "./FormText";
-import FormModalText from "./FormModalText";
-// import FormLinkText from "./FormModalText";
+import FormText from "@/components/ui/will/FormText";
+import PersonalInfo from "../formSections/PersonalInfo";
 
-const BeneficiariesForm = ({
+const AlternativeExecutorForm = ({
   formInputFields,
   countriesOptions,
   idTypeOptions,
   isEditable,
-  setStepFields,
+  setStepFild,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -41,16 +37,10 @@ const BeneficiariesForm = ({
       {contextHolder}
 
       <div className="">
-        <FormHeading heading={"Who will be the Beneficiaries of Your Will?"} />
         <FormText
           text={
-            "The Beneficiaries are the people who will benefit from the asset allocation indicated in this will."
+            "The execution power will be passed on to the Alternative Executor if circumstances cause the main Executor to be unable to execute the Will."
           }
-        />
-
-        <FormModalText
-          text={"More information about Beneficiaries"}
-          data={[]}
         />
       </div>
 
@@ -59,7 +49,7 @@ const BeneficiariesForm = ({
         data={formInputFields}
         countriesOptions={countriesOptions}
         idTypeOptions={idTypeOptions}
-        setStepFields={setStepFields}
+        setStepFild={setStepFild}
         deleteModalOkHandelar={deleteModalOkHandelar}
         loading={deleteLoading}
       />
@@ -67,4 +57,4 @@ const BeneficiariesForm = ({
   );
 };
 
-export default BeneficiariesForm;
+export default AlternativeExecutorForm;

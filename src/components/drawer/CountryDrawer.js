@@ -54,8 +54,9 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
   const modalOkHandelar = async () => {
     if (data?.key) {
       // update country
-      const result = await updateCountry(data).unwrap();
-      if (result?.data?.success) {
+
+      try {
+        const result = await updateCountry(data).unwrap();
         messageApi.open({
           type: "success",
           content: result?.data?.message || "Country Updated Successfully!",
@@ -64,20 +65,17 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
         setOpen(false);
         setData({
           name: "",
-          postalCode: "",
           countryCode: "",
         });
-      } else {
+      } catch (error) {
         messageApi.open({
           type: "error",
-          content: result?.message || "Something went wrong!",
+          content: error?.data || "Something went wrong!",
         });
       }
     } else {
-      // create new
-      const result = await createCountry(data).unwrap();
-
-      if (result?.data?.success) {
+      try {
+        const result = await createCountry(data).unwrap();
         messageApi.open({
           type: "success",
           content: result?.message || "Country Create Successfully!",
@@ -86,13 +84,12 @@ const CountryDrawer = ({ open, setOpen, setData, data }) => {
         setOpen(false);
         setData({
           name: "",
-          postalCode: "",
           countryCode: "",
         });
-      } else {
+      } catch (error) {
         messageApi.open({
           type: "error",
-          content: result?.message || "Something went wrong!",
+          content: error?.data || "Something went wrong!",
         });
       }
     }

@@ -11,7 +11,6 @@ import SearchInput from "@/components/ui/dataInput/SearchInput";
 import dayjs from "dayjs";
 import DeleteInfoModal from "@/components/modal/DeleteInfoModal";
 import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
-import SearchSelect from "@/components/ui/dataInput/SearchSelect";
 import FormStepDrawer from "@/components/drawer/FormStepDrawer";
 import {
   useDeleteFormStepMutation,
@@ -28,7 +27,7 @@ const ManageFormStepPage = () => {
   const [sortBy, setSortBy] = useState("tittle");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
-  const [countryId, setCountryId] = useState("");
+  // const [countryId, setCountryId] = useState("");
 
   // modal code
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -50,9 +49,9 @@ const ManageFormStepPage = () => {
     query["search"] = debouncedTerm;
   }
 
-  if (countryId) {
-    query["countryId"] = countryId;
-  }
+  // if (countryId) {
+  //   query["countryId"] = countryId;
+  // }
 
   const { data, isLoading: tableLoading } = useGetAllFormStepsQuery({
     ...query,
@@ -64,9 +63,7 @@ const ManageFormStepPage = () => {
       key: item?.id,
       sl: page * size - size + i + 1,
       tittle: item?.tittle,
-      country: item?.country?.name,
-      countryCode: item?.country?.countryCode,
-      countryId: item?.countryId,
+      stepFields: item?.stepFilds?.length,
       createdAt: dayjs(item?.createdAt).format("MMM D, YYYY hh:mm A"),
     };
   });
@@ -81,11 +78,6 @@ const ManageFormStepPage = () => {
         value: item?.id,
       };
     }) || [];
-
-  // countriesOptions?.unshift({
-  //   label: "All Countries",
-  //   value: "",
-  // });
 
   const [deleteFormStep, { isLoading: deleteLoading }] =
     useDeleteFormStepMutation();
@@ -106,8 +98,8 @@ const ManageFormStepPage = () => {
   };
 
   const deleteHandelar = async () => {
-    const result = await deleteFormStep(formStepInfo?.key).unwrap();
-    if (result?.data?.success) {
+    try {
+      const result = await deleteFormStep(formStepInfo?.key).unwrap();
       messageApi.open({
         type: "success",
         content: result?.data?.message || "Id Type Delete Successfully!",
@@ -115,12 +107,11 @@ const ManageFormStepPage = () => {
       setOpenModal(false);
       setFormStepInfo({
         tittle: "",
-        countryId: "",
       });
-    } else {
+    } catch (error) {
       messageApi.open({
         type: "error",
-        content: result?.message || "Something went wrong!",
+        content: error?.data || "Something went wrong!",
       });
     }
   };
@@ -138,25 +129,19 @@ const ManageFormStepPage = () => {
       dataIndex: "sl",
     },
     {
-      title: <p>ID Type Tittle</p>,
+      title: <p>Step Tittle</p>,
       dataIndex: "tittle",
       width: 250,
       // align: "center",
     },
 
     {
-      title: <p>Country Name</p>,
-      dataIndex: "country",
+      title: <p>Total Fields</p>,
+      dataIndex: "stepFields",
       width: 150,
-      // align: "center",
+      align: "center",
     },
 
-    {
-      title: <p>Country Code</p>,
-      dataIndex: "countryCode",
-      width: 120,
-      // align: "center",
-    },
     {
       title: <p>Created Date</p>,
       dataIndex: "createdAt",
@@ -228,7 +213,7 @@ const ManageFormStepPage = () => {
                     change={(e) => setSearchTerm(e.target.value)}
                   />
                 </Col>
-                <Col span={6}>
+                {/* <Col span={6}>
                   <SearchSelect
                     value={countryId}
                     loading={countryLoading}
@@ -238,8 +223,8 @@ const ManageFormStepPage = () => {
                     ]}
                     handleChange={(e) => setCountryId(e)}
                   />
-                </Col>
-                <Col span={8} className="flex items-center">
+                </Col> */}
+                <Col span={14} className="flex items-center">
                   <div className="flex items-center font-primary text-lg">
                     <p>Sort by:</p>
                     <Select

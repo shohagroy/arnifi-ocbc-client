@@ -1,12 +1,12 @@
 "use client";
 
 import AdminBreadCrumb from "@/components/admin/AdminBreadCrumb";
-import FormFildAdd from "@/components/admin/formSections/FormFildAdd";
+import DisplayAddedFields from "@/components/admin/formSections/DisplayAddedFields";
+import FormFieldAdd from "@/components/admin/formSections/FormFieldAdd";
 import FormSelectField from "@/components/forms/FormSelectField";
 import Form from "@/components/forms/From";
 import CreateUpdateInfoModal from "@/components/modal/CreateUpdateInfoModal";
-import DisplayAddedStrpFilds from "@/components/ui/will/DisplayAddedStrpFilds";
-import { allStepsFields } from "@/constans/steps";
+import { generatorStepfieldsValueOptions } from "@/constans/stepFields";
 import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
 import { useGetAllFormStepsQuery } from "@/redux/features/formStep/formStepApi";
 import {
@@ -53,17 +53,6 @@ const CreateNewWillsPage = () => {
       value: step?.value,
     };
   });
-  const selectedCountry = countriesOptions?.find(
-    (item) => item?.value === stepFields?.countryId
-  );
-
-  const idTypeOptions = selectedCountry?.idTypes?.map((item) => {
-    return {
-      label: item?.tittle,
-      value: item?.id,
-      data: item,
-    };
-  });
 
   const breadCrumbItems = [
     {
@@ -80,11 +69,11 @@ const CreateNewWillsPage = () => {
     },
   ];
 
-  const inputFildAddHandelar = (data) => {
+  const inputFieldAddHandelar = (data) => {
     let info = {};
     if (data?.id) {
       info = {
-        tittle: "Are you sure update this step fild?",
+        tittle: "Are you sure update this step field?",
         details: (
           <>
             <p className="font-primary">
@@ -99,12 +88,9 @@ const CreateNewWillsPage = () => {
           </>
         ),
       };
-      // setStepFields(data);
-      // setModalText(info);
-      // setOpenModal(true);
     } else {
       info = {
-        tittle: "Are you sure create this step fild?",
+        tittle: "Are you sure create this step field?",
         details: (
           <>
             <p className="font-primary">
@@ -119,9 +105,6 @@ const CreateNewWillsPage = () => {
           </>
         ),
       };
-      // setStepFields(data);
-      // setModalText(info);
-      // setOpenModal(true);
     }
 
     setStepFields(data);
@@ -166,6 +149,10 @@ const CreateNewWillsPage = () => {
     }
   };
 
+  const stepFieldsValueOptions = generatorStepfieldsValueOptions(
+    stepFields?.stepValue
+  );
+
   return (
     <main className="font-primary">
       {contextHolder}
@@ -181,7 +168,7 @@ const CreateNewWillsPage = () => {
           >
             <div>
               <Form
-                submitHandler={inputFildAddHandelar}
+                submitHandler={inputFieldAddHandelar}
                 resolver={yupResolver(formInputFildSchema)}
                 defaultValues={stepFields}
               >
@@ -224,19 +211,19 @@ const CreateNewWillsPage = () => {
                       name={"name"}
                       placeholder="select type"
                       label={"For Value"}
-                      options={allStepsFields || []}
+                      options={stepFieldsValueOptions || []}
                     />
                   </Col>
                 </Row>
 
-                <FormFildAdd setValue={setStepFields} value={stepFields} />
+                <FormFieldAdd setValue={setStepFields} value={stepFields} />
               </Form>
 
               <div className="my-6">
-                <DisplayAddedStrpFilds
+                <DisplayAddedFields
                   data={stepFields}
                   setStepFields={setStepFields}
-                  idTypeOptions={idTypeOptions}
+                  idTypeOptions={[]}
                   countriesOptions={countriesOptions}
                 />
               </div>

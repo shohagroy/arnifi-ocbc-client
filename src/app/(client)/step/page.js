@@ -27,8 +27,6 @@ const DetailsSubmitPage = () => {
       : 1
   );
 
-  console.log(additional);
-
   const { data: activeWillCountry, isLoading: countryLoading } =
     useGetActiveCountryWillQuery();
 

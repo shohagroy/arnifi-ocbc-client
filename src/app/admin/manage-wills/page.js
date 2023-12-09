@@ -2,25 +2,19 @@
 
 import AdminBreadCrumb from "@/components/admin/AdminBreadCrumb";
 import DisplayTable from "@/components/table/DisplayTable";
-import { Button, Card, Col, Row, Select, Switch, message } from "antd";
+import { Button, Card, Col, Row, Switch, message } from "antd";
 import React, { useState } from "react";
 import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import { useDebounced } from "@/redux/hooks/useDebounced";
 import AddButton from "../../../components/ui/button/AddButton";
 import dayjs from "dayjs";
-import DeleteInfoModal from "@/components/modal/DeleteInfoModal";
-import IdTypeDrawer from "@/components/drawer/IdTypeDrawer";
-import { useDeleteIdTypeMutation } from "@/redux/features/idType/idTypeApi";
 import {
   useChangeActiveStatusMutation,
-  useGetAllCountryDataQuery,
   useGetCountriesWillsQuery,
 } from "@/redux/features/country/countryApi";
-import SearchSelect from "@/components/ui/dataInput/SearchSelect";
 import Link from "next/link";
 
 const ManageWillsPage = () => {
-  const [idTypeInfo, setIdTypeInfo] = useState({});
   const [messageApi, contextHolder] = message.useMessage();
 
   const [page, setPage] = useState(1);
@@ -53,14 +47,10 @@ const ManageWillsPage = () => {
     query["countryId"] = countryId;
   }
 
-  const { data, isLoading: tableLoading } = useGetCountriesWillsQuery({
-    // ...query,
-  });
+  const { data, isLoading: tableLoading } = useGetCountriesWillsQuery({});
 
   const [updateCountry, { isLoading: updateLoading }] =
     useChangeActiveStatusMutation();
-
-  // console.log(data);
 
   const { meta } = data || {};
 
@@ -74,59 +64,6 @@ const ManageWillsPage = () => {
       data: item,
     };
   });
-
-  // const { data: countriesData, isLoading: countryLoading } =
-  //   useGetAllCountryDataQuery();
-
-  // const countriesOptions = countriesData?.data?.data.map((item) => {
-  //   return {
-  //     label: item?.name,
-  //     value: item?.id,
-  //   };
-  // });
-
-  // countriesOptions?.unshift({
-  //   label: "All Countries",
-  //   value: "",
-  // });
-
-  // const [deleteIdType, { isLoading: deleteLoading }] =
-  //   useDeleteIdTypeMutation();
-
-  // const openModalHandelar = (data) => {
-  //   const info = {
-  //     tittle: "Are you sure delete this ID Types?",
-  //     details: (
-  //       <p className="font-primary">
-  //         Tittle: <strong>{data?.tittle}</strong>
-  //       </p>
-  //     ),
-  //   };
-
-  //   setIdTypeInfo(data);
-  //   setModalText(info);
-  //   setOpenModal(true);
-  // };
-
-  // const deleteHandelar = async () => {
-  //   const result = await deleteIdType(idTypeInfo?.key).unwrap();
-  //   if (result?.data?.success) {
-  //     messageApi.open({
-  //       type: "success",
-  //       content: result?.data?.message || "Id Type Delete Successfully!",
-  //     });
-  //     setOpenModal(false);
-  //     setIdTypeInfo({
-  //       tittle: "",
-  //       countryId: "",
-  //     });
-  //   } else {
-  //     messageApi.open({
-  //       type: "error",
-  //       content: result?.message || "Something went wrong!",
-  //     });
-  //   }
-  // };
 
   const activeStatusChangeHandelar = async (data) => {
     const newData = { ...data };
@@ -251,38 +188,8 @@ const ManageWillsPage = () => {
           <Card className="mt-10 min-h-[80vh]">
             <div>
               <Row gutter={1}>
-                <Col span={8}>
-                  {/* <SearchSelect
-                    value={countryId}
-                    loading={countryLoading}
-                    options={countriesOptions}
-                    handleChange={(e) => setCountryId(e)}
-                  /> */}
-                </Col>
-                <Col span={12} className="flex items-center">
-                  {/* <div className="flex items-center font-primary text-lg">
-                    <Select
-                      className={`focus:border-primary h-[50px] w-[250px] ml-3`}
-                      onChange={(e) => setSortOrder(e)}
-                      value={sortOrder}
-                      size={"large"}
-                      options={[
-                        {
-                          label: "Low to High",
-                          value: "asc",
-                        },
-                        {
-                          label: "High to Low",
-                          value: "desc",
-                        },
-                      ]}
-                    />
-                  </div> */}
-                </Col>
+                <Col span={20}></Col>
                 <Col span={4}>
-                  {/* <Link href={"/admin/manage-wills/add-new"}>
-                    <AddButton text={"Add New"} />
-                  </Link> */}
                   <Link href={"/admin/manage-wills/create"}>
                     <AddButton text={"Create New Wills"} />
                   </Link>

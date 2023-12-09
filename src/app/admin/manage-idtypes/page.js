@@ -102,8 +102,8 @@ const ManageIdTypePage = () => {
   };
 
   const deleteHandelar = async () => {
-    const result = await deleteIdType(idTypeInfo?.key).unwrap();
-    if (result?.data?.success) {
+    try {
+      const result = await deleteIdType(idTypeInfo?.key).unwrap();
       messageApi.open({
         type: "success",
         content: result?.data?.message || "Id Type Delete Successfully!",
@@ -113,10 +113,10 @@ const ManageIdTypePage = () => {
         tittle: "",
         countryId: "",
       });
-    } else {
+    } catch (error) {
       messageApi.open({
         type: "error",
-        content: result?.message || "Something went wrong!",
+        content: error?.data || "Something went wrong!",
       });
     }
   };

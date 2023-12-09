@@ -1,25 +1,20 @@
-import { useGetStepFildsQuery } from "@/redux/features/stepFild/stepFildApi";
 import { Button, Divider, Empty } from "antd";
 import React, { useState } from "react";
 
 import Form from "@/components/forms/From";
-import FormHeading from "@/components/ui/will/FormHeading";
 import { generateSteperFormValidator } from "@/schemas/formSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
-import PersonalDetailsForm from "./PersonalDetailsForm";
 import { EditFilled } from "@ant-design/icons";
-import {
-  useGetCountryFormStepsQuery,
-  useGetWillStepFildsQuery,
-} from "@/redux/features/formStep/formStepApi";
-import MainExecutorForm from "./MainExecutorForm";
-import AlternativeExecutorForm from "./AlternativeExecutorForm";
-import BeneficiariesForm from "./BeneficiariesForm";
+import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
 import { ENUM_FORM_STEPS } from "@/constans/steps";
-import AssetAllocationForm from "./AssetAllocationForm";
-import OtherBeneficiariesForm from "./OtherBeneficiariesForm";
+import PersonalDetailsForm from "../step/PersonalDetailsForm";
+import MainExecutorForm from "../step/MainExecutorForm";
+import BeneficiariesForm from "../step/BeneficiariesForm";
+import AssetAllocationForm from "../step/AssetAllocationForm";
+import AlternativeExecutorForm from "../step/AlternativeExecutorForm";
+import InstructionsForm from "../step/InstructionsForm";
 
-const DisplayAddedStrpFilds = ({
+const DisplayAddedFields = ({
   data,
   countriesOptions,
   idTypeOptions,
@@ -100,17 +95,9 @@ const DisplayAddedStrpFilds = ({
                   setStepFields={setStepFields}
                 />
               </div>
-            ) : findStep?.value === ENUM_FORM_STEPS.SECEND_BENEFICIARIES ||
-              ENUM_FORM_STEPS.THIRD_BENEFICIARIES ||
-              ENUM_FORM_STEPS.FOURTH_BENEFICIARIES ||
-              ENUM_FORM_STEPS.FIFTH_BENEFICIARIES ||
-              ENUM_FORM_STEPS.SIXTH_BENEFICIARIES ||
-              ENUM_FORM_STEPS.SEVENTH_BENEFICIARIES ||
-              ENUM_FORM_STEPS.EIGHTH_BENEFICIARIES ||
-              ENUM_FORM_STEPS.NINETH_BENEFICIARIES ||
-              ENUM_FORM_STEPS.THIRD_BENEFICIARIES ? (
+            ) : findStep?.value === ENUM_FORM_STEPS.ALTERNATIVE_EXECUTORS ? (
               <div>
-                <OtherBeneficiariesForm
+                <AlternativeExecutorForm
                   isEditable={isEditable}
                   countriesOptions={countriesOptions}
                   formInputFields={stepFields}
@@ -118,9 +105,9 @@ const DisplayAddedStrpFilds = ({
                   setStepFields={setStepFields}
                 />
               </div>
-            ) : findStep?.value === ENUM_FORM_STEPS.ALTERNATIVE_EXECUTORS ? (
+            ) : findStep?.value === ENUM_FORM_STEPS.INSTRUCTIONS ? (
               <div>
-                <AlternativeExecutorForm
+                <InstructionsForm
                   isEditable={isEditable}
                   countriesOptions={countriesOptions}
                   formInputFields={stepFields}
@@ -132,7 +119,15 @@ const DisplayAddedStrpFilds = ({
               <div>no data</div>
             )}
 
-            <Button htmlType="submit">Submit to error Message</Button>
+            <div className="flex justify-end">
+              <Button
+                className="bg-primary font-primary text-white"
+                size="large"
+                htmlType="submit"
+              >
+                Click to show error Message
+              </Button>
+            </div>
           </Form>
         </div>
       ) : (
@@ -144,4 +139,4 @@ const DisplayAddedStrpFilds = ({
   );
 };
 
-export default DisplayAddedStrpFilds;
+export default DisplayAddedFields;

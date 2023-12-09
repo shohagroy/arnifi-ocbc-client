@@ -1,11 +1,11 @@
 import FormCheckbox from "@/components/forms/FormCheckbox";
 import FormInput from "@/components/forms/FormInput";
 import FormSelectField from "@/components/forms/FormSelectField";
-import { formInputTypeOptions } from "@/constans/steps";
+import { stepFieldsTypesOptions } from "@/constans/stepFields";
 import { Button, Col, Divider, Row } from "antd";
 import React from "react";
 
-const FormFildAdd = ({ value, setValue }) => {
+const FormFieldAdd = ({ value, setValue }) => {
   return (
     <div>
       <div className="my-4 font-primary text-lg">
@@ -19,8 +19,8 @@ const FormFildAdd = ({ value, setValue }) => {
             required
             handleChange={(e) => setValue({ ...value, type: e })}
             name={"type"}
-            placeholder="select find type"
-            options={formInputTypeOptions || []}
+            placeholder="select field type"
+            options={stepFieldsTypesOptions || []}
           />
         </Col>
 
@@ -29,7 +29,7 @@ const FormFildAdd = ({ value, setValue }) => {
             name={"label"}
             handleChange={(e) => console.log(e)}
             required
-            placeholder="enter fild lable tittle"
+            placeholder="enter field lable tittle"
           />
         </Col>
 
@@ -37,7 +37,7 @@ const FormFildAdd = ({ value, setValue }) => {
           <FormInput
             name={"placeholder"}
             required
-            placeholder="enter fild placeholder"
+            placeholder="enter field placeholder"
           />
         </Col>
 
@@ -45,7 +45,7 @@ const FormFildAdd = ({ value, setValue }) => {
           <FormInput
             name={"errorText"}
             required
-            placeholder="enter fild error message"
+            placeholder="enter field error message"
           />
         </Col>
 
@@ -67,4 +67,4 @@ const FormFildAdd = ({ value, setValue }) => {
   );
 };
 
-export default FormFildAdd;
+export default FormFieldAdd;

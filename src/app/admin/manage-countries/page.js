@@ -3,7 +3,6 @@
 import AdminBreadCrumb from "@/components/admin/AdminBreadCrumb";
 import DisplayTable from "@/components/table/DisplayTable";
 import { Button, Card, Col, Row, Select, message } from "antd";
-import Link from "next/link";
 import React, { useState } from "react";
 import { EditFilled, DeleteFilled } from "@ant-design/icons";
 import { useDebounced } from "@/redux/hooks/useDebounced";
@@ -83,8 +82,8 @@ const ManageCountryPage = () => {
   };
 
   const deleteHandelar = async () => {
-    const result = await deleteCountry(countryInfo?.key).unwrap();
-    if (result?.data?.success) {
+    try {
+      const result = await deleteCountry(countryInfo?.key).unwrap();
       messageApi.open({
         type: "success",
         content: result?.data?.message || "Country Delete Successfully!",
@@ -92,13 +91,12 @@ const ManageCountryPage = () => {
       setOpenModal(false);
       setCountryInfo({
         name: "",
-        postalCode: "",
         countryCode: "",
       });
-    } else {
+    } catch (error) {
       messageApi.open({
         type: "error",
-        content: result?.message || "Something went wrong!",
+        content: error?.data || "Something went wrong!",
       });
     }
   };
@@ -279,8 +277,6 @@ const ManageCountryPage = () => {
         setData={setCountryInfo}
         modalText={modalText}
         setModalText={setModalText}
-        // openModal={openModal}
-        // setOpenModal={setOpenModal}
       />
 
       <DeleteInfoModal

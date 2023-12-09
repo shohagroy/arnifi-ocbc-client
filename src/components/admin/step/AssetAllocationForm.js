@@ -1,29 +1,22 @@
 "use client";
 
-import { Button, Card, Checkbox, message } from "antd";
+import { Button, Card, message } from "antd";
 import React, { useState } from "react";
-// import FormInput from "../forms/FormInput";
-// import FormSelectField from "../forms/FormSelectField";
-import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import FormInput from "@/components/forms/FormInput";
 import FormSelectField from "@/components/forms/FormSelectField";
-import FormHeading from "./FormHeading";
-import FormText from "./FormText";
-import FormModalText from "./FormModalText";
-import PersonalInfo from "./PersonalInfo";
 import { useDeleteStepFildMutation } from "@/redux/features/stepFild/stepFildApi";
-import FormAddressField from "@/components/stepperForm/FormAddressField";
 import UpdateDeleteBtn from "@/components/admin/formSections/UpdateDeleteBtn";
+import FormHeading from "@/components/ui/will/FormHeading";
+import FormText from "@/components/ui/will/FormText";
+import FormModalText from "@/components/ui/will/FormModalText";
 
 const AssetAllocationForm = ({
   formInputFields,
-  countriesOptions,
   idTypeOptions,
   isEditable,
   setStepFields,
 }) => {
-  const [address, setAddress] = useState(false);
-
   const [messageApi, contextHolder] = message.useMessage();
 
   const [deleteStepFild, { isLoading: deleteLoading }] =
@@ -53,6 +46,7 @@ const AssetAllocationForm = ({
 
   return (
     <div>
+      {contextHolder}
       <div>
         <div className="p-2">
           <FormHeading

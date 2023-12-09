@@ -1,16 +1,12 @@
-import UpdateDeleteBtn from "@/components/admin/formSections/UpdateDeleteBtn";
-import FormAddressField from "@/components/forms/FormAddressField";
-import FormGenderRadio from "@/components/forms/FormGenderRadio";
-import FormInput from "@/components/forms/FormInput";
-import FormRadio from "@/components/forms/FormRadio";
-import FormSelectField from "@/components/forms/FormSelectField";
 import { useDeleteStepFildMutation } from "@/redux/features/stepFild/stepFildApi";
 import { message } from "antd";
 import React from "react";
-import PersonalInfo from "./PersonalInfo";
+import AlternativeExecutorForm from "./AlternativeExecutorForm";
 import FormHeading from "@/components/ui/will/FormHeading";
+import FormText from "@/components/ui/will/FormText";
+import PersonalInfo from "../formSections/PersonalInfo";
 
-const PersonalDetailsForm = ({
+const MainExecutorForm = ({
   formInputFields,
   countriesOptions,
   idTypeOptions,
@@ -41,7 +37,21 @@ const PersonalDetailsForm = ({
   return (
     <div>
       {contextHolder}
-      <FormHeading heading={"First, we need some details from you"} />
+
+      <div className="">
+        <FormHeading heading={"Who will be the Executor(s) of your Will?"} />
+        <FormText
+          text={
+            "The Main Executor is the person appointed to carry out the wishes of this Will."
+          }
+        />
+        <FormText
+          text={`An Executor must be over the age of 21, not be a bankrupt and is of
+            sound mind to carry out his or her duties under the Will upon the
+            Testator’s demise. An Executor can also be a Beneficiary under a
+            Will.`}
+        />
+      </div>
 
       <PersonalInfo
         isEditable={isEditable}
@@ -52,8 +62,20 @@ const PersonalDetailsForm = ({
         deleteModalOkHandelar={deleteModalOkHandelar}
         loading={deleteLoading}
       />
+
+      <div>
+        <AlternativeExecutorForm
+          isEditable={isEditable}
+          data={formInputFields}
+          countriesOptions={countriesOptions}
+          idTypeOptions={idTypeOptions}
+          setStepFields={setStepFields}
+          deleteModalOkHandelar={deleteModalOkHandelar}
+          loading={deleteLoading}
+        />
+      </div>
     </div>
   );
 };
 
-export default PersonalDetailsForm;
+export default MainExecutorForm;

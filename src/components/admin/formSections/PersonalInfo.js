@@ -39,8 +39,8 @@ const PersonalInfo = ({
                   label={fullNameFields?.label}
                   name={fullNameFields?.name}
                   placeholder={fullNameFields?.placeholder}
-                  type={fullNameFields?.type}
                   required={fullNameFields?.isRequired}
+                  type={fullNameFields?.type}
                 />
               </div>
             )}

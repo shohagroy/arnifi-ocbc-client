@@ -1,18 +1,15 @@
 import { useDeleteStepFildMutation } from "@/redux/features/stepFild/stepFildApi";
 import { message } from "antd";
 import React from "react";
-import PersonalInfo from "./PersonalInfo";
-import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import FormHeading from "./FormHeading";
-import FormText from "./FormText";
-// import FormLinkText from "./FormModalText";
+import FormHeading from "@/components/ui/will/FormHeading";
+import PersonalInfo from "../formSections/PersonalInfo";
 
-const AlternativeExecutorForm = ({
+const PersonalDetailsForm = ({
   formInputFields,
   countriesOptions,
   idTypeOptions,
   isEditable,
-  setStepFild,
+  setStepFields,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -38,21 +35,14 @@ const AlternativeExecutorForm = ({
   return (
     <div>
       {contextHolder}
-
-      <div className="">
-        <FormText
-          text={
-            "The execution power will be passed on to the Alternative Executor if circumstances cause the main Executor to be unable to execute the Will."
-          }
-        />
-      </div>
+      <FormHeading heading={"First, we need some details from you"} />
 
       <PersonalInfo
         isEditable={isEditable}
         data={formInputFields}
         countriesOptions={countriesOptions}
         idTypeOptions={idTypeOptions}
-        setStepFild={setStepFild}
+        setStepFields={setStepFields}
         deleteModalOkHandelar={deleteModalOkHandelar}
         loading={deleteLoading}
       />
@@ -60,4 +50,4 @@ const AlternativeExecutorForm = ({
   );
 };
 
-export default AlternativeExecutorForm;
+export default PersonalDetailsForm;

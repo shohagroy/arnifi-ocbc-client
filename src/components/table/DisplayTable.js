@@ -20,6 +20,7 @@ const DisplayTable = ({
         pageSizeOptions: [5, 8, 10, 20],
         showSizeChanger: showSizeChanger,
         onChange: onPaginationChange,
+        showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
       }
     : false;
 
