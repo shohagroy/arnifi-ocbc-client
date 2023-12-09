@@ -7,6 +7,7 @@ import Link from "next/link";
 import { generateFormValidator } from "@/schemas/formSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
+import { useSelector } from "react-redux";
 
 const StepperForm = ({
   steps,
@@ -31,6 +32,8 @@ const StepperForm = ({
   useEffect(() => {
     setToLocalStorage("step", JSON.stringify({ step: current }));
   }, [current]);
+
+  const { validator } = useSelector((state) => state.resolver);
 
   const prev = () => {
     if (current === 3 && assetStep > 1) {
@@ -67,7 +70,7 @@ const StepperForm = ({
         defaultValues={savedValues}
         persistKey={persistKey}
         submitHandler={onSubmit}
-        // resolver={yupResolver(resolver)}
+        resolver={validator && yupResolver(validator)}
       >
         <Steps current={current} items={items} />
         <div>{steps[current].content}</div>

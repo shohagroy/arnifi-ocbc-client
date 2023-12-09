@@ -11,14 +11,20 @@ import FormAddressField from "./FormAddressField";
 import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
 import { DeleteOutlined } from "@ant-design/icons";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
+import { setFormValidator } from "@/redux/features/formResolver/formResolverSlice";
+import { generateFormsResolver } from "@/schemas/formSchema";
+import { useDispatch } from "react-redux";
 
 const AlternativeExecutors = ({
   idTypeOptions,
   countriesOptions,
   countryId,
+  mainExecutor,
 }) => {
   const [savedValues, setSavedValues] = useState({});
   const [show, setShow] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setSavedValues(JSON.parse(getFromLocalStorage("form-data")) || {});
@@ -29,11 +35,23 @@ const AlternativeExecutors = ({
   const { data: findStepsData, isLoading: willLoading } =
     useGetWillStepFildsQuery(`/${stepValue}/${countryId}`);
 
+  const findedStep = findStepsData?.data?.data;
+  const stepFields = findedStep?.stepFilds || [];
+
+  useEffect(() => {
+    if (show) {
+      const resolver = generateFormsResolver(findedStep, mainExecutor);
+      dispatch(setFormValidator(resolver));
+    } else {
+      const resolver = generateFormsResolver(mainExecutor);
+      dispatch(setFormValidator(resolver));
+    }
+  }, [dispatch, show, findedStep, mainExecutor]);
+
   if (willLoading) {
     return <CardFormLoader />;
   }
 
-  const stepFields = findStepsData?.data?.data?.stepFilds || [];
   const addressFild = stepFields?.find((item) => item.type === "address");
 
   const alternativeExecutorsAddHandelar = () => {

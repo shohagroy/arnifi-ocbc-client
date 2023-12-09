@@ -1,30 +1,43 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import FormInput from "../forms/FormInput";
 import FormSelectField from "../forms/FormSelectField";
-import { Button, Card, Checkbox } from "antd";
-import { QuestionCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
+import { Card } from "antd";
 import { ENUM_FORM_STEPS } from "@/constans/steps";
 import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
-import FormAddressField from "./FormAddressField";
+// import FormAddressField from "./FormAddressField";
 import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
 import FormModalText from "../ui/will/FormModalText";
 import AlternativeExecutors from "./AlternativeExecutors";
 import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
-import CardLoader from "../skeleton-loader/CardLoader";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
+import { useDispatch } from "react-redux";
+import { setFormValidator } from "@/redux/features/formResolver/formResolverSlice";
+import { generateFormsResolver } from "@/schemas/formSchema";
+import FormAddressField from "../forms/FormAddressField";
 
 const Executors = ({ country }) => {
   const { idTypes, id } = country || {};
+
+  const dispatch = useDispatch();
+
   const stepValue = ENUM_FORM_STEPS.EXECUTORS;
 
   const { data: findStepsData, isLoading: willLoading } =
     useGetWillStepFildsQuery(`/${stepValue}/${id}`);
 
-  const stepFields = findStepsData?.data?.data?.stepFilds || [];
+  const findedStep = findStepsData?.data?.data;
+  const stepFields = findedStep?.stepFilds || [];
+
+  // const resolver = generateFormsResolver(findedStep);
+
+  // useEffect(() => {
+  //   if (resolver) {
+  //     dispatch(setFormValidator(resolver));
+  //   }
+  // }, [resolver, dispatch]);
 
   const idTypeOptions = idTypes?.map((item) => {
     return {
@@ -102,7 +115,7 @@ const Executors = ({ country }) => {
           {stepFields?.map((data, i) => {
             const { type, placeholder, name, label, required } = data || {};
             return type === "text" && name === "fullName" ? (
-              <div key={i} className="col-span-2 grid grid-cols-2">
+              <div key={i} className="md:col-span-2 md:grid md:grid-cols-2">
                 <div>
                   <FormInput
                     label={label}
@@ -157,7 +170,7 @@ const Executors = ({ country }) => {
           countryId={id}
           idTypeOptions={idTypeOptions}
           countriesOptions={countryOptions}
-          stepFields={stepFields}
+          mainExecutor={findedStep}
         />
       </div>
 

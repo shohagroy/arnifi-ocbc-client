@@ -35,11 +35,9 @@ const DisplayAddedFields = ({
   };
 
   const findedStep = steps?.data?.data;
-
   const stepFields = findedStep?.stepFilds || [];
 
   const resolver = generateFormsResolver(findedStep);
-  const validator = generateSteperFormValidator(stepFields);
 
   return (
     <div>

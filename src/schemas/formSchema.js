@@ -61,27 +61,6 @@ export const formInputFildSchema = yup.object().shape({
   errorText: yup.string().required("Input placeholder fild is required."),
 });
 
-// export const generateFormValidatorUpdated = (formData) => {
-//   const formErrorSchema = {};
-
-//   Object.keys(formData).map((mainKey) => {
-//     // console.log(formData[mainKey]?.value);
-//     const fieldValidator = {};
-
-//     Object?.keys(formData[mainKey]?.value)?.map((fieldLey) => {
-//       // console.log(fieldLey);
-//       fieldValidator[fieldLey] = yup
-//         .string()
-//         .required("This Filed is Required.");
-//     });
-
-//     console.log(mainKey);
-//     formErrorSchema[mainKey] = yup.object().shape(fieldValidator);
-//   });
-
-//   return yup.object().shape(formErrorSchema);
-// };
-
 export const generateFormValidatorUpdated = (formData) => {
   const formErrorSchema = {};
 
@@ -107,12 +86,12 @@ export const generateFormValidatorUpdated = (formData) => {
   return yup.object().shape(formErrorSchema);
 };
 
-export const generateFormsResolver = (formData) => {
+export const generateFormsResolver = (formData, prevData) => {
   const formErrorSchema = {};
-
-  console.log(formData);
+  const prevErrorSchema = {};
 
   const formStep = formData?.stepFilds;
+  const prevStep = prevData?.stepFilds;
 
   formStep?.forEach((item) => {
     if (item?.type !== "address" && item?.isRequired) {
@@ -128,9 +107,25 @@ export const generateFormsResolver = (formData) => {
     }
   });
 
+  prevStep?.forEach((item) => {
+    if (item?.type !== "address" && item?.isRequired) {
+      prevErrorSchema[item?.name] = yup.string().required(item?.errorText);
+    }
+
+    if (item?.type === "address") {
+      prevErrorSchema["address"] = yup.object().shape({
+        line1: yup.string().required("The Address field is required."),
+        country: yup.string().required("Country field is required."),
+        postalCode: yup.string().required("Postal Code field is required."),
+      });
+    }
+  });
+
   const stepValidateSchema = yup.object().shape(formErrorSchema);
+  const prevValidateSchema = yup.object().shape(prevErrorSchema);
 
   return yup.object().shape({
     [formData?.value]: stepValidateSchema,
+    [prevData?.value]: prevValidateSchema,
   });
 };
