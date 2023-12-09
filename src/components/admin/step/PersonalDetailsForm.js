@@ -5,6 +5,7 @@ import FormHeading from "@/components/ui/will/FormHeading";
 import PersonalInfo from "../formSections/PersonalInfo";
 
 const PersonalDetailsForm = ({
+  stepValue,
   formInputFields,
   countriesOptions,
   idTypeOptions,
@@ -38,6 +39,7 @@ const PersonalDetailsForm = ({
       <FormHeading heading={"First, we need some details from you"} />
 
       <PersonalInfo
+        stepValue={stepValue}
         isEditable={isEditable}
         data={formInputFields}
         countriesOptions={countriesOptions}
@@ -46,6 +48,8 @@ const PersonalDetailsForm = ({
         deleteModalOkHandelar={deleteModalOkHandelar}
         loading={deleteLoading}
       />
+
+      <hr className="border-[#EEEEEE] col-span-2 my-10" />
     </div>
   );
 };

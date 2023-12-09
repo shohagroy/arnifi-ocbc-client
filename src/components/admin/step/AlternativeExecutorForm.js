@@ -9,6 +9,7 @@ const AlternativeExecutorForm = ({
   countriesOptions,
   idTypeOptions,
   isEditable,
+  stepValue,
   setStepFild,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -45,6 +46,7 @@ const AlternativeExecutorForm = ({
       </div>
 
       <PersonalInfo
+        stepValue={stepValue}
         isEditable={isEditable}
         data={formInputFields}
         countriesOptions={countriesOptions}

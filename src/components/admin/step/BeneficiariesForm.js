@@ -12,6 +12,7 @@ const BeneficiariesForm = ({
   idTypeOptions,
   isEditable,
   setStepFields,
+  stepValue,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -53,6 +54,7 @@ const BeneficiariesForm = ({
       </div>
 
       <PersonalInfo
+        stepValue={stepValue}
         isEditable={isEditable}
         data={formInputFields}
         countriesOptions={countriesOptions}

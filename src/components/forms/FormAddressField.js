@@ -10,6 +10,7 @@ const FormAddressField = ({
   deleteModalOkHandelar,
   loading,
   setStepFild,
+  stepValue,
 }) => {
   return (
     <div className="my-10">
@@ -31,7 +32,7 @@ const FormAddressField = ({
               required
               type={"text"}
               placeholder={"address line 1"}
-              name={"address.line1"}
+              name={`${stepValue}.address.line1`}
             />
           </div>
           <div></div>
@@ -41,13 +42,13 @@ const FormAddressField = ({
                 <FormInput
                   type={"text"}
                   placeholder={"address line 2"}
-                  name={"address.line2"}
+                  name={`${stepValue}.address.line2`}
                 />
               </div>
               <div>
                 <FormSelectField
                   required={true}
-                  name={"address.country"}
+                  name={`${stepValue}.address.country`}
                   options={countriesOptions}
                   showSearch={true}
                 />
@@ -57,7 +58,7 @@ const FormAddressField = ({
                   required
                   type={"number"}
                   placeholder={"postal code"}
-                  name={"address.postalCode"}
+                  name={`${stepValue}.address.postalCode`}
                 />
               </div>
             </div>

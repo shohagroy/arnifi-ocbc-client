@@ -3,6 +3,7 @@ import FormAddressField from "@/components/forms/FormAddressField";
 import FormGenderRadio from "@/components/forms/FormGenderRadio";
 import FormInput from "@/components/forms/FormInput";
 import FormSelectField from "@/components/forms/FormSelectField";
+import { ENUM_FORM_STEPS } from "@/constans/steps";
 import { Card } from "antd";
 import React from "react";
 
@@ -14,11 +15,20 @@ const PersonalInfo = ({
   setStepFields,
   deleteModalOkHandelar,
   loading,
+  stepValue,
 }) => {
   const addressType = data?.find((item) => item.type === "address");
   const fullNameFields = data?.find((item) => item.name === "fullName");
   const gender = data?.find((item) => item.name === "gender");
   const relation = data?.find((item) => item.name === "relation");
+
+  const generateFullNameLabel = (name) => {
+    if (stepValue === ENUM_FORM_STEPS.BENEFICIARIES) {
+      return `Full name of first ${name}.`;
+    } else {
+      return name;
+    }
+  };
 
   return (
     <Card>
@@ -36,8 +46,8 @@ const PersonalInfo = ({
                   />
                 )}
                 <FormInput
-                  label={fullNameFields?.label}
-                  name={fullNameFields?.name}
+                  label={generateFullNameLabel(fullNameFields?.label)}
+                  name={`${stepValue}.${fullNameFields?.name}`}
                   placeholder={fullNameFields?.placeholder}
                   required={fullNameFields?.isRequired}
                   type={fullNameFields?.type}
@@ -59,7 +69,7 @@ const PersonalInfo = ({
                 )}
                 <FormGenderRadio
                   label={gender?.label}
-                  name={gender?.name}
+                  name={`${stepValue}.${gender?.name}`}
                   required={gender?.isRequired}
                 />
               </div>
@@ -77,7 +87,7 @@ const PersonalInfo = ({
                 )}
                 <FormInput
                   label={relation?.label}
-                  name={relation?.name}
+                  name={`${stepValue}.${relation?.name}`}
                   placeholder={relation?.placeholder}
                   type={relation?.type}
                   required={relation?.isRequired}
@@ -101,7 +111,7 @@ const PersonalInfo = ({
               )}
               <FormInput
                 label={label}
-                name={name}
+                name={`${stepValue}.${name}`}
                 placeholder={placeholder}
                 type={type}
                 required={isRequired}
@@ -119,7 +129,7 @@ const PersonalInfo = ({
               )}
               <FormInput
                 label={label}
-                name={name}
+                name={`${stepValue}.${name}`}
                 placeholder={placeholder}
                 type={type}
                 required={isRequired}
@@ -139,7 +149,7 @@ const PersonalInfo = ({
                 )}
                 <FormSelectField
                   label={label}
-                  name={name}
+                  name={`${stepValue}.${name}`}
                   showSearch={true}
                   required={isRequired}
                   options={
@@ -155,6 +165,7 @@ const PersonalInfo = ({
           {addressType && (
             <div>
               <FormAddressField
+                stepValue={stepValue}
                 data={addressType}
                 setStepFields={setStepFields}
                 isEditable={isEditable}

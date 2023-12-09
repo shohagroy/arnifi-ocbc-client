@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Card, message } from "antd";
-import React, { useState } from "react";
+import React from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import FormInput from "@/components/forms/FormInput";
 import FormSelectField from "@/components/forms/FormSelectField";
@@ -16,6 +16,7 @@ const AssetAllocationForm = ({
   idTypeOptions,
   isEditable,
   setStepFields,
+  stepValue,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -88,7 +89,8 @@ const AssetAllocationForm = ({
                       required
                       type={"text"}
                       placeholder={"address line 1"}
-                      name={"address.line1"}
+                      // name={"address.line1"}
+                      name={`${stepValue}.address.line1`}
                     />
                   </div>
 
@@ -97,14 +99,15 @@ const AssetAllocationForm = ({
                       required
                       type={"text"}
                       placeholder={"address line 2"}
-                      name={"address.line2"}
+                      // name={"address.line2"}
+                      name={`${stepValue}.address.line2`}
                     />
                   </div>
 
                   <div>
                     <FormSelectField
-                      name={"address.country"}
                       placeholder="select country"
+                      name={`${stepValue}.address.country`}
                       required
                       options={[]}
                       type={"text"}
@@ -116,7 +119,7 @@ const AssetAllocationForm = ({
                       required
                       type={"text"}
                       placeholder={"postal code"}
-                      name={"address.postalCode"}
+                      name={`${stepValue}.address.postalCode`}
                     />
                   </div>
                 </div>
@@ -135,7 +138,7 @@ const AssetAllocationForm = ({
                 )}
                 <FormSelectField
                   label={beneficiaryType?.label}
-                  name={beneficiaryType?.name}
+                  name={`${stepValue}.${beneficiaryType?.name}`}
                   required
                   options={idTypeOptions}
                   type={beneficiaryType?.type}
@@ -191,7 +194,7 @@ const AssetAllocationForm = ({
                     required
                     type={sumMoneyType?.type}
                     placeholder={sumMoneyType?.placeholder}
-                    name={sumMoneyType?.name}
+                    name={`${stepValue}.${sumMoneyType?.name}`}
                   />
                 </div>
               )}
@@ -210,10 +213,10 @@ const AssetAllocationForm = ({
 
                 <FormSelectField
                   label={beneficiaryType?.label}
-                  name={beneficiaryType?.name}
                   required
                   options={idTypeOptions}
                   type={beneficiaryType?.type}
+                  name={`${stepValue}.${beneficiaryType?.name}`}
                 />
               </div>
             )}

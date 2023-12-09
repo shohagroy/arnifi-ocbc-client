@@ -1,7 +1,7 @@
 import { useDeleteStepFildMutation } from "@/redux/features/stepField/stepFieldApi";
 import { message } from "antd";
 import React from "react";
-import AlternativeExecutorForm from "./AlternativeExecutorForm";
+// import AlternativeExecutorForm from "./AlternativeExecutorForm";
 import FormHeading from "@/components/ui/will/FormHeading";
 import FormText from "@/components/ui/will/FormText";
 import PersonalInfo from "../formSections/PersonalInfo";
@@ -12,6 +12,7 @@ const MainExecutorForm = ({
   idTypeOptions,
   isEditable,
   setStepFields,
+  stepValue,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -54,6 +55,7 @@ const MainExecutorForm = ({
       </div>
 
       <PersonalInfo
+        stepValue={stepValue}
         isEditable={isEditable}
         data={formInputFields}
         countriesOptions={countriesOptions}
@@ -63,7 +65,7 @@ const MainExecutorForm = ({
         loading={deleteLoading}
       />
 
-      <div>
+      {/* <div>
         <AlternativeExecutorForm
           isEditable={isEditable}
           data={formInputFields}
@@ -73,7 +75,9 @@ const MainExecutorForm = ({
           deleteModalOkHandelar={deleteModalOkHandelar}
           loading={deleteLoading}
         />
-      </div>
+      </div> */}
+
+      <hr className="border-[#EEEEEE] col-span-2 my-10" />
     </div>
   );
 };

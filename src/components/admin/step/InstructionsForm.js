@@ -10,7 +10,12 @@ import FormText from "@/components/ui/will/FormText";
 import FormTextarea from "@/components/forms/FormTextarea";
 import FormInput from "@/components/forms/FormInput";
 
-const InstructionsForm = ({ formInputFields, isEditable, setStepFields }) => {
+const InstructionsForm = ({
+  formInputFields,
+  isEditable,
+  setStepFields,
+  stepValue,
+}) => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [deleteStepFild, { isLoading: deleteLoading }] =
@@ -73,7 +78,7 @@ const InstructionsForm = ({ formInputFields, isEditable, setStepFields }) => {
             )}
             <FormSelectField
               label={religion?.label}
-              name={religion?.name}
+              name={`${stepValue}.${religion?.name}`}
               required
               options={[]}
               type={religion?.type}
@@ -91,7 +96,7 @@ const InstructionsForm = ({ formInputFields, isEditable, setStepFields }) => {
             )}
             <FormSelectField
               label={instructions?.label}
-              name={instructions?.name}
+              name={`${stepValue}.${instructions?.name}`}
               required
               options={[]}
               type={instructions?.type}
@@ -126,7 +131,7 @@ const InstructionsForm = ({ formInputFields, isEditable, setStepFields }) => {
               )}
               <FormInput
                 label={asset?.label}
-                name={asset?.name}
+                name={`${stepValue}.${asset?.name}`}
                 placeholder={asset?.placeholder}
                 required={asset?.isRequired}
                 type={asset?.type}
@@ -144,7 +149,7 @@ const InstructionsForm = ({ formInputFields, isEditable, setStepFields }) => {
               )}
               <FormSelectField
                 label={category?.label}
-                name={category?.name}
+                name={`${stepValue}.${category?.name}`}
                 placeholder={category?.placeholder}
                 required={category?.isRequired}
                 options={[]}
@@ -163,7 +168,7 @@ const InstructionsForm = ({ formInputFields, isEditable, setStepFields }) => {
               )}
               <FormInput
                 label={estimatedValue?.label}
-                name={estimatedValue?.name}
+                name={`${stepValue}.${estimatedValue?.name}`}
                 placeholder={estimatedValue?.placeholder}
                 required={estimatedValue?.isRequired}
                 type={estimatedValue?.type}
@@ -181,7 +186,7 @@ const InstructionsForm = ({ formInputFields, isEditable, setStepFields }) => {
               )}
               <FormTextarea
                 label={description?.label}
-                name={description?.name}
+                name={`${stepValue}.${description?.name}`}
                 placeholder={estimatedValue?.placeholder}
                 required={estimatedValue?.isRequired}
                 type={description?.type}
