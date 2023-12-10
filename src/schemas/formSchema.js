@@ -129,3 +129,43 @@ export const generateFormsResolver = (formData, prevData) => {
     [prevData?.value]: prevValidateSchema,
   });
 };
+
+export const generateFormsArrayResolver = (formData) => {
+  const formErrorSchema = {};
+  const value = formData?.value;
+  const stepFields = formData?.stepFilds;
+
+  stepFields?.forEach((item) => {
+    if (item?.type !== "address" && item?.isRequired) {
+      formErrorSchema[item?.name] = yup.string().required(item?.errorText);
+    }
+
+    if (item?.type === "address") {
+      formErrorSchema["address"] = yup.object().shape({
+        line1: yup.string().required("The Address field is required."),
+        country: yup.string().required("Country field is required."),
+        postalCode: yup.string().required("Postal Code field is required."),
+      });
+    }
+  });
+
+  return yup.object().shape({
+    [value]: yup.array().of(yup.object().shape(formErrorSchema)),
+  });
+};
+
+const data = {
+  beneficiaries: [
+    {
+      fullName: "this field is required.",
+      relationship: "this field is required.",
+      idType: "this field is required.",
+      idNumber: "this field is required.",
+      address: {
+        line1: "this field is required.",
+        country: "this field is required.",
+        countryCode: "this field is required.",
+      },
+    },
+  ],
+};

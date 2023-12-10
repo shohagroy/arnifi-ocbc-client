@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ENUM_FORM_STEPS } from "@/constans/steps";
 import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
@@ -11,15 +11,15 @@ import CardFormLoader from "../skeleton-loader/CardFormLoader";
 import { getFromLocalStorage } from "@/utils/local-storage";
 import { PlusOutlined } from "@ant-design/icons";
 import BeneficiaryCard from "./BeneficiaryCard";
+import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
+import { generateFormsArrayResolver } from "@/schemas/formSchema";
+import { setFormValidator } from "@/redux/features/formResolver/formResolverSlice";
+import { useDispatch } from "react-redux";
 
-const Beneficiaries = ({ country }) => {
-  const [beneficiariesCount, setBeneficiariesCount] = useState(
-    !!getFromLocalStorage("form-data")
-      ? Number(
-          JSON.parse(getFromLocalStorage("form-data"))?.beneficiaries?.length
-        ) || 1
-      : 1
-  );
+const Beneficiaries = ({ country, persistKey }) => {
+  const [beneficiariesCount, setBeneficiariesCount] = useState(0);
+
+  const dispatch = useDispatch();
 
   const { idTypes, id } = country || {};
   const stepValue = ENUM_FORM_STEPS.BENEFICIARIES;
@@ -27,25 +27,48 @@ const Beneficiaries = ({ country }) => {
   const { data: findStepsData, isLoading: willLoading } =
     useGetWillStepFildsQuery(`/${stepValue}/${id}`);
 
-  const stepFields = findStepsData?.data?.data?.stepFilds || [];
-
-  const idTypeOptions = idTypes?.map((item) => {
+  const { data, isLoading } = useGetAllCountryDataQuery();
+  const countryOptions = data?.data?.data?.map((country) => {
     return {
-      label: item?.tittle,
-      value: item?.id,
+      label: country?.name,
+      value: country?.id,
     };
   });
 
-  if (willLoading) {
-    return <CardFormLoader />;
-  }
-
+  const findedStep = findStepsData?.data?.data;
+  const stepFields = findedStep?.stepFilds || [];
   const addressFild = stepFields?.find((item) => item.type === "address");
 
   const beneficiariesData = [...Array(beneficiariesCount)]?.map((_) => {
     return {
       addressFild,
       stepFields,
+    };
+  });
+
+  useEffect(() => {
+    const beneficiaries = JSON.parse(
+      getFromLocalStorage(persistKey)
+    )?.beneficiaries;
+    const dataLength = beneficiaries.filter((item) => item?.fullName);
+
+    if (dataLength?.length) {
+      setBeneficiariesCount(dataLength?.length);
+    } else {
+      setBeneficiariesCount(1);
+    }
+    // const resolver = generateFormsArrayResolver(findedStep);
+    // dispatch(setFormValidator(resolver));
+  }, [dispatch, findedStep, stepValue, persistKey]);
+
+  if (willLoading) {
+    return <CardFormLoader />;
+  }
+
+  const idTypeOptions = idTypes?.map((item) => {
+    return {
+      label: item?.tittle,
+      value: item?.id,
     };
   });
 
@@ -87,6 +110,8 @@ const Beneficiaries = ({ country }) => {
           idTypeOptions={idTypeOptions}
           setBeneficiariesCount={setBeneficiariesCount}
           beneficiariesCount={beneficiariesCount}
+          countryOptions={countryOptions}
+          loading={isLoading}
         />
       ))}
 

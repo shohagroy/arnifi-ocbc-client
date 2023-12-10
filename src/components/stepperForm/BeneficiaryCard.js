@@ -1,11 +1,11 @@
 import React from "react";
-import FormAddressField from "./FormAddressField";
 import FormSelectField from "../forms/FormSelectField";
 import FormInput from "../forms/FormInput";
 import { Button, Card } from "antd";
 import { relationsOptions } from "@/constans/steps";
 import { DeleteOutlined } from "@ant-design/icons";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
+import FormAddressField from "../forms/FormAddressField";
 
 const BeneficiaryCard = ({
   data,
@@ -14,21 +14,28 @@ const BeneficiaryCard = ({
   idTypeOptions,
   setBeneficiariesCount,
   beneficiariesCount,
+  countryOptions,
+  loading,
 }) => {
   const { stepFields, addressFild } = data || {};
 
   const beneficiaryRemoveHandelar = () => {
     const savedValues = JSON.parse(getFromLocalStorage("form-data"));
-    const updatedLocations = savedValues?.beneficiaries?.filter(
+    const updatedBeneficiaries = savedValues?.beneficiaries?.filter(
       (_, i) => i !== index
     );
-    const updatedData = {
-      ...savedValues,
-      beneficiaries: updatedLocations,
-    };
 
-    setToLocalStorage("form-data", JSON.stringify(updatedData));
+    savedValues["beneficiaries"] = updatedBeneficiaries;
+    setToLocalStorage("form-data", JSON.stringify(savedValues));
     setBeneficiariesCount(beneficiariesCount - 1);
+
+    // const savedValues = JSON.parse(getFromLocalStorage("form-data"));
+    // const updatedLocations = savedValues?.beneficiaries?.filter(
+    //   (_, i) => i !== index
+    // );
+    // savedValues["beneficiaries"] = updatedLocations;
+    // setToLocalStorage("form-data", JSON.stringify(savedValues));
+    // setBeneficiariesCount(beneficiariesCount - 1);
   };
 
   const generateFullNameLabel = () => {
@@ -62,7 +69,7 @@ const BeneficiaryCard = ({
           {index + 1}
         </p>
         <div className="w-[150px] flex justify-end text-xl text-gray-500">
-          {index !== 0 && (
+          {index !== 10 && (
             <Button danger type="link" onClick={beneficiaryRemoveHandelar}>
               <DeleteOutlined />
             </Button>
@@ -89,7 +96,6 @@ const BeneficiaryCard = ({
                 <FormSelectField
                   label={label}
                   name={`${stepValue}.${index}.${name}`}
-                  //   showSearch={true}
                   required={required}
                   options={name === "idType" ? idTypeOptions : relationsOptions}
                 />
@@ -99,10 +105,14 @@ const BeneficiaryCard = ({
         })}
 
         {addressFild && (
-          <>
-            <hr className="border-[#EEEEEE] col-span-2 my-4" />
-            <FormAddressField value={`${stepValue}.${index}`} />
-          </>
+          <div className="col-span-full">
+            <FormAddressField
+              data={addressFild}
+              loading={loading}
+              countriesOptions={countryOptions}
+              stepValue={`${stepValue}.${index}`}
+            />
+          </div>
         )}
       </div>
     </Card>

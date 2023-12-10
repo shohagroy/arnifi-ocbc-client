@@ -47,7 +47,9 @@ const DetailsSubmitPage = () => {
     },
     {
       title: "Beneficiaries",
-      content: <Beneficiaries country={activeCountry} />,
+      content: (
+        <Beneficiaries country={activeCountry} persistKey={"form-data"} />
+      ),
     },
     {
       title: "Asset Allocation",
