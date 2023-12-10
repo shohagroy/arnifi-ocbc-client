@@ -17,7 +17,11 @@ import { setFormValidator } from "@/redux/features/formResolver/formResolverSlic
 import { useDispatch } from "react-redux";
 
 const Beneficiaries = ({ country, persistKey }) => {
-  const [beneficiariesCount, setBeneficiariesCount] = useState(0);
+  const [beneficiariesCount, setBeneficiariesCount] = useState(
+    !!getFromLocalStorage(persistKey)
+      ? JSON.parse(getFromLocalStorage(persistKey))?.beneficiaries?.length
+      : 1
+  );
 
   const dispatch = useDispatch();
 
@@ -47,19 +51,9 @@ const Beneficiaries = ({ country, persistKey }) => {
   });
 
   useEffect(() => {
-    const beneficiaries = JSON.parse(
-      getFromLocalStorage(persistKey)
-    )?.beneficiaries;
-    const dataLength = beneficiaries.filter((item) => item?.fullName);
-
-    if (dataLength?.length) {
-      setBeneficiariesCount(dataLength?.length);
-    } else {
-      setBeneficiariesCount(1);
-    }
-    // const resolver = generateFormsArrayResolver(findedStep);
-    // dispatch(setFormValidator(resolver));
-  }, [dispatch, findedStep, stepValue, persistKey]);
+    const resolver = generateFormsArrayResolver(findedStep);
+    dispatch(setFormValidator(resolver));
+  }, [dispatch, findedStep]);
 
   if (willLoading) {
     return <CardFormLoader />;

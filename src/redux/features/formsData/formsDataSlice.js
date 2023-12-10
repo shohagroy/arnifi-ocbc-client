@@ -2,7 +2,9 @@ import { getFromLocalStorage } from "@/utils/local-storage";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  formsData: JSON.parse(getFromLocalStorage("form-data")),
+  formsData: !!getFromLocalStorage("form-data")
+    ? JSON.parse(getFromLocalStorage("form-data"))
+    : {},
 };
 
 const formsDataSlice = createSlice({

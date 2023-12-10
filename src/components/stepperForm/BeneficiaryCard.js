@@ -4,8 +4,8 @@ import FormInput from "../forms/FormInput";
 import { Button, Card } from "antd";
 import { relationsOptions } from "@/constans/steps";
 import { DeleteOutlined } from "@ant-design/icons";
-import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import FormAddressField from "../forms/FormAddressField";
+import { useFieldArray } from "react-hook-form";
 
 const BeneficiaryCard = ({
   data,
@@ -17,25 +17,13 @@ const BeneficiaryCard = ({
   countryOptions,
   loading,
 }) => {
+  const { remove } = useFieldArray({ name: stepValue });
+
   const { stepFields, addressFild } = data || {};
 
   const beneficiaryRemoveHandelar = () => {
-    const savedValues = JSON.parse(getFromLocalStorage("form-data"));
-    const updatedBeneficiaries = savedValues?.beneficiaries?.filter(
-      (_, i) => i !== index
-    );
-
-    savedValues["beneficiaries"] = updatedBeneficiaries;
-    setToLocalStorage("form-data", JSON.stringify(savedValues));
+    remove(index);
     setBeneficiariesCount(beneficiariesCount - 1);
-
-    // const savedValues = JSON.parse(getFromLocalStorage("form-data"));
-    // const updatedLocations = savedValues?.beneficiaries?.filter(
-    //   (_, i) => i !== index
-    // );
-    // savedValues["beneficiaries"] = updatedLocations;
-    // setToLocalStorage("form-data", JSON.stringify(savedValues));
-    // setBeneficiariesCount(beneficiariesCount - 1);
   };
 
   const generateFullNameLabel = () => {
@@ -69,7 +57,7 @@ const BeneficiaryCard = ({
           {index + 1}
         </p>
         <div className="w-[150px] flex justify-end text-xl text-gray-500">
-          {index !== 10 && (
+          {index !== 0 && (
             <Button danger type="link" onClick={beneficiaryRemoveHandelar}>
               <DeleteOutlined />
             </Button>

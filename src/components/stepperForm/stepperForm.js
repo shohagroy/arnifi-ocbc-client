@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Button, message, Steps } from "antd";
 import Form from "../forms/From";
 import Link from "next/link";
-import { generateFormValidator } from "@/schemas/formSchema";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { useSelector } from "react-redux";
@@ -62,6 +61,8 @@ const StepperForm = ({
     } else {
       setCurrent(current + 1);
     }
+
+    console.log(data);
   };
 
   return (

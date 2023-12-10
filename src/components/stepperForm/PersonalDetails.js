@@ -23,13 +23,10 @@ const PersonalDetails = ({ country }) => {
   const findedStep = findStepsData?.data?.data;
   const stepFields = findedStep?.stepFilds || [];
 
-  const resolver = generateFormsResolver(findedStep);
-
   useEffect(() => {
-    if (resolver) {
-      dispatch(setFormValidator(resolver));
-    }
-  }, [resolver, dispatch]);
+    const resolver = generateFormsResolver(findedStep);
+    dispatch(setFormValidator(resolver));
+  }, [dispatch, findedStep]);
 
   const idTypeOptions = idTypes?.map((item) => {
     return {

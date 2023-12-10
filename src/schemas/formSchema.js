@@ -124,10 +124,21 @@ export const generateFormsResolver = (formData, prevData) => {
   const stepValidateSchema = yup.object().shape(formErrorSchema);
   const prevValidateSchema = yup.object().shape(prevErrorSchema);
 
-  return yup.object().shape({
-    [formData?.value]: stepValidateSchema,
-    [prevData?.value]: prevValidateSchema,
-  });
+  if (prevData?.value) {
+    return yup.object().shape({
+      [formData?.value]: stepValidateSchema,
+      [prevData?.value]: prevValidateSchema,
+    });
+  } else {
+    return yup.object().shape({
+      [formData?.value]: stepValidateSchema,
+    });
+  }
+
+  // return yup.object().shape({
+  //   [formData?.value]: stepValidateSchema,
+  //   [prevData?.value]: prevValidateSchema,
+  // });
 };
 
 export const generateFormsArrayResolver = (formData) => {
