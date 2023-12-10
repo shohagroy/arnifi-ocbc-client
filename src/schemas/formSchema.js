@@ -180,3 +180,25 @@ const data = {
     },
   ],
 };
+
+const assetAllocation = {
+  locations: [
+    {
+      address: {
+        line1: "",
+        line2: "",
+        country: "",
+        postalCode: "",
+      },
+      beneficiary: "Full Name of fourth Beneficiary.",
+    },
+  ],
+  sumMoney: [
+    {
+      beneficiary: "Full Name of fourth Beneficiary.",
+      money: undefined, // Add actual money value
+    },
+  ],
+};
+
+console.log(assetAllocation);

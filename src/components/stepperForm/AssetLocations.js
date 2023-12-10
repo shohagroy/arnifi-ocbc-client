@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import FormSelectField from "../forms/FormSelectField";
 import FormInput from "../forms/FormInput";
 import { Button, Card } from "antd";
@@ -12,8 +12,21 @@ const AssetLocations = ({
   locationCount,
   setLocationCount,
   beneficiaryOptions,
+  countryOptions,
 }) => {
+  // const { remove } = useFieldArray({ name: stepValue });
   const { addressFields, beneficiaryFields } = data || {};
+  const [selectedbeneficiary, setSelectedbeneficiary] = useState("");
+  const [address, setAddress] = useState({
+    line1: "",
+    line2: "",
+    country: "",
+    postalCode: "",
+  });
+
+  const beneficiaryLocationAddHandelar = (data) => {
+    console.log("call", data);
+  };
 
   const locationRemoveHandelar = () => {
     const savedValues = JSON.parse(getFromLocalStorage("form-data"));
@@ -48,52 +61,58 @@ const AssetLocations = ({
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <FormInput
-            label={addressFields?.label}
-            required
-            type={"text"}
-            placeholder={"address line 1"}
-            name={`${value}.address.line1`}
-          />
+          <div>
+            <FormInput
+              handleChange={(e) =>
+                beneficiaryLocationAddHandelar({ line1: e.target.value })
+              }
+              label={addressFields?.label}
+              required
+              type={"text"}
+              placeholder={"address line 1"}
+              name={`${value}.address.line1`}
+            />
+          </div>
+
+          <div className="my-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <FormInput
+                  type={"text"}
+                  placeholder={"address line 2"}
+                  name={`${value}.address.line2`}
+                />
+              </div>
+              <div className="">
+                <FormSelectField
+                  required
+                  name={`${value}.address.country`}
+                  options={countryOptions}
+                  type={"text"}
+                />
+              </div>
+              <div>
+                <FormInput
+                  required
+                  type={"text"}
+                  placeholder={"postal code"}
+                  name={`${value}.address.postalCode`}
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         <div>
           <FormSelectField
             loading={false}
             label={beneficiaryFields?.label}
+            handleChange={(e) => setSelectedbeneficiary(e)}
             name={`${value}.beneficiary.${name}}`}
             required
             options={beneficiaryOptions || []}
             type={"text"}
           />
-        </div>
-
-        <div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <FormInput
-                type={"text"}
-                placeholder={"address line 2"}
-                name={`${value}.address.line2`}
-              />
-            </div>
-            <div>
-              <FormSelectField
-                required
-                name={`${value}.address.country`}
-                options={[]}
-                type={"text"}
-              />
-            </div>
-            <div>
-              <FormInput
-                required
-                type={"text"}
-                placeholder={"postal code"}
-                name={`${value}.address.postalCode`}
-              />
-            </div>
-          </div>
         </div>
       </div>
     </Card>

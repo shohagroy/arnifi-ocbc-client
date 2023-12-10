@@ -18,7 +18,6 @@ const BeneficiaryCard = ({
   loading,
 }) => {
   const { remove } = useFieldArray({ name: stepValue });
-
   const { stepFields, addressFild } = data || {};
 
   const beneficiaryRemoveHandelar = () => {

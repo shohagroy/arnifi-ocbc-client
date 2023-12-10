@@ -13,6 +13,7 @@ import CardFormLoader from "../skeleton-loader/CardFormLoader";
 import AssetLocations from "./AssetLocations";
 import { getFromLocalStorage } from "@/utils/local-storage";
 import AssetSum from "./AssetSum";
+import { useFieldArray, useForm } from "react-hook-form";
 
 const AssetAllocation = ({ country }) => {
   const [locationCount, setLocationCount] = useState(
@@ -41,7 +42,7 @@ const AssetAllocation = ({ country }) => {
 
   const beneficiaryOptions = beneficiariesData?.map((item) => {
     return {
-      label: item.fullName,
+      label: `${item.fullName} (${item?.relation})`,
       value: item.fullName,
     };
   });
@@ -56,8 +57,8 @@ const AssetAllocation = ({ country }) => {
   const beneficiaryFields = stepFields?.find(
     (item) => item.name === "beneficiary"
   );
-  const sumMoneyFields = stepFields?.find((item) => item.name === "sumMoney");
 
+  const sumMoneyFields = stepFields?.find((item) => item.name === "sumMoney");
   const assetLocations = [...Array(locationCount)]?.map((_) => {
     return {
       addressFields,
