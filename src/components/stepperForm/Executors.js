@@ -1,27 +1,18 @@
 "use client";
 
-import React, { useEffect } from "react";
-import FormInput from "../forms/FormInput";
-import FormSelectField from "../forms/FormSelectField";
-import { Card } from "antd";
+import React from "react";
 import { ENUM_FORM_STEPS } from "@/constans/steps";
 import { useGetAllCountryDataQuery } from "@/redux/features/country/countryApi";
-// import FormAddressField from "./FormAddressField";
 import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
 import FormModalText from "../ui/will/FormModalText";
 import AlternativeExecutors from "./AlternativeExecutors";
 import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
-import { useDispatch } from "react-redux";
-import { setFormValidator } from "@/redux/features/formResolver/formResolverSlice";
-import { generateFormsResolver } from "@/schemas/formSchema";
-import FormAddressField from "../forms/FormAddressField";
+import PersonalInfo from "../admin/formSections/PersonalInfo";
 
 const Executors = ({ country }) => {
   const { idTypes, id } = country || {};
-
-  const dispatch = useDispatch();
 
   const stepValue = ENUM_FORM_STEPS.EXECUTORS;
 
@@ -30,14 +21,6 @@ const Executors = ({ country }) => {
 
   const findedStep = findStepsData?.data?.data;
   const stepFields = findedStep?.stepFilds || [];
-
-  // const resolver = generateFormsResolver(findedStep);
-
-  // useEffect(() => {
-  //   if (resolver) {
-  //     dispatch(setFormValidator(resolver));
-  //   }
-  // }, [resolver, dispatch]);
 
   const idTypeOptions = idTypes?.map((item) => {
     return {
@@ -58,8 +41,6 @@ const Executors = ({ country }) => {
   if (willLoading) {
     return <CardFormLoader />;
   }
-
-  const addressFild = stepFields?.find((item) => item.type === "address");
 
   const modalTextData = [
     {
@@ -110,60 +91,13 @@ const Executors = ({ country }) => {
         />
       </div>
 
-      <Card>
-        <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {stepFields?.map((data, i) => {
-            const { type, placeholder, name, label, required } = data || {};
-            return type === "text" && name === "fullName" ? (
-              <div key={i} className="md:col-span-2 md:grid md:grid-cols-2">
-                <div>
-                  <FormInput
-                    label={label}
-                    name={`${stepValue}.${name}`}
-                    placeholder={placeholder}
-                    type={type}
-                    required={required}
-                  />
-                </div>
-
-                <div></div>
-              </div>
-            ) : type === "text" ? (
-              <>
-                <div key={i}>
-                  <FormInput
-                    label={label}
-                    name={`${stepValue}.${name}`}
-                    placeholder={placeholder}
-                    type={type}
-                    required={required}
-                  />
-                </div>
-              </>
-            ) : (
-              type === "select" && (
-                <div key={i}>
-                  <FormSelectField
-                    loading={isLoading}
-                    label={label}
-                    name={`${stepValue}.${name}`}
-                    showSearch={true}
-                    required={required}
-                    options={name === "idType" ? idTypeOptions : countryOptions}
-                  />
-                </div>
-              )
-            );
-          })}
-
-          {addressFild && (
-            <>
-              <hr className="border-[#EEEEEE] col-span-2 my-4" />
-              <FormAddressField value={stepValue} />
-            </>
-          )}
-        </div>
-      </Card>
+      <PersonalInfo
+        countriesOptions={countryOptions}
+        idTypeOptions={idTypeOptions}
+        loading={isLoading}
+        data={stepFields}
+        stepValue={stepValue}
+      />
 
       <div className="my-10">
         <AlternativeExecutors

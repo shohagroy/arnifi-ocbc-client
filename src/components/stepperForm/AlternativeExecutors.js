@@ -7,13 +7,13 @@ import { Button, Card } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { ENUM_FORM_STEPS } from "@/constans/steps";
-import FormAddressField from "./FormAddressField";
 import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
 import { DeleteOutlined } from "@ant-design/icons";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
 import { setFormValidator } from "@/redux/features/formResolver/formResolverSlice";
 import { generateFormsResolver } from "@/schemas/formSchema";
 import { useDispatch } from "react-redux";
+import FormAddressField from "../forms/FormAddressField";
 
 const AlternativeExecutors = ({
   idTypeOptions,
@@ -21,15 +21,13 @@ const AlternativeExecutors = ({
   countryId,
   mainExecutor,
 }) => {
-  const [savedValues, setSavedValues] = useState({});
-  const [show, setShow] = useState(false);
+  const [isAlternativeExecutors, setIsAlternativeExecutors] = useState(
+    !!getFromLocalStorage("alt-exe")
+      ? JSON.parse(getFromLocalStorage("alt-exe"))
+      : false
+  );
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    setSavedValues(JSON.parse(getFromLocalStorage("form-data")) || {});
-  }, [show]);
-
   const stepValue = ENUM_FORM_STEPS.ALTERNATIVE_EXECUTORS;
 
   const { data: findStepsData, isLoading: willLoading } =
@@ -38,50 +36,36 @@ const AlternativeExecutors = ({
   const findedStep = findStepsData?.data?.data;
   const stepFields = findedStep?.stepFilds || [];
 
+  const addressType = stepFields?.find((item) => item.type === "address");
+  const fullNameFields = stepFields?.find((item) => item.name === "fullName");
+
   useEffect(() => {
-    if (show) {
+    if (isAlternativeExecutors) {
       const resolver = generateFormsResolver(findedStep, mainExecutor);
       dispatch(setFormValidator(resolver));
     } else {
       const resolver = generateFormsResolver(mainExecutor);
       dispatch(setFormValidator(resolver));
     }
-  }, [dispatch, show, findedStep, mainExecutor]);
+  }, [dispatch, isAlternativeExecutors, findedStep, mainExecutor]);
 
   if (willLoading) {
     return <CardFormLoader />;
   }
 
-  const addressFild = stepFields?.find((item) => item.type === "address");
-
   const alternativeExecutorsAddHandelar = () => {
-    const updatedValues = {
-      ...savedValues,
-      alternativeExecutors: {
-        ...savedValues?.alternativeExecutors,
-        isShow: true,
-      },
-    };
-    setToLocalStorage("form-data", JSON.stringify(updatedValues));
-    setShow(!show);
+    setToLocalStorage("alt-exe", JSON.stringify(true));
+    setIsAlternativeExecutors(true);
   };
 
   const alternativeExecutorsRemoveHandelar = () => {
-    const updatedValues = {
-      ...savedValues,
-      alternativeExecutors: {
-        ...savedValues?.alternativeExecutors,
-        isShow: false,
-      },
-    };
-
-    setToLocalStorage("form-data", JSON.stringify(updatedValues));
-    setShow(!show);
+    setToLocalStorage("alt-exe", JSON.stringify(false));
+    setIsAlternativeExecutors(false);
   };
 
   return (
     <div>
-      {savedValues?.alternativeExecutors?.isShow ? (
+      {isAlternativeExecutors ? (
         <Card>
           <div className="px-4 flex ">
             <p className="font-primary text-sm ">
@@ -101,46 +85,49 @@ const AlternativeExecutors = ({
               </Button>
             </div>
           </div>
-          <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-            {stepFields?.map((data, i) => {
-              const { type, placeholder, name, label, required } = data || {};
-              return type === "text" && name === "fullName" ? (
-                <div key={i} className="col-span-2 grid grid-cols-2">
+
+          <div className="my-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                {fullNameFields && (
                   <div>
                     <FormInput
-                      label={label}
-                      name={`${stepValue}.${name}`}
-                      placeholder={placeholder}
-                      type={type}
-                      required={required}
+                      label={fullNameFields?.label}
+                      name={`${stepValue}.${fullNameFields?.name}`}
+                      placeholder={fullNameFields?.placeholder}
+                      required={fullNameFields?.isRequired}
+                      type={fullNameFields?.type}
                     />
                   </div>
+                )}
+              </div>
+            </div>
 
-                  <div></div>
+            {stepFields?.map((item) => {
+              const { id, type, placeholder, name, label, isRequired } =
+                item || {};
+              return type === "text" && name !== "fullName" ? (
+                <div key={id}>
+                  <FormInput
+                    label={label}
+                    name={`${stepValue}.${name}`}
+                    placeholder={placeholder}
+                    type={type}
+                    required={isRequired}
+                  />
                 </div>
-              ) : type === "text" ? (
-                <>
-                  <div key={i}>
-                    <FormInput
-                      label={label}
-                      name={`${stepValue}.${name}`}
-                      placeholder={placeholder}
-                      type={type}
-                      required={required}
-                    />
-                  </div>
-                </>
               ) : (
                 type === "select" && (
-                  <div key={i}>
+                  <div key={id}>
                     <FormSelectField
-                      // loading={isLoading}
                       label={label}
                       name={`${stepValue}.${name}`}
                       showSearch={true}
-                      required={required}
+                      required={isRequired}
                       options={
-                        name === "idType" ? idTypeOptions : countriesOptions
+                        name === "citizenship"
+                          ? countriesOptions
+                          : idTypeOptions
                       }
                     />
                   </div>
@@ -148,12 +135,17 @@ const AlternativeExecutors = ({
               );
             })}
 
-            {addressFild && (
-              <>
-                <hr className="border-[#EEEEEE] col-span-2 my-4" />
-                <FormAddressField value={stepValue} />
-              </>
-            )}
+            <div className="col-span-full">
+              {addressType && (
+                <div>
+                  <FormAddressField
+                    stepValue={stepValue}
+                    data={addressType}
+                    countriesOptions={countriesOptions}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </Card>
       ) : (
