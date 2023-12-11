@@ -4,11 +4,11 @@ import FormSelectField from "./FormSelectField";
 import UpdateDeleteBtn from "../admin/formSections/UpdateDeleteBtn";
 
 const FormAddressField = ({
-  countriesOptions,
   isEditable,
-  data,
-  deleteModalOkHandelar,
   loading,
+  data,
+  countriesOptions,
+  deleteModalOkHandelar,
   setStepFild,
   stepValue,
 }) => {
@@ -47,6 +47,7 @@ const FormAddressField = ({
               </div>
               <div>
                 <FormSelectField
+                  loading={loading}
                   required={true}
                   name={`${stepValue}.address.country`}
                   options={countriesOptions}

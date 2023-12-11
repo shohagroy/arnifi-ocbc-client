@@ -31,7 +31,7 @@ const PersonalDetails = ({ country }) => {
   const idTypeOptions = idTypes?.map((item) => {
     return {
       label: item?.tittle,
-      value: item?.id,
+      value: item?.tittle,
     };
   });
 
@@ -39,7 +39,7 @@ const PersonalDetails = ({ country }) => {
   const countryOptions = data?.data?.data?.map((country) => {
     return {
       label: country?.name,
-      value: country?.id,
+      value: country?.name,
     };
   });
 

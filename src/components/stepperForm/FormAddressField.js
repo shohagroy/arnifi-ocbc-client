@@ -9,7 +9,7 @@ const FormAddressField = ({ value }) => {
   const countryOptions = data?.data?.data?.map((country) => {
     return {
       label: country?.name,
-      value: country?.id,
+      value: country?.name,
     };
   });
 

@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import FormInput from "../forms/FormInput";
-import FormSelectField from "../forms/FormSelectField";
 import { Button, Card } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
@@ -14,12 +12,14 @@ import { setFormValidator } from "@/redux/features/formResolver/formResolverSlic
 import { generateFormsResolver } from "@/schemas/formSchema";
 import { useDispatch } from "react-redux";
 import FormAddressField from "../forms/FormAddressField";
+import PersonalInfo from "../admin/formSections/PersonalInfo";
 
 const AlternativeExecutors = ({
   idTypeOptions,
   countriesOptions,
   countryId,
   mainExecutor,
+  loading,
 }) => {
   const [isAlternativeExecutors, setIsAlternativeExecutors] = useState(
     !!getFromLocalStorage("alt-exe")
@@ -35,9 +35,6 @@ const AlternativeExecutors = ({
 
   const findedStep = findStepsData?.data?.data;
   const stepFields = findedStep?.stepFilds || [];
-
-  const addressType = stepFields?.find((item) => item.type === "address");
-  const fullNameFields = stepFields?.find((item) => item.name === "fullName");
 
   useEffect(() => {
     if (isAlternativeExecutors) {
@@ -85,8 +82,15 @@ const AlternativeExecutors = ({
               </Button>
             </div>
           </div>
+          <PersonalInfo
+            countriesOptions={countriesOptions}
+            idTypeOptions={idTypeOptions}
+            loading={loading}
+            data={stepFields}
+            stepValue={stepValue}
+          />
 
-          <div className="my-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* <div className="my-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 {fullNameFields && (
@@ -146,7 +150,7 @@ const AlternativeExecutors = ({
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
         </Card>
       ) : (
         <Button

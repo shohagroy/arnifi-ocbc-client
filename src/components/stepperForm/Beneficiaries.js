@@ -62,7 +62,7 @@ const Beneficiaries = ({ country, persistKey }) => {
   const idTypeOptions = idTypes?.map((item) => {
     return {
       label: item?.tittle,
-      value: item?.id,
+      value: item?.tittle,
     };
   });
 

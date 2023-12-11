@@ -25,7 +25,7 @@ const Executors = ({ country }) => {
   const idTypeOptions = idTypes?.map((item) => {
     return {
       label: item?.tittle,
-      value: item?.id,
+      value: item?.tittle,
     };
   });
 
@@ -34,7 +34,7 @@ const Executors = ({ country }) => {
   const countryOptions = data?.data?.data?.map((country) => {
     return {
       label: country?.name,
-      value: country?.id,
+      value: country?.name,
     };
   });
 
@@ -101,6 +101,7 @@ const Executors = ({ country }) => {
 
       <div className="my-10">
         <AlternativeExecutors
+          loading={isLoading}
           countryId={id}
           idTypeOptions={idTypeOptions}
           countriesOptions={countryOptions}

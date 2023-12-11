@@ -13,6 +13,7 @@ import InitialCardLoading from "@/components/skeleton-loader/InitialCardLoading"
 import { getFromLocalStorage } from "@/utils/local-storage";
 import AssetDistribute from "@/components/stepperForm/AssetDistribute";
 import AdditionalInstructions from "@/components/stepperForm/AdditionalInstructions";
+import { formStepsOptions } from "@/constans/steps";
 
 const DetailsSubmitPage = () => {
   const [assetStep, setAssetStep] = useState(
@@ -27,10 +28,25 @@ const DetailsSubmitPage = () => {
       : 1
   );
 
-  const { data: activeWillCountry, isLoading: countryLoading } =
+  const { data: activeCountryData, isLoading: countryLoading } =
     useGetActiveCountryWillQuery();
 
-  const activeCountry = activeWillCountry?.data?.data || {};
+  const activeCountry = activeCountryData?.data?.data || {};
+
+  // console.log(activeCountry);
+
+  // const stepsFieldsData = formStepsOptions?.map((step) => {
+  //   console.log(step);
+  //   return activeCountry.stepFilds?.filter(
+  //     (field) => field?.stepValue === step?.value
+  //   );
+  // });
+
+  // console.log(stepsFieldsData);
+
+  const formSteps = activeCountry.stepFilds?.map((data) => {
+    // console.log(data);
+  });
 
   if (countryLoading) {
     return <InitialCardLoading />;
@@ -73,7 +89,7 @@ const DetailsSubmitPage = () => {
     },
     {
       title: "Review",
-      content: <ReviewAndSubmit />,
+      content: <ReviewAndSubmit stepFields={activeCountry?.stepFilds} />,
     },
   ];
 

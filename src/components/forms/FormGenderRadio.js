@@ -27,12 +27,12 @@ const FormGenderRadio = ({
   const genderOptions = [
     {
       label: "Male",
-      value: "male",
+      value: "Male",
       icon: MaleImg,
     },
     {
       label: "Female",
-      value: "female",
+      value: "Female",
       icon: FemaleImg,
     },
   ];
