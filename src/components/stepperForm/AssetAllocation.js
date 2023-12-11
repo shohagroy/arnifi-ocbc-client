@@ -40,14 +40,15 @@ const AssetAllocation = ({ country }) => {
       : []
   );
 
-  const beneficiaryOptions = beneficiariesData?.map((item) => {
+  const beneficiaryOptions = beneficiariesData?.map((item, i) => {
     return {
       label: `${item.fullName} (${item?.relation})`,
-      value: item.fullName,
+      value: i,
     };
   });
 
   const stepValue = ENUM_FORM_STEPS.ASSET_ALLOCATION;
+  const beneficiaryValue = ENUM_FORM_STEPS.BENEFICIARIES;
 
   const { data: findStepsData, isLoading: willLoading } =
     useGetWillStepFildsQuery(`/${stepValue}/${country?.id}`);
@@ -82,7 +83,7 @@ const AssetAllocation = ({ country }) => {
   const countryOptions = data?.data?.data?.map((country) => {
     return {
       label: country?.name,
-      value: country?.id,
+      value: country?.name,
     };
   });
 
@@ -128,7 +129,7 @@ const AssetAllocation = ({ country }) => {
 
         {assetLocations?.map((item, i) => (
           <AssetLocations
-            value={`${stepValue}.locations.${i}`}
+            stepValue={beneficiaryValue}
             beneficiaryOptions={beneficiaryOptions}
             data={item}
             setLocationCount={setLocationCount}

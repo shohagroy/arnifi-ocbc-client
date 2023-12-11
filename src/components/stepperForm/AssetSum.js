@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import FormSelectField from "../forms/FormSelectField";
 import FormInput from "../forms/FormInput";
 import { Button, Card } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { useFieldArray } from "react-hook-form";
+import { ENUM_FORM_STEPS } from "@/constans/steps";
 
 const AssetSum = ({
   data,
@@ -14,8 +15,24 @@ const AssetSum = ({
   sumCount,
   beneficiaryOptions,
 }) => {
-  const { remove } = useFieldArray({ name: "assetAllocation.sumMoney" });
   const { sumMoneyFields, beneficiaryFields } = data || {};
+  const [beneficiaryIndex, setBeneficiaryIndex] = useState(0);
+  const stepValue = ENUM_FORM_STEPS.BENEFICIARIES;
+
+  const { remove, fields, update } = useFieldArray({
+    name: `${stepValue}.${beneficiaryIndex}.giveMoney`,
+  });
+
+  const current = { ...fields };
+
+  const propertiesAddHandelar = (e) => {
+    console.log(e);
+  };
+
+  const locationRemoveHandelar = () => {
+    remove(index);
+    setLocationCount(locationCount - 1);
+  };
 
   const sumMoneyRemoveHandelar = () => {
     remove(index);
@@ -43,7 +60,7 @@ const AssetSum = ({
             required
             type={"number"}
             placeholder={sumMoneyFields?.money}
-            name={`${value}.money`}
+            name={`${stepValue}.${beneficiaryIndex}.giveMoney.value`}
           />
         </div>
 
@@ -51,6 +68,8 @@ const AssetSum = ({
           <FormSelectField
             label={beneficiaryFields?.label}
             name={`${value}.beneficiary`}
+            handleChange={(e) => setBeneficiaryIndex(e)}
+            value={index}
             required
             options={beneficiaryOptions || []}
             type={"text"}

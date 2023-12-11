@@ -96,23 +96,23 @@ export const formInputTypeOptions = [
 export const relationsOptions = [
   {
     label: "Spouse",
-    value: "spouse",
+    value: "Spouse",
   },
   {
     label: "Child",
-    value: "child",
+    value: "Child",
   },
   {
     label: "Parent",
-    value: "parent",
+    value: "Parent",
   },
   {
     label: "Relative",
-    value: "relative",
+    value: "Relative",
   },
   {
     label: "Other",
-    value: "other",
+    value: "Other",
   },
 ];
 

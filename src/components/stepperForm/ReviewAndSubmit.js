@@ -7,16 +7,19 @@ import PersonalDetailsReviewCard from "../ui/will/PersonalDetailsReviewCard";
 import ExecutorsDetailsReviewCard from "../ui/will/ExecutorsDetailsReviewCard";
 import { ENUM_FORM_STEPS } from "@/constans/steps";
 import { useSelector } from "react-redux";
+import BeneficiariesDetailsReviewCard from "../ui/will/BeneficiariesDetailsReviewCard";
 
 const ReviewAndSubmit = ({ stepFields }) => {
-  const { personalDetails, executors, alternativeExecutors } = useSelector(
-    (state) => state.forms?.formsData
-  );
+  const {
+    personalDetails,
+    executors,
+    alternativeExecutors,
+    beneficiaries,
+    assetAllocation,
+  } = useSelector((state) => state.forms?.formsData);
   const personalDetailsFields = stepFields?.filter(
     (field) => field?.stepValue === ENUM_FORM_STEPS.PERSONAL_DETAILS
   );
-
-  // console.log(alternativeExecutors);
 
   return (
     <div>
@@ -43,8 +46,14 @@ const ReviewAndSubmit = ({ stepFields }) => {
           <ExecutorsDetailsReviewCard
             executors={executors}
             alternativeExecutors={alternativeExecutors}
-            fields={personalDetailsFields}
-            values={personalDetails}
+          />
+        </div>
+
+        <div className="my-4">
+          <BeneficiariesDetailsReviewCard
+            beneficiaries={beneficiaries}
+            executors={executors}
+            alternativeExecutors={alternativeExecutors}
           />
         </div>
       </div>

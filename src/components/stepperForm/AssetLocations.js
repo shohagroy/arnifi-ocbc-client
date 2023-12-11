@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import FormSelectField from "../forms/FormSelectField";
 import FormInput from "../forms/FormInput";
 import { Button, Card } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useFieldArray } from "react-hook-form";
+import { ENUM_FORM_STEPS } from "@/constans/steps";
 
 const AssetLocations = ({
   data,
@@ -14,8 +15,17 @@ const AssetLocations = ({
   beneficiaryOptions,
   countryOptions,
 }) => {
-  // assetAllocation:Object locations:Object
-  const { remove } = useFieldArray({ name: "assetAllocation.locations" });
+  const [beneficiaryIndex, setBeneficiaryIndex] = useState(0);
+  const stepValue = ENUM_FORM_STEPS.BENEFICIARIES;
+
+  const { remove } = useFieldArray({
+    name: `${stepValue}.${beneficiaryIndex}.properties`,
+  });
+
+  const propertiesAddHandelar = (e) => {
+    console.log(e);
+  };
+
   const { addressFields, beneficiaryFields } = data || {};
 
   const locationRemoveHandelar = () => {
@@ -45,7 +55,7 @@ const AssetLocations = ({
               required
               type={"text"}
               placeholder={"address line 1"}
-              name={`${value}.address.line1`}
+              name={`${stepValue}.${beneficiaryIndex}.properties.${index}.address.line1`}
             />
           </div>
 
@@ -55,13 +65,13 @@ const AssetLocations = ({
                 <FormInput
                   type={"text"}
                   placeholder={"address line 2"}
-                  name={`${value}.address.line2`}
+                  name={`${stepValue}.${beneficiaryIndex}.properties.${index}.address.line2`}
                 />
               </div>
               <div className="">
                 <FormSelectField
                   required
-                  name={`${value}.address.country`}
+                  name={`${stepValue}.${beneficiaryIndex}.properties.${index}.address.country`}
                   options={countryOptions}
                   type={"text"}
                 />
@@ -71,7 +81,7 @@ const AssetLocations = ({
                   required
                   type={"text"}
                   placeholder={"postal code"}
-                  name={`${value}.address.postalCode`}
+                  name={`${stepValue}.${beneficiaryIndex}.properties.${index}.address.postalCode`}
                 />
               </div>
             </div>
@@ -80,7 +90,8 @@ const AssetLocations = ({
 
         <div>
           <FormSelectField
-            loading={false}
+            defaultValue={beneficiaryIndex}
+            handleChange={(e) => setBeneficiaryIndex(e)}
             label={beneficiaryFields?.label}
             name={`${value}.beneficiary`}
             required

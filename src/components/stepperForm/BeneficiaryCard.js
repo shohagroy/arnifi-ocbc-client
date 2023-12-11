@@ -4,8 +4,8 @@ import FormInput from "../forms/FormInput";
 import { Button, Card } from "antd";
 import { relationsOptions } from "@/constans/steps";
 import { DeleteOutlined } from "@ant-design/icons";
-import FormAddressField from "../forms/FormAddressField";
 import { useFieldArray } from "react-hook-form";
+import FormAddressField from "../forms/FormAddressField";
 
 const BeneficiaryCard = ({
   data,
@@ -95,7 +95,7 @@ const BeneficiaryCard = ({
           <div className="col-span-full">
             <FormAddressField
               data={addressFild}
-              loading={loading}
+              // loading={loading}
               countriesOptions={countryOptions}
               stepValue={`${stepValue}.${index}`}
             />

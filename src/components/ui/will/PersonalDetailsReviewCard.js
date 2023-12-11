@@ -29,14 +29,14 @@ const PersonalDetailsReviewCard = ({ fields, values }) => {
           Edit
         </Button>
       </div>
-      <Card className="p-6">
+      <Card className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-primary">
           {otherFields?.map((data, i) => {
             const { label, value } = data || {};
             return (
               <div key={i}>
                 <p>{label}</p>
-                <p className="text-lg font-semibold">{value}</p>
+                <p className="text- font-semibold">{value}</p>
               </div>
             );
           })}
@@ -45,7 +45,7 @@ const PersonalDetailsReviewCard = ({ fields, values }) => {
         {addressFields && (
           <div className="my-4 ">
             <p>{addressFields?.label}</p>
-            <div className="text-xl font-semibold">
+            <div className="text- font-semibold">
               <p>{addressFields?.value?.line1}</p>
               <p>{addressFields?.value?.line2}</p>
               <p>
