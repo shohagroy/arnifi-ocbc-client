@@ -2,12 +2,14 @@
 
 import { Card } from "antd";
 import React from "react";
-import { instructionsOptions } from "@/constans/steps";
 import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
 import FormTextarea from "../forms/FormTextarea";
+import { ENUM_FORM_STEPS } from "@/constans/steps";
 
-const AdditionalInstructions = ({ stepValue }) => {
+const AdditionalInstructions = () => {
+  const stepValue = ENUM_FORM_STEPS.INSTRUCTIONS;
+
   return (
     <div>
       <div>
@@ -33,9 +35,8 @@ const AdditionalInstructions = ({ stepValue }) => {
           <div>
             <FormTextarea
               label={"Instructions"}
-              name={`${stepValue}.instructions`}
-              required
-              type={"text"}
+              name={`${stepValue}.specialInstructions`}
+              required={false}
               placeholder={
                 "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi, quod quae labore quos enim laboriosam quasi veniam vel iste at necessitatibus, odio doloremque illo dicta omnis earum repellendus nemo possimus rem quaerat blanditiis! Aliquam repellat facere nisi vero maiores?"
               }

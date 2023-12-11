@@ -84,6 +84,7 @@ const Instructions = () => {
               <InstructionsAssetCard
                 key={i}
                 index={i}
+                stepValue={`${stepValue}.specifyAssets.${i}`}
                 setAssetCount={setAssetCount}
                 assetCount={assetCount}
               />

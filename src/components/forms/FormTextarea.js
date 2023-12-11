@@ -54,7 +54,7 @@ const FormTextarea = ({
             {...field}
             value={value ? value : field.value}
             rows={6}
-            maxLength={6}
+            maxLength={200}
           />
         )}
       />

@@ -3,20 +3,17 @@ import React from "react";
 import FormInput from "../forms/FormInput";
 import FormTextarea from "../forms/FormTextarea";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useFieldArray } from "react-hook-form";
 
-const InstructionsAssetCard = ({ setAssetCount, assetCount, index }) => {
+const InstructionsAssetCard = ({
+  setAssetCount,
+  assetCount,
+  index,
+  stepValue,
+}) => {
+  const { remove } = useFieldArray({ name: stepValue });
   const assetRemoveHandelar = () => {
-    //     const savedValues = JSON.parse(getFromLocalStorage("form-data"));
-    // const updatedLocations = savedValues?.assetAllocation?.sumMoney?.filter(
-    //   (_, i) => i !== index
-    // );
-    // const asset = savedValues?.assetAllocation;
-    // const updatedData = {
-    //   ...savedValues,
-    //   assetAllocation: { ...asset, sumMoney: updatedLocations },
-    // };
-
-    // setToLocalStorage("form-data", JSON.stringify(updatedData));
+    remove(index);
     setAssetCount(assetCount - 1);
   };
   return (
@@ -35,24 +32,36 @@ const InstructionsAssetCard = ({ setAssetCount, assetCount, index }) => {
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <FormInput type={"text"} label={"Asset"} name={"asset"} />
-        </div>
-        <div>
-          <FormInput type={"text"} label={"Category"} name={"Category"} />
+          <FormInput
+            placeholder={"asset name"}
+            type={"text"}
+            label={"Asset"}
+            name={`${stepValue}.${index}.asset`}
+          />
         </div>
         <div>
           <FormInput
             type={"text"}
+            placeholder={"category"}
+            label={"Category"}
+            name={`${stepValue}.${index}.category`}
+          />
+        </div>
+        <div>
+          <FormInput
+            type={"number"}
+            placeholder={"eg.100"}
             label={"Estimated value of asset"}
-            name={"value"}
+            name={`${stepValue}.${index}.value`}
           />
         </div>
 
         <div className="col-span-3">
           <FormTextarea
             type={"text"}
+            placeholder={"description"}
             label={"Description"}
-            name={"description"}
+            name={`${stepValue}.${index}.description`}
           />
         </div>
       </div>
