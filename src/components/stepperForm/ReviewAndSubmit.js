@@ -1,19 +1,22 @@
 "use client";
 
-import { Button, Card } from "antd";
 import React from "react";
 import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
-import { EditOutlined } from "@ant-design/icons";
 import PersonalDetailsReviewCard from "../ui/will/PersonalDetailsReviewCard";
+import ExecutorsDetailsReviewCard from "../ui/will/ExecutorsDetailsReviewCard";
 import { ENUM_FORM_STEPS } from "@/constans/steps";
 import { useSelector } from "react-redux";
 
 const ReviewAndSubmit = ({ stepFields }) => {
-  const { personalDetails } = useSelector((state) => state.forms?.formsData);
+  const { personalDetails, executors, alternativeExecutors } = useSelector(
+    (state) => state.forms?.formsData
+  );
   const personalDetailsFields = stepFields?.filter(
     (field) => field?.stepValue === ENUM_FORM_STEPS.PERSONAL_DETAILS
   );
+
+  // console.log(alternativeExecutors);
 
   return (
     <div>
@@ -29,10 +32,21 @@ const ReviewAndSubmit = ({ stepFields }) => {
 
         <hr className="border-[#EEEEEE] col-span-2 my-4" />
 
-        <PersonalDetailsReviewCard
-          fields={personalDetailsFields}
-          values={personalDetails}
-        />
+        <div className="my-4">
+          <PersonalDetailsReviewCard
+            fields={personalDetailsFields}
+            values={personalDetails}
+          />
+        </div>
+
+        <div className="my-4">
+          <ExecutorsDetailsReviewCard
+            executors={executors}
+            alternativeExecutors={alternativeExecutors}
+            fields={personalDetailsFields}
+            values={personalDetails}
+          />
+        </div>
       </div>
 
       <hr className="border-[#EEEEEE] col-span-2 my-10" />
