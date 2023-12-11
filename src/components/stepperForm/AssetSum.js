@@ -4,6 +4,7 @@ import FormInput from "../forms/FormInput";
 import { Button, Card } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
+import { useFieldArray } from "react-hook-form";
 
 const AssetSum = ({
   data,
@@ -13,20 +14,11 @@ const AssetSum = ({
   sumCount,
   beneficiaryOptions,
 }) => {
+  const { remove } = useFieldArray({ name: "assetAllocation.sumMoney" });
   const { sumMoneyFields, beneficiaryFields } = data || {};
 
   const sumMoneyRemoveHandelar = () => {
-    const savedValues = JSON.parse(getFromLocalStorage("form-data"));
-    const updatedLocations = savedValues?.assetAllocation?.sumMoney?.filter(
-      (_, i) => i !== index
-    );
-    const asset = savedValues?.assetAllocation;
-    const updatedData = {
-      ...savedValues,
-      assetAllocation: { ...asset, sumMoney: updatedLocations },
-    };
-
-    setToLocalStorage("form-data", JSON.stringify(updatedData));
+    remove(index);
     setSumCount(sumCount - 1);
   };
 
@@ -49,8 +41,8 @@ const AssetSum = ({
           <FormInput
             label={sumMoneyFields?.label}
             required
-            type={sumMoneyFields?.type}
-            placeholder={"money"}
+            type={"number"}
+            placeholder={sumMoneyFields?.money}
             name={`${value}.money`}
           />
         </div>

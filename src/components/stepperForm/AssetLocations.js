@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import FormSelectField from "../forms/FormSelectField";
 import FormInput from "../forms/FormInput";
 import { Button, Card } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
+import { useFieldArray } from "react-hook-form";
 
 const AssetLocations = ({
   data,
@@ -14,34 +14,12 @@ const AssetLocations = ({
   beneficiaryOptions,
   countryOptions,
 }) => {
-  // const { remove } = useFieldArray({ name: stepValue });
+  // assetAllocation:Object locations:Object
+  const { remove } = useFieldArray({ name: "assetAllocation.locations" });
   const { addressFields, beneficiaryFields } = data || {};
-  const [selectedbeneficiary, setSelectedbeneficiary] = useState("");
-  const [address, setAddress] = useState({
-    line1: "",
-    line2: "",
-    country: "",
-    postalCode: "",
-  });
-
-  const beneficiaryLocationAddHandelar = (data) => {
-    console.log("call", data);
-  };
 
   const locationRemoveHandelar = () => {
-    const savedValues = JSON.parse(getFromLocalStorage("form-data"));
-    const updatedLocations = savedValues?.assetAllocation?.locations?.filter(
-      (_, i) => i !== index
-    );
-
-    const asset = savedValues?.assetAllocation;
-
-    const updatedData = {
-      ...savedValues,
-      assetAllocation: { ...asset, locations: updatedLocations },
-    };
-
-    setToLocalStorage("form-data", JSON.stringify(updatedData));
+    remove(index);
     setLocationCount(locationCount - 1);
   };
 
@@ -63,9 +41,6 @@ const AssetLocations = ({
         <div>
           <div>
             <FormInput
-              handleChange={(e) =>
-                beneficiaryLocationAddHandelar({ line1: e.target.value })
-              }
               label={addressFields?.label}
               required
               type={"text"}
@@ -107,8 +82,7 @@ const AssetLocations = ({
           <FormSelectField
             loading={false}
             label={beneficiaryFields?.label}
-            handleChange={(e) => setSelectedbeneficiary(e)}
-            name={`${value}.beneficiary.${name}}`}
+            name={`${value}.beneficiary`}
             required
             options={beneficiaryOptions || []}
             type={"text"}
