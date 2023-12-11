@@ -165,3 +165,34 @@ export const instructionsOptions = [
     value: "Other",
   },
 ];
+
+export const assetsCategories = [
+  {
+    label: "Cash",
+    value: "Cash",
+  },
+  {
+    label: "Bonds",
+    value: "Bonds",
+  },
+  {
+    label: "Cryptocurrency",
+    value: "Cryptocurrency",
+  },
+  {
+    label: "Life Insurance",
+    value: "Life Insurance",
+  },
+  {
+    label: "Properties",
+    value: "Properties",
+  },
+  {
+    label: "Stocks, Shares or Equities",
+    value: "Stocks, Shares or Equities",
+  },
+  {
+    label: "Other, Place State",
+    value: "Other, Place State",
+  },
+];

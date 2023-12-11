@@ -4,6 +4,8 @@ import FormInput from "../forms/FormInput";
 import FormTextarea from "../forms/FormTextarea";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useFieldArray } from "react-hook-form";
+import FormSelectField from "../forms/FormSelectField";
+import { assetsCategories } from "@/constans/steps";
 
 const InstructionsAssetCard = ({
   setAssetCount,
@@ -36,15 +38,16 @@ const InstructionsAssetCard = ({
             placeholder={"asset name"}
             type={"text"}
             label={"Asset"}
-            name={`${stepValue}.${index}.asset`}
+            name={`${stepValue}.asset`}
           />
         </div>
         <div>
-          <FormInput
+          <FormSelectField
             type={"text"}
+            options={assetsCategories || []}
             placeholder={"category"}
             label={"Category"}
-            name={`${stepValue}.${index}.category`}
+            name={`${stepValue}.category`}
           />
         </div>
         <div>
@@ -52,7 +55,7 @@ const InstructionsAssetCard = ({
             type={"number"}
             placeholder={"eg.100"}
             label={"Estimated value of asset"}
-            name={`${stepValue}.${index}.value`}
+            name={`${stepValue}.value`}
           />
         </div>
 
@@ -61,7 +64,7 @@ const InstructionsAssetCard = ({
             type={"text"}
             placeholder={"description"}
             label={"Description"}
-            name={`${stepValue}.${index}.description`}
+            name={`${stepValue}.description`}
           />
         </div>
       </div>
