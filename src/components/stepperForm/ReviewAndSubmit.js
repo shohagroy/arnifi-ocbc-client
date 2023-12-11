@@ -1,35 +1,28 @@
 "use client";
 
-import { Card } from "antd";
+import { Button, Card } from "antd";
 import React from "react";
+import FormHeading from "../ui/will/FormHeading";
+import FormText from "../ui/will/FormText";
+import { EditOutlined } from "@ant-design/icons";
+import PersonalDetailsReviewCard from "../ui/will/PersonalDetailsReviewCard";
 
 const ReviewAndSubmit = () => {
   return (
     <div>
       <div>
-        <div className="p-2">
-          <div className="pt-10 font-semibold">
-            <p>(Optional)</p>
-            <h2 className="text-3xl">User Review and submit</h2>
-          </div>
-
-          <div className="text-sm py-6">
-            <p className="">
-              You may provide detailed ReviewAndSubmit for your preferred
-              funeral arrangements. Funeral ReviewAndSubmit are not compulsory
-              and may not be legally binding, but they will help your executor
-              carry out your wishes.
-            </p>
-          </div>
-
-          {/* <div className="py-6 ">
-            <a className="text-primary flex" href="/">
-              <QuestionCircleOutlined />
-              <p className="px-2">More information about Gift of Monies</p>
-            </a>
-          </div> */}
+        <div className="py-4">
+          <FormHeading heading={"Please review your will below."} />
+          <FormText
+            text={
+              "You are almost done! After you save the Will and close this session, you can no longer retrieve or edit the document. Do make sure that all the information is correct, as you will need to start over again if you need to make changes to your Will."
+            }
+          />
         </div>
-        <Card></Card>
+
+        <hr className="border-[#EEEEEE] col-span-2 my-4" />
+
+        <PersonalDetailsReviewCard />
       </div>
 
       <hr className="border-[#EEEEEE] col-span-2 my-10" />
