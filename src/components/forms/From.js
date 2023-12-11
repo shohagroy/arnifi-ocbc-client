@@ -1,8 +1,10 @@
 "use client";
 
-import { setToLocalStorage } from "@/utils/local-storage";
+import { setFormData } from "@/redux/features/formsData/formsDataSlice";
+import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import React, { useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 const Form = ({
   persistKey,
@@ -17,13 +19,27 @@ const Form = ({
   if (!!resolver) formConfig["resolver"] = resolver;
   const methods = useForm(formConfig);
 
+  const dispatch = useDispatch();
   const { handleSubmit, reset } = methods;
 
   const fillFormData = methods.watch();
 
+  const formsData = { ...fillFormData };
+
   useEffect(() => {
     setToLocalStorage(persistKey, JSON.stringify(fillFormData));
-  }, [persistKey, fillFormData]);
+    // const formData = !!getFromLocalStorage(persistKey)
+    //   ? JSON.parse(getFromLocalStorage(persistKey))
+    //   : {};
+    // dispatch(setFormData(formData));
+  }, [persistKey, fillFormData, dispatch]);
+
+  useEffect(() => {
+    const formData = !!getFromLocalStorage(persistKey)
+      ? JSON.parse(getFromLocalStorage(persistKey))
+      : {};
+    dispatch(setFormData(formData));
+  }, [persistKey, dispatch, fillFormData]);
 
   const onSubmit = (data) => {
     submitHandler(data);

@@ -165,6 +165,20 @@ export const generateFormsArrayResolver = (formData) => {
   });
 };
 
+export const generateBeneficiaryShareResolver = () => {
+  return yup.object().shape({
+    beneficiaries: yup.array().of(
+      yup.object().shape({
+        share: yup
+          .number()
+          .required("This is required.")
+          .positive("Share must be a positive number.")
+          .max(100, "Share cannot be more than 100%."),
+      })
+    ),
+  });
+};
+
 const data = {
   beneficiaries: [
     {
@@ -201,4 +215,4 @@ const assetAllocation = {
   ],
 };
 
-console.log(assetAllocation);
+// console.log(assetAllocation);

@@ -22,6 +22,8 @@ const StepperForm = ({
       : 0
   );
 
+  // const formData = useSelector((state) => state.forms);
+
   const [savedValues, setSavedValues] = useState(
     !!getFromLocalStorage(persistKey)
       ? JSON.parse(getFromLocalStorage(persistKey))
@@ -32,7 +34,8 @@ const StepperForm = ({
     setToLocalStorage("step", JSON.stringify({ step: current }));
   }, [current]);
 
-  const { validator } = useSelector((state) => state.resolver);
+  const { validator, shareError } = useSelector((state) => state.resolver);
+  // const formsData = useSelector((state) => state.forms);
 
   const prev = () => {
     if (current === 3 && assetStep > 1) {
@@ -55,6 +58,9 @@ const StepperForm = ({
     if (current === 3 && assetStep === 1) {
       setToLocalStorage("assetStep", JSON.stringify(assetStep + 1));
       setAssetStep(assetStep + 1);
+    } else if (current === 3 && assetStep > 1 && shareError) {
+      console.log("error");
+      return;
     } else if (current === 4 && additional === 1) {
       setToLocalStorage("additional", JSON.stringify(additional + 1));
       setAdditional(additional + 1);

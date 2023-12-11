@@ -1,23 +1,48 @@
 "use client";
 
 import { Card } from "antd";
-import React, { useState } from "react";
-import { ENUM_FORM_STEPS } from "@/constans/steps";
+import React, { useEffect, useState } from "react";
 import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
 import FormModalText from "../ui/will/FormModalText";
-
-import { getFromLocalStorage } from "@/utils/local-storage";
 import FormInput from "../forms/FormInput";
+import { useDispatch, useSelector } from "react-redux";
+import { generateBeneficiaryShareResolver } from "@/schemas/formSchema";
+import {
+  setFormValidator,
+  setShareError,
+} from "@/redux/features/formResolver/formResolverSlice";
 
 const AssetDistribute = () => {
-  const [beneficiariesData, setBeneficiariesData] = useState(
-    !!getFromLocalStorage("form-data")
-      ? JSON.parse(getFromLocalStorage("form-data"))?.beneficiaries
-      : []
-  );
+  const [error, setError] = useState(false);
+  const { beneficiaries } = useSelector((state) => state.forms.formsData);
+  const dispatch = useDispatch();
 
-  const stepValue = ENUM_FORM_STEPS.ASSET_ALLOCATION;
+  const totalShare =
+    beneficiaries.reduce((total, beneficiary) => {
+      const shareValue = parseFloat(beneficiary.share);
+
+      if (!isNaN(shareValue)) {
+        return total + shareValue;
+      }
+
+      return total;
+    }, 0) || 0;
+
+  useEffect(() => {
+    if (totalShare !== 100) {
+      dispatch(setShareError(true));
+      setError(true);
+    } else {
+      dispatch(setShareError(false));
+      setError(false);
+    }
+  }, [totalShare, dispatch]);
+
+  useEffect(() => {
+    const resolver = generateBeneficiaryShareResolver();
+    dispatch(setFormValidator(resolver));
+  }, [dispatch]);
 
   const modalTextData = [
     {
@@ -68,7 +93,7 @@ const AssetDistribute = () => {
             </thead>
 
             <tbody>
-              {beneficiariesData?.map((item, i) => {
+              {beneficiaries?.map((item, i) => {
                 const { fullName, idNumber, relation } = item || {};
                 return (
                   <tr key={i}>
@@ -79,7 +104,14 @@ const AssetDistribute = () => {
                     <td>{idNumber}</td>
                     <td>{relation}</td>
                     <td className="flex justify-center items-center">
-                      <FormInput type={"number"} name={"share"} required />
+                      <div>
+                        <FormInput
+                          type={"number"}
+                          name={`beneficiaries.${i}.share`}
+                          required
+                        />
+                      </div>
+
                       <p className="text-2xl font-bold ml-3">%</p>
                     </td>
                   </tr>
@@ -92,8 +124,17 @@ const AssetDistribute = () => {
                 <td colSpan={4} className="text-right">
                   Total:
                 </td>
-                <td className="text-center">0 %</td>
+                <td className="text-center"> {totalShare} %</td>
               </tr>
+              {error && (
+                <tr>
+                  <td colSpan={5} className="text-right">
+                    <small className="text-red-600 font-primary">
+                      Please allocate 100% of your assets before continuing.
+                    </small>
+                  </td>
+                </tr>
+              )}
             </tfoot>
           </table>
         </Card>

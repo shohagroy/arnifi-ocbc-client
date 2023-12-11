@@ -11,11 +11,11 @@ const formsDataSlice = createSlice({
   name: "data",
   initialState,
   reducers: {
-    // setFormValidator: (state, action) => {
-    //   state.validator = action.payload;
-    // },
+    setFormData: (state, action) => {
+      state.formsData = action.payload;
+    },
   },
 });
 
-export const {} = formsDataSlice.actions;
+export const { setFormData } = formsDataSlice.actions;
 export default formsDataSlice.reducer;

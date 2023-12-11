@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   validator: null,
+  shareError: false,
 };
 
 const formResolverSlice = createSlice({
@@ -11,8 +12,11 @@ const formResolverSlice = createSlice({
     setFormValidator: (state, action) => {
       state.validator = action.payload;
     },
+    setShareError: (state, action) => {
+      state.shareError = action.payload;
+    },
   },
 });
 
-export const { setFormValidator } = formResolverSlice.actions;
+export const { setFormValidator, setShareError } = formResolverSlice.actions;
 export default formResolverSlice.reducer;

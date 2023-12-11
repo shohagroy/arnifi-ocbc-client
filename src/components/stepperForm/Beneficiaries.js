@@ -20,7 +20,7 @@ const Beneficiaries = ({ country, persistKey }) => {
   const [beneficiariesCount, setBeneficiariesCount] = useState(
     !!getFromLocalStorage(persistKey)
       ? JSON.parse(getFromLocalStorage(persistKey))?.beneficiaries?.length
-      : 1
+      : 1 || 1
   );
 
   const dispatch = useDispatch();
