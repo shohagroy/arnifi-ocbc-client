@@ -11,45 +11,22 @@ import FormModalText from "../ui/will/FormModalText";
 import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
 import CardFormLoader from "../skeleton-loader/CardFormLoader";
 import AssetLocations from "./AssetLocations";
-import { getFromLocalStorage } from "@/utils/local-storage";
 import AssetSum from "./AssetSum";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 const AssetAllocation = ({ country }) => {
-  const [locationCount, setLocationCount] = useState(
-    !!getFromLocalStorage("form-data")
-      ? Number(
-          JSON.parse(getFromLocalStorage("form-data"))?.assetAllocation
-            ?.locations?.length
-        ) || 1
-      : 1
-  );
-
-  const [sumCount, setSumCount] = useState(
-    !!getFromLocalStorage("form-data")
-      ? Number(
-          JSON.parse(getFromLocalStorage("form-data"))?.assetAllocation
-            ?.sumMoney?.length
-        ) || 1
-      : 1
-  );
-
-  const [beneficiariesData, setBeneficiariesData] = useState(
-    !!getFromLocalStorage("form-data")
-      ? JSON.parse(getFromLocalStorage("form-data"))?.beneficiaries
-      : []
-  );
-
-  const beneficiaryOptions = beneficiariesData?.map((item, i) => {
-    console.log(item);
-    return {
-      label: `${item.fullName} (${item?.relation})`,
-      value: i,
-    };
-  });
-
   const stepValue = ENUM_FORM_STEPS.ASSET_ALLOCATION;
-  const beneficiaryValue = ENUM_FORM_STEPS.BENEFICIARIES;
+  const { watch } = useFormContext();
+  const fromData = watch();
+
+  const { assetAllocation, beneficiaries } = fromData || {};
+
+  const { properties, sumMoney } = assetAllocation || {};
+
+  const [propertiesCount, setPropertiesCount] = useState(
+    properties?.length || 1
+  );
+  const [sumMoneyCount, setSumMoneyCount] = useState(sumMoney?.length || 1);
 
   const { data: findStepsData, isLoading: willLoading } =
     useGetWillStepFildsQuery(`/${stepValue}/${country?.id}`);
@@ -61,14 +38,14 @@ const AssetAllocation = ({ country }) => {
   );
 
   const sumMoneyFields = stepFields?.find((item) => item.name === "sumMoney");
-  const assetLocations = [...Array(locationCount)]?.map((_) => {
+  const assetLocations = [...Array(propertiesCount)]?.map((_) => {
     return {
       addressFields,
       beneficiaryFields,
     };
   });
 
-  const assetSums = [...Array(sumCount)]?.map((_) => {
+  const assetSums = [...Array(sumMoneyCount)]?.map((_) => {
     return {
       sumMoneyFields,
       beneficiaryFields,
@@ -85,6 +62,13 @@ const AssetAllocation = ({ country }) => {
     return {
       label: country?.name,
       value: country?.name,
+    };
+  });
+
+  const beneficiaryOptions = beneficiaries?.map((item, i) => {
+    return {
+      label: `${item.fullName} (${item?.relation})`,
+      value: i,
     };
   });
 
@@ -130,11 +114,11 @@ const AssetAllocation = ({ country }) => {
 
         {assetLocations?.map((item, i) => (
           <AssetLocations
-            stepValue={beneficiaryValue}
+            stepValue={stepValue}
             beneficiaryOptions={beneficiaryOptions}
             data={item}
-            setLocationCount={setLocationCount}
-            locationCount={locationCount}
+            setPropertiesCount={setPropertiesCount}
+            propertiesCount={propertiesCount}
             index={i}
             key={i}
             countryOptions={countryOptions}
@@ -143,7 +127,7 @@ const AssetAllocation = ({ country }) => {
 
         <div className="my-10">
           <Button
-            onClick={() => setLocationCount(locationCount + 1)}
+            onClick={() => setPropertiesCount(propertiesCount + 1)}
             icon={<PlusOutlined />}
             className="bg-primary hover:bg-secondary px-[12px]"
             size="large"
@@ -179,17 +163,17 @@ const AssetAllocation = ({ country }) => {
           <AssetSum
             beneficiaryOptions={beneficiaryOptions}
             key={i}
-            value={`${stepValue}.sumMoney.${i}`}
+            stepValue={`${stepValue}`}
             data={item}
-            setSumCount={setSumCount}
-            sumCount={sumCount}
+            setSumMoneyCount={setSumMoneyCount}
+            sumMoneyCount={sumMoneyCount}
             index={i}
           />
         ))}
 
         <div className="my-10">
           <Button
-            onClick={() => setSumCount(sumCount + 1)}
+            onClick={() => setSumMoneyCount(sumMoneyCount + 1)}
             icon={<PlusOutlined />}
             className="bg-primary hover:bg-secondary px-[12px]"
             size="large"

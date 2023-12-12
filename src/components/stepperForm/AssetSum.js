@@ -1,42 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import FormSelectField from "../forms/FormSelectField";
 import FormInput from "../forms/FormInput";
 import { Button, Card } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { useFieldArray } from "react-hook-form";
-import { ENUM_FORM_STEPS } from "@/constans/steps";
 
 const AssetSum = ({
   data,
-  value,
+  stepValue,
   index,
-  setSumCount,
-  sumCount,
+  setSumMoneyCount,
+  sumMoneyCount,
   beneficiaryOptions,
 }) => {
   const { sumMoneyFields, beneficiaryFields } = data || {};
-  const [beneficiaryIndex, setBeneficiaryIndex] = useState(0);
-  const stepValue = ENUM_FORM_STEPS.BENEFICIARIES;
 
-  const { remove, fields, update } = useFieldArray({
-    name: `${stepValue}.${beneficiaryIndex}.giveMoney`,
+  const { remove } = useFieldArray({
+    name: `${stepValue}.sumMoney`,
   });
-
-  const current = { ...fields };
-
-  const propertiesAddHandelar = (e) => {
-    console.log(e);
-  };
-
-  const locationRemoveHandelar = () => {
-    remove(index);
-    setLocationCount(locationCount - 1);
-  };
 
   const sumMoneyRemoveHandelar = () => {
     remove(index);
-    setSumCount(sumCount - 1);
+    setSumMoneyCount(sumMoneyCount - 1);
   };
 
   return (
@@ -58,21 +43,19 @@ const AssetSum = ({
           <FormInput
             label={sumMoneyFields?.label}
             required
-            type={"number"}
-            placeholder={sumMoneyFields?.money}
-            name={`${stepValue}.${beneficiaryIndex}.giveMoney.value`}
+            type={sumMoneyFields?.type}
+            placeholder={sumMoneyFields?.placeholder}
+            name={`${stepValue}.sumMoney.${index}.money`}
           />
         </div>
 
         <div>
           <FormSelectField
             label={beneficiaryFields?.label}
-            name={`${value}.beneficiary`}
-            handleChange={(e) => setBeneficiaryIndex(e)}
+            name={`${stepValue}.sumMoney.${index}.beneficiary`}
             value={index}
             required
             options={beneficiaryOptions || []}
-            type={"text"}
           />
         </div>
       </div>
