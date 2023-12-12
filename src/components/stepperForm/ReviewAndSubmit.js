@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import BeneficiariesDetailsReviewCard from "../ui/will/BeneficiariesDetailsReviewCard";
 import FuneralInstructionsDetailsReviewCard from "../ui/will/FuneralInstructionsDetailsReviewCard";
 import SpecialAssetsReviewCard from "../ui/will/SpecialAssetsReviewCard";
+import SpecialInstructionsReviewCard from "../ui/will/SpecialInstructionsReviewCard";
 
 const ReviewAndSubmit = ({ stepFields }) => {
   const {
@@ -66,6 +67,15 @@ const ReviewAndSubmit = ({ stepFields }) => {
 
         <div className="my-4">
           <SpecialAssetsReviewCard instructions={instructions} />
+        </div>
+
+        <div className="my-4">
+          {instructions?.specialInstructions && (
+            <SpecialInstructionsReviewCard
+              instructions={instructions}
+              specialInstructions={instructions?.specialInstructions}
+            />
+          )}
         </div>
       </div>
 

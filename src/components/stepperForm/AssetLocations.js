@@ -62,6 +62,7 @@ const AssetLocations = ({
               </div>
               <div className="">
                 <FormSelectField
+                  showSearch={true}
                   // required={addressFields?.isRequired}
                   name={`${stepValue}.properties.${index}.address.country`}
                   options={countryOptions}

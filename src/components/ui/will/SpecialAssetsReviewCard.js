@@ -5,7 +5,6 @@ import { EditOutlined } from "@ant-design/icons";
 const SpecialAssetsReviewCard = ({ instructions }) => {
   const { specifyAssets } = instructions || {};
 
-  console.log(specifyAssets);
   return (
     <div className="font-primary">
       <div className="flex justify-between items-center p-1 font-primary">
@@ -16,24 +15,28 @@ const SpecialAssetsReviewCard = ({ instructions }) => {
       </div>
       <Card className="p-4 font-primary">
         {specifyAssets?.map((item, i) => {
-          const { asset, category, value, description } = item;
+          const { asset, category, estimatedValue, description } = item;
+
           return (
-            <div className="my-4" key={i}>
-              <div className="my-4 grid grid-cols-3 gap-4 ">
-                <p>Special asset name</p>
-                <p>Category</p>
-                <p>Estimated value of special asset</p>
-
-                <p>{asset}</p>
-                <p>{category}</p>
-                <p>{value}</p>
-              </div>
-
+            <Card key={i} className="my-4 font-primary">
               <div>
-                <p>Description</p>
-                <p className="font-semibold">{description}</p>
+                <p className="h-8 w-8 bg-gray-200 flex justify-center items-center rounded-full">
+                  {i + 1}
+                </p>
+                <div className="grid grid-cols-3 gap-4 ">
+                  <p>Special asset name</p>
+                  <p>Category</p>
+                  <p>Estimated value of special asset</p>
+                  <p className="font-semibold">{asset}</p>
+                  <p className="font-semibold">{category}</p>
+                  <p className="font-semibold">{estimatedValue}</p>
+                </div>
+                <div className="mt-4">
+                  <p>Description</p>
+                  <p className="font-semibold">{description}</p>
+                </div>
               </div>
-            </div>
+            </Card>
           );
         })}
 
