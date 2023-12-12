@@ -41,6 +41,7 @@ const AssetAllocation = ({ country }) => {
   );
 
   const beneficiaryOptions = beneficiariesData?.map((item, i) => {
+    console.log(item);
     return {
       label: `${item.fullName} (${item?.relation})`,
       value: i,

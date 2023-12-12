@@ -43,7 +43,9 @@ const AssetAllocationForm = ({
   const beneficiaryType = formInputFields?.find(
     (item) => item.type === "select"
   );
-  const sumMoneyType = formInputFields?.find((item) => item.type === "text");
+  const sumMoneyType = formInputFields?.find(
+    (item) => item.name === "sumMoney"
+  );
 
   return (
     <div>
