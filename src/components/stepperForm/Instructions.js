@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Card } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormSelectField from "../forms/FormSelectField";
 import {
   ENUM_FORM_STEPS,
@@ -10,18 +10,57 @@ import {
 } from "@/constans/steps";
 import FormHeading from "../ui/will/FormHeading";
 import FormText from "../ui/will/FormText";
-import FormInput from "../forms/FormInput";
-import FormTextarea from "../forms/FormTextarea";
 import InstructionsAssetCard from "./InstructionsAssetCard";
 import { PlusOutlined } from "@ant-design/icons";
+import { useGetWillStepFildsQuery } from "@/redux/features/formStep/formStepApi";
+import CardFormLoader from "../skeleton-loader/CardFormLoader";
+import { useFormContext } from "react-hook-form";
+import { generateInstructionsResolver } from "@/schemas/formSchema";
+import { useDispatch } from "react-redux";
+import { setFormValidator } from "@/redux/features/formResolver/formResolverSlice";
 
-const Instructions = () => {
-  const [assetCount, setAssetCount] = useState(1);
+const Instructions = ({ country }) => {
+  const { id } = country;
+
+  const dispatch = useDispatch();
+  const { watch } = useFormContext();
+  const { specifyAssets } = watch()?.instructions || {};
+
+  const [assetCount, setAssetCount] = useState(specifyAssets?.length || 1);
   const stepValue = ENUM_FORM_STEPS.INSTRUCTIONS;
 
+  const { data: findStepsData, isLoading: willLoading } =
+    useGetWillStepFildsQuery(`/${stepValue}/${id}`);
+
+  const findedStep = findStepsData?.data?.data;
+  const stepFields = findedStep?.stepFilds || [];
+
+  const religionFields = stepFields?.find((item) => item?.name === "religion");
+  const instructionsFields = stepFields?.find(
+    (item) => item?.name === "instructions"
+  );
+
+  const otherFields = stepFields?.filter(
+    (item) => item?.name !== "religion" && item?.name !== "instructions"
+  );
+
   const assetsDetails = [...Array(assetCount)]?.map((_) => {
-    return {};
+    return otherFields;
   });
+  const validatorData = { religionFields, instructionsFields, otherFields };
+  const resolver = generateInstructionsResolver(validatorData);
+
+  useEffect(() => {
+    if (resolver) {
+      dispatch(setFormValidator(resolver));
+    }
+  }, [dispatch, willLoading]);
+
+  if (willLoading) {
+    return <CardFormLoader />;
+  }
+
+  // console.log(validatorData);
 
   return (
     <div>
@@ -42,22 +81,20 @@ const Instructions = () => {
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <FormSelectField
-                label={"Religion"}
-                name={`${stepValue}.religion`}
+                label={religionFields?.label}
+                name={`${stepValue}.${religionFields?.name}`}
                 required
                 options={religionOptions}
-                type={"text"}
               />
             </div>
 
             <div></div>
             <div>
               <FormSelectField
-                label={"Instructions"}
-                name={`${stepValue}.instructions`}
+                label={instructionsFields?.label}
+                name={`${stepValue}.${instructionsFields?.name}`}
                 required
                 options={instructionsOptions}
-                type={"text"}
               />
             </div>
           </div>
@@ -82,9 +119,10 @@ const Instructions = () => {
           {assetsDetails?.map((item, i) => {
             return (
               <InstructionsAssetCard
+                data={item}
                 key={i}
                 index={i}
-                stepValue={`${stepValue}.specifyAssets.${i}`}
+                stepValue={`${stepValue}.specifyAssets`}
                 setAssetCount={setAssetCount}
                 assetCount={assetCount}
               />

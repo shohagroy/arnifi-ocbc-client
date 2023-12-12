@@ -8,6 +8,7 @@ import FormSelectField from "../forms/FormSelectField";
 import { assetsCategories } from "@/constans/steps";
 
 const InstructionsAssetCard = ({
+  data,
   setAssetCount,
   assetCount,
   index,
@@ -18,6 +19,14 @@ const InstructionsAssetCard = ({
     remove(index);
     setAssetCount(assetCount - 1);
   };
+  const assetField = data?.find((item) => item?.name === "asset");
+  const categoryField = data?.find((item) => item?.name === "category");
+  const estimatedvalueField = data?.find(
+    (item) => item?.name === "estimatedValue"
+  );
+
+  const descriptionField = data?.find((item) => item?.name === "description");
+
   return (
     <Card className="my-6">
       <div className="px-4 flex justify-between ">
@@ -35,38 +44,42 @@ const InstructionsAssetCard = ({
       <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <FormInput
-            placeholder={"asset name"}
-            type={"text"}
-            label={"Asset"}
-            name={`${stepValue}.asset`}
+            placeholder={assetField?.placeholder}
+            type={assetField?.type}
+            label={assetField?.label}
+            required={assetField?.isRequired}
+            name={`${stepValue}.${index}.${assetField?.name}`}
           />
         </div>
         <div>
           <FormSelectField
-            type={"text"}
             options={assetsCategories || []}
-            placeholder={"category"}
-            label={"Category"}
-            name={`${stepValue}.category`}
+            placeholder={categoryField?.placeholder}
+            label={categoryField?.label}
+            required={categoryField?.isRequired}
+            name={`${stepValue}.${index}.${categoryField?.name}`}
           />
         </div>
         <div>
           <FormInput
-            type={"number"}
-            placeholder={"eg.100"}
-            label={"Estimated value of asset"}
-            name={`${stepValue}.value`}
+            placeholder={estimatedvalueField?.placeholder}
+            type={estimatedvalueField?.type}
+            label={estimatedvalueField?.label}
+            required={estimatedvalueField?.isRequired}
+            name={`${stepValue}.${index}.${estimatedvalueField?.name}`}
           />
         </div>
 
-        <div className="col-span-3">
-          <FormTextarea
-            type={"text"}
-            placeholder={"description"}
-            label={"Description"}
-            name={`${stepValue}.description`}
-          />
-        </div>
+        {descriptionField && (
+          <div className="col-span-3">
+            <FormTextarea
+              required={descriptionField?.isRequired}
+              placeholder={descriptionField?.placeholder}
+              label={descriptionField?.label}
+              name={`${stepValue}.${index}.${descriptionField?.name}`}
+            />
+          </div>
+        )}
       </div>
     </Card>
   );

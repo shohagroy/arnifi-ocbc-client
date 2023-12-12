@@ -33,17 +33,6 @@ const DetailsSubmitPage = () => {
 
   const activeCountry = activeCountryData?.data?.data || {};
 
-  // console.log(activeCountry);
-
-  // const stepsFieldsData = formStepsOptions?.map((step) => {
-  //   console.log(step);
-  //   return activeCountry.stepFilds?.filter(
-  //     (field) => field?.stepValue === step?.value
-  //   );
-  // });
-
-  // console.log(stepsFieldsData);
-
   const formSteps = activeCountry.stepFilds?.map((data) => {
     // console.log(data);
   });
@@ -83,7 +72,11 @@ const DetailsSubmitPage = () => {
       title: "Instructions",
       content: (
         <div>
-          {additional === 1 ? <Instructions /> : <AdditionalInstructions />}
+          {additional === 1 ? (
+            <Instructions country={activeCountry} />
+          ) : (
+            <AdditionalInstructions />
+          )}
         </div>
       ),
     },

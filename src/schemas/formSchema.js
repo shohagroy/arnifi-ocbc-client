@@ -179,6 +179,84 @@ export const generateBeneficiaryShareResolver = () => {
   });
 };
 
+// export const generateInstructionsResolver = (fieldsData) => {
+//   const { religionFields, instructionsFields, otherFields } = fieldsData || {};
+
+//   const formErrorSchema = {};
+
+//   const generateValidationArray = (fields) => {
+//     const schema = {};
+
+//     fields.forEach((field) => {
+//       if (field?.isRequired) {
+//         schema[field?.name] = yup.string().required(field?.errorText);
+//       }
+//     });
+
+//     const arraySchema = generateValidationArray(otherFields);
+
+//     formErrorSchema["specifyAssets"] = yup
+//       .array()
+//       .of(yup.object().shape(arraySchema));
+
+//     if (religionFields?.isRequired) {
+//       formErrorSchema["religion"] = yup
+//         .string()
+//         .required(religionFields?.errorText);
+//     }
+
+//     if (instructionsFields?.isRequired) {
+//       formErrorSchema["instructions"] = yup
+//         .string()
+//         .required(instructionsFields?.errorText);
+//     }
+
+//     return yup.object().shape({
+//       instructions: yup.object().shape(formErrorSchema),
+//     });
+//   };
+// };
+
+const generateValidationArray = (fields) => {
+  const schema = {};
+
+  fields.forEach((field) => {
+    if (field?.isRequired) {
+      schema[field?.name] = yup.string().required(field?.errorText);
+    }
+  });
+
+  return schema;
+};
+
+export const generateInstructionsResolver = (fieldsData) => {
+  const { religionFields, instructionsFields, otherFields } = fieldsData || {};
+
+  const formErrorSchema = {};
+
+  const arraySchema = generateValidationArray(otherFields);
+
+  formErrorSchema["specifyAssets"] = yup
+    .array()
+    .of(yup.object().shape(arraySchema));
+
+  if (religionFields?.isRequired) {
+    formErrorSchema["religion"] = yup
+      .string()
+      .required(religionFields?.errorText);
+  }
+
+  if (instructionsFields?.isRequired) {
+    formErrorSchema["instructions"] = yup
+      .string()
+      .required(instructionsFields?.errorText);
+  }
+
+  return yup.object().shape({
+    instructions: yup.object().shape(formErrorSchema),
+  });
+};
+
 const data = {
   beneficiaries: [
     {
@@ -195,24 +273,10 @@ const data = {
   ],
 };
 
-const assetAllocation = {
-  locations: [
-    {
-      address: {
-        line1: "",
-        line2: "",
-        country: "",
-        postalCode: "",
-      },
-      beneficiary: "Full Name of fourth Beneficiary.",
-    },
-  ],
-  sumMoney: [
-    {
-      beneficiary: "Full Name of fourth Beneficiary.",
-      money: undefined, // Add actual money value
-    },
-  ],
+const instructions = {
+  religion: "",
+  instructions: "",
+  specifyAssets: [],
 };
 
 // console.log(assetAllocation);
