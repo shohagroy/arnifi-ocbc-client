@@ -115,8 +115,8 @@ const AssetAllocation = ({ country }) => {
         {assetLocations?.map((item, i) => (
           <AssetLocations
             stepValue={stepValue}
-            beneficiaryOptions={beneficiaryOptions}
             data={item}
+            beneficiaryOptions={beneficiaryOptions}
             setPropertiesCount={setPropertiesCount}
             propertiesCount={propertiesCount}
             index={i}

@@ -44,7 +44,7 @@ const AssetLocations = ({
           <div>
             <FormInput
               label={addressFields?.label}
-              required
+              required={addressFields?.isRequired}
               type={"text"}
               placeholder={"address line 1"}
               name={`${stepValue}.properties.${index}.address.line1`}
@@ -62,15 +62,13 @@ const AssetLocations = ({
               </div>
               <div className="">
                 <FormSelectField
-                  required
+                  // required={addressFields?.isRequired}
                   name={`${stepValue}.properties.${index}.address.country`}
                   options={countryOptions}
-                  type={"text"}
                 />
               </div>
               <div>
                 <FormInput
-                  required
                   type={"text"}
                   placeholder={"postal code"}
                   name={`${stepValue}.properties.${index}.address.postalCode`}
@@ -83,6 +81,7 @@ const AssetLocations = ({
         <div>
           <FormSelectField
             label={beneficiaryFields?.label}
+            required={beneficiaryFields?.isRequired}
             name={`${stepValue}.properties.${index}.beneficiary`}
             options={beneficiaryOptions || []}
             type={"text"}

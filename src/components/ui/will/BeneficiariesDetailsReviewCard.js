@@ -2,7 +2,25 @@ import { Button, Card } from "antd";
 import React from "react";
 import { EditOutlined } from "@ant-design/icons";
 
-const BeneficiariesDetailsReviewCard = ({ beneficiaries }) => {
+const BeneficiariesDetailsReviewCard = ({ beneficiaries, assetAllocation }) => {
+  const { properties: assetLocations, sumMoney } = assetAllocation || {};
+
+  const withAsset = beneficiaries?.map((info, i) => {
+    const properties = assetLocations?.filter((data) => data.beneficiary === i);
+    const moneyArray = sumMoney?.filter((data) => data?.beneficiary === i);
+
+    const givenMoney = moneyArray.reduce(
+      (sum, data) => sum + parseFloat(data.money),
+      0
+    );
+
+    return {
+      ...info,
+      properties,
+      givenMoney,
+    };
+  });
+
   return (
     <div>
       <div className="flex justify-between items-center p-1 font-primary">
@@ -30,7 +48,7 @@ const BeneficiariesDetailsReviewCard = ({ beneficiaries }) => {
             </td>
           </tr>
           <tbody>
-            {beneficiaries?.map((data, i) => {
+            {withAsset?.map((data, i) => {
               const {
                 fullName,
                 idNumber,
@@ -39,7 +57,7 @@ const BeneficiariesDetailsReviewCard = ({ beneficiaries }) => {
                 share,
                 address,
                 properties,
-                giveMoney,
+                givenMoney,
               } = data || {};
 
               return (
@@ -81,9 +99,7 @@ const BeneficiariesDetailsReviewCard = ({ beneficiaries }) => {
                         })
                       : "N/A"}
                   </td>
-                  <td>
-                    {giveMoney?.value ? <p>{giveMoney?.value}</p> : "N/A"}
-                  </td>
+                  <td>{givenMoney ? <p>{givenMoney}</p> : "N/A"}</td>
                   <td>{share} %</td>
                 </tr>
               );

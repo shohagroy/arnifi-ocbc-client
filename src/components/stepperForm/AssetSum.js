@@ -42,7 +42,7 @@ const AssetSum = ({
         <div>
           <FormInput
             label={sumMoneyFields?.label}
-            required
+            required={sumMoneyFields?.isRequired}
             type={sumMoneyFields?.type}
             placeholder={sumMoneyFields?.placeholder}
             name={`${stepValue}.sumMoney.${index}.money`}
@@ -54,7 +54,7 @@ const AssetSum = ({
             label={beneficiaryFields?.label}
             name={`${stepValue}.sumMoney.${index}.beneficiary`}
             value={index}
-            required
+            required={beneficiaryFields?.isRequired}
             options={beneficiaryOptions || []}
           />
         </div>

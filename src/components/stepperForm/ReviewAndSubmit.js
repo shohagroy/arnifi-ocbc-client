@@ -18,7 +18,9 @@ const ReviewAndSubmit = ({ stepFields }) => {
     alternativeExecutors,
     beneficiaries,
     instructions,
+    assetAllocation,
   } = useSelector((state) => state.forms?.formsData);
+
   const personalDetailsFields = stepFields?.filter(
     (field) => field?.stepValue === ENUM_FORM_STEPS.PERSONAL_DETAILS
   );
@@ -52,7 +54,10 @@ const ReviewAndSubmit = ({ stepFields }) => {
         </div>
 
         <div className="my-4">
-          <BeneficiariesDetailsReviewCard beneficiaries={beneficiaries} />
+          <BeneficiariesDetailsReviewCard
+            beneficiaries={beneficiaries}
+            assetAllocation={assetAllocation}
+          />
         </div>
 
         <div className="my-4">
