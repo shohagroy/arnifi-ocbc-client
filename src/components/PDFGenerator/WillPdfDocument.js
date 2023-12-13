@@ -79,27 +79,6 @@ const WillPdfDocument = () => {
           </Text>
         </View>
       </Page>
-
-      {/* Additional Page (You can customize this based on your requirements) */}
-      <Page size="A4" style={styles.page}>
-        <View style={styles.header}>
-          <Text>Last Will and Testament of</Text>
-          <Text>Personal Full Name</Text>
-        </View>
-
-        <View>
-          <Text style={styles.text}>Invoice to:</Text>
-          <Text style={styles.text}>Name: John Doe</Text>
-          <Text style={styles.text}>Email: john.doe@example.com</Text>
-          <Text style={styles.text}>Payment ID: ABC123</Text>
-          <Text style={styles.text}>Booking ID: XYZ789</Text>
-          <Text style={styles.text}>Amount: $100 USD</Text>
-        </View>
-
-        <View style={styles.footer}>
-          <Text>Thank you for your booking!</Text>
-        </View>
-      </Page>
     </Document>
   );
 };
