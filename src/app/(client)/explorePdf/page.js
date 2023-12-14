@@ -1,58 +1,32 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "antd";
 // import * as html2pdf from "html2pdf.js";
 import willTemp from "@/template/will";
 import savePdfFile from "@/utils/savePdfFile";
+import { useSelector } from "react-redux";
+import numberToWords from "@/utils/numberToWord";
 
 const ExplorePdf = () => {
-  const generatePdf = () => {
-    const htmlTemplate = willTemp();
-    return savePdfFile(htmlTemplate);
+  const { formsData } = useSelector((state) => state.forms) || {};
 
-    // const options = {
-    //   filename: `${"filename"}.pdf`,
-    //   margin: 0,
-    //   image: { type: "jpeg", quality: 1.9 },
-    //   jsPDF: { unit: "mm", format: "A4" },
-    //   pagebreak: { mode: "avoid-all" },
-    // };
+  // console.log(formsData?.personalDetails?.fullName);
 
-    // if (typeof window !== "undefined") {
-    //   html2pdf()
-    //     .from(htmlTemplate)
-    //     .set(options)
-    //     .toPdf()
-    //     .get("pdf")
-    //     .then((pdf) => {
-    //       let totalPage = pdf.internal.getNumberOfPages();
-
-    //       for (let i = 1; i <= totalPage; i++) {
-    //         pdf.setPage(i);
-    //         pdf.setFontSize(10);
-    //         pdf.setFontSize(10);
-    //         const text = "Page - " + i + " of " + totalPage;
-    //         const textWidth =
-    //           pdf.getStringUnitWidth(text) * pdf.internal.getFontSize();
-    //         const textHeight = pdf.internal.getLineHeight();
-    //         const pageWidth = pdf.internal.pageSize.getWidth();
-    //         const pageHeight = pdf.internal.pageSize.getHeight();
-    //         const x = pageWidth - textWidth + 20;
-    //         const y = pageHeight - textHeight - 0;
-    //         pdf.text(text, x, y);
-    //       }
-    //     })
-    //     .save();
-    // } else {
-    //   console.log("something wrong.. window not found!");
-    // }
+  const [loading, setLoading] = useState(false);
+  const generatePdf = async () => {
+    setLoading(true);
+    const htmlTemplate = willTemp(formsData);
+    const result = await savePdfFile(htmlTemplate);
+    setLoading(false);
   };
 
   return (
     <section className="min-h-screen">
       <div>
-        <Button onClick={generatePdf}>Generate PDF Buffer</Button>
+        <Button onClick={generatePdf}>
+          {loading ? "Loading..." : "Download PDF"}{" "}
+        </Button>
       </div>
     </section>
   );

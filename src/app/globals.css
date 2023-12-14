@@ -8,10 +8,6 @@
   box-sizing: border-box;
 }
 
-ul li {
-  list-style: none;
-}
-
 .background-image {
   background-image: url("/background.png");
   background-position: center;

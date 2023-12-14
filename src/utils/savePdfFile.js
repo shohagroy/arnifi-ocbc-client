@@ -3,10 +3,10 @@ const savePdfFile = async (htmlTemplate) => {
 
   const options = {
     filename: `${"filename"}.pdf`,
-    margin: 0,
-    image: { type: "jpeg", quality: 1.9 },
+    margin: 20,
+    image: { type: "jpeg", quality: 3 },
     jsPDF: { unit: "mm", format: "A4" },
-    pagebreak: { mode: "avoid-all" },
+    pagebreak: { mode: "auto" },
   };
 
   html2pdf()
@@ -18,18 +18,20 @@ const savePdfFile = async (htmlTemplate) => {
       let totalPage = pdf.internal.getNumberOfPages();
 
       for (let i = 1; i <= totalPage; i++) {
-        pdf.setPage(i);
-        pdf.setFontSize(10);
-        pdf.setFontSize(10);
-        const text = "Page - " + i + " of " + totalPage;
-        const textWidth =
-          pdf.getStringUnitWidth(text) * pdf.internal.getFontSize();
-        const textHeight = pdf.internal.getLineHeight();
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const x = pageWidth - textWidth + 20;
-        const y = pageHeight - textHeight - 0;
-        pdf.text(text, x, y);
+        if (i > 1) {
+          pdf.setPage(i);
+          pdf.setFontSize(10);
+          pdf.setFontSize(10);
+          const text = "Page - " + (i - 1) + " of " + (totalPage - 1);
+          const textWidth =
+            pdf.getStringUnitWidth(text) * pdf.internal.getFontSize();
+          const textHeight = pdf.internal.getLineHeight();
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+          const x = pageWidth - textWidth + 20;
+          const y = pageHeight - textHeight - 0;
+          pdf.text(text, x, y);
+        }
       }
     })
     .save();

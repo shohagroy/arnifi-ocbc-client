@@ -1,12 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button, message, Steps } from "antd";
+import { Button, Steps } from "antd";
 import Form from "../forms/From";
 import Link from "next/link";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { getFromLocalStorage, setToLocalStorage } from "@/utils/local-storage";
 import { useSelector } from "react-redux";
+import willTemp from "@/template/will";
+import savePdfFile from "@/utils/savePdfFile";
+import { useRouter } from "next/navigation";
 
 const StepperForm = ({
   steps,
@@ -22,7 +25,8 @@ const StepperForm = ({
       : 0
   );
 
-  // const formData = useSelector((state) => state.forms);
+  const navigation = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const [savedValues, setSavedValues] = useState(
     !!getFromLocalStorage(persistKey)
@@ -35,7 +39,6 @@ const StepperForm = ({
   }, [current]);
 
   const { validator, shareError } = useSelector((state) => state.resolver);
-  // const formsData = useSelector((state) => state.forms);
 
   const prev = () => {
     if (current === 3 && assetStep > 1) {
@@ -59,7 +62,6 @@ const StepperForm = ({
       setToLocalStorage("assetStep", JSON.stringify(assetStep + 1));
       setAssetStep(assetStep + 1);
     } else if (current === 3 && assetStep > 1 && shareError) {
-      console.log("error");
       return;
     } else if (current === 4 && additional === 1) {
       setToLocalStorage("additional", JSON.stringify(additional + 1));
@@ -68,7 +70,17 @@ const StepperForm = ({
       setCurrent(current + 1);
     }
 
-    console.log(data);
+    setSavedValues(data);
+  };
+
+  const pdfDownloadHandelar = async () => {
+    setLoading(true);
+    const htmlTemplate = willTemp(savedValues);
+    await savePdfFile(htmlTemplate);
+
+    navigation.push("/");
+    setLoading(false);
+    localStorage.clear();
   };
 
   return (
@@ -112,16 +124,15 @@ const StepperForm = ({
             </Button>
           )}
           {current === steps.length - 1 && (
-            <Link href={"/"}>
-              <Button
-                className="bg-primary font-bold px-10"
-                size="large"
-                type="primary"
-                onClick={() => message.success("Processing complete!")}
-              >
-                Submit
-              </Button>
-            </Link>
+            <Button
+              loading={loading}
+              className="bg-primary font-bold px-10"
+              size="large"
+              type="primary"
+              onClick={pdfDownloadHandelar}
+            >
+              {loading ? "Please wait.." : "Download PDF"}
+            </Button>
           )}
         </div>
       </Form>
